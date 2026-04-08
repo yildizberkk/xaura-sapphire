@@ -1,14 +1,44 @@
+"use client";
+
+import { useState } from "react";
+import { useCurrentTime, getEventState } from "@/lib/time";
+import { getCurrentDayIndex, getSessionsForDay, SCHEDULE } from "@/lib/schedule";
+import SkyBackground from "@/components/SkyBackground";
+import Header from "@/components/Header";
+import DayTabs from "@/components/DayTabs";
+import SessionList from "@/components/SessionList";
+import ContextualMessage from "@/components/ContextualMessage";
+
 export default function Home() {
+  const now = useCurrentTime();
+  const eventState = getEventState(now);
+  const autoDayIndex = getCurrentDayIndex(now);
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+
+  const dayIndex = selectedDay ?? autoDayIndex;
+  const sessions = getSessionsForDay(dayIndex);
+
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-3xl font-extrabold tracking-widest text-cream">
-          SAPPHIRE
-        </h1>
-        <p className="text-sm font-light tracking-[0.3em] text-gold mt-1">
-          MOMENTUM II
+    <>
+      <SkyBackground now={now} />
+
+      <main className="relative min-h-screen flex flex-col max-w-[440px] mx-auto">
+        <Header />
+
+        <ContextualMessage eventState={eventState} now={now} />
+
+        <DayTabs
+          activeIndex={dayIndex}
+          onSelect={(index) => setSelectedDay(index)}
+        />
+
+        {/* MC info */}
+        <p className="text-center text-[10px] text-cream/30 mb-2">
+          MC: {SCHEDULE[dayIndex].mc}
         </p>
-      </div>
-    </main>
+
+        <SessionList sessions={sessions} now={now} />
+      </main>
+    </>
   );
 }
