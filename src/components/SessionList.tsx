@@ -39,7 +39,7 @@ export default function SessionList({ sessions, now }: SessionListProps) {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2.5 px-4 pb-12">
+    <div className="flex flex-col gap-2.5 px-4 pb-12 scrollbar-hide">
       {enriched.map((item, index) => {
         const isActive = item.status === "active";
         return (
