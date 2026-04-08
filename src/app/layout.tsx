@@ -16,7 +16,12 @@ const gilroy = localFont({
 
 export const metadata: Metadata = {
   title: "Sapphire Momentum II",
-  description: "24-26 Nisan | Kremlin Palace, Antalya",
+  description: "24-26 Nisan 2025 | Kremlin Palace, Antalya | Xaura Global",
+  openGraph: {
+    title: "Sapphire Momentum II",
+    description: "24-26 Nisan 2025 | Kremlin Palace, Antalya",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
