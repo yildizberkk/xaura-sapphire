@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useCurrentTime, getEventState } from "@/lib/time";
 import { getCurrentDayIndex, getSessionsForDay, SCHEDULE } from "@/lib/schedule";
 import SkyBackground from "@/components/SkyBackground";
@@ -8,18 +8,23 @@ import Header from "@/components/Header";
 import DayTabs from "@/components/DayTabs";
 import SessionList from "@/components/SessionList";
 import ContextualMessage from "@/components/ContextualMessage";
+import BoardingIntro from "@/components/BoardingIntro";
 
 export default function Home() {
   const now = useCurrentTime();
   const eventState = getEventState(now);
   const autoDayIndex = getCurrentDayIndex(now);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [introComplete, setIntroComplete] = useState(false);
+  const handleIntroComplete = useCallback(() => setIntroComplete(true), []);
 
   const dayIndex = selectedDay ?? autoDayIndex;
   const sessions = getSessionsForDay(dayIndex);
 
   return (
     <>
+      {!introComplete && <BoardingIntro onComplete={handleIntroComplete} />}
+
       <SkyBackground now={now} />
 
       <main className="relative min-h-screen flex flex-col max-w-[440px] mx-auto">
