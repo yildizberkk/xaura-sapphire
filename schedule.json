@@ -10,7 +10,7 @@
     {
       "day": "Cuma",
       "dayEN": "Friday",
-      "date": "2025-04-24",
+      "date": "2025-04-25",
       "mc": "Sinan Güler & Ayşe Özçobanlar",
       "sessions": [
         { "start": "10:00", "end": "12:30", "title": "Giriş", "titleEN": "Entry", "type": "general" },
@@ -25,7 +25,7 @@
     {
       "day": "Cumartesi",
       "dayEN": "Saturday",
-      "date": "2025-04-25",
+      "date": "2025-04-26",
       "mc": "Esra & Kadir Turgut",
       "sessions": [
         { "start": "07:00", "end": "09:30", "title": "Kahvaltı", "titleEN": "Breakfast", "type": "meal" },
@@ -50,7 +50,7 @@
     {
       "day": "Pazar",
       "dayEN": "Sunday",
-      "date": "2025-04-26",
+      "date": "2025-04-27",
       "mc": "Metin Kılıç & Meral Çimen",
       "sessions": [
         { "start": "07:00", "end": "09:30", "title": "Kahvaltı", "titleEN": "Breakfast", "type": "meal" },
