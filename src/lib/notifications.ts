@@ -39,7 +39,7 @@ export function scheduleNotifications(): void {
       if (reminderDelay > 0 && reminderDelay < 24 * 60 * 60 * 1000) {
         setTimeout(() => {
           new Notification("\u23f1 5 dk sonra", {
-            body: `${session.title} \u2014 ${session.speaker}`,
+            body: `${session.title} — ${session.speaker}`,
             tag: `reminder-${session.start}`,
           });
         }, reminderDelay);
@@ -48,8 +48,8 @@ export function scheduleNotifications(): void {
       const liveDelay = sessionDate.getTime() - now.getTime();
       if (liveDelay > 0 && liveDelay < 24 * 60 * 60 * 1000) {
         setTimeout(() => {
-          new Notification("\u2708 \u015eimdi", {
-            body: `${session.title} \u2014 ${session.speaker}`,
+          new Notification("\u2708 Şimdi", {
+            body: `${session.title} — ${session.speaker}`,
             tag: `live-${session.start}`,
           });
         }, liveDelay);

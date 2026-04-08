@@ -58,36 +58,36 @@ export default function NotificationPrompt({ show }: NotificationPromptProps) {
             {!showIOSGuide ? (
               <>
                 <p className="text-cream text-sm font-semibold mb-1">
-                  Oturum hat\u0131rlat\u0131c\u0131lar\u0131n\u0131 a\u00e7mak ister misiniz?
+                  Oturum hatırlatıcılarını açmak ister misiniz?
                 </p>
                 <p className="text-cream/50 text-xs mb-4">
-                  Her oturum ba\u015flamadan 5 dk \u00f6nce bildirim al\u0131n.
+                  Her oturum başlamadan 5 dk önce bildirim alın.
                 </p>
                 <div className="flex gap-3">
                   <button
                     onClick={handleAccept}
                     className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-gold-dark to-gold-light text-sky-deep text-sm font-bold active:scale-95 transition-transform"
                   >
-                    Evet, hat\u0131rlat
+                    Evet, hatırlat
                   </button>
                   <button
                     onClick={handleDismiss}
                     className="flex-1 py-2.5 rounded-xl border border-white/10 text-cream/50 text-sm active:scale-95 transition-transform"
                   >
-                    \u015eimdi de\u011fil
+                    Şimdi değil
                   </button>
                 </div>
               </>
             ) : (
               <>
                 <p className="text-cream text-sm font-semibold mb-3">
-                  Bildirimleri almak i\u00e7in Ana Ekrana ekleyin
+                  Bildirimleri almak için Ana Ekrana ekleyin
                 </p>
                 <ol className="text-cream/60 text-xs space-y-2 mb-4 list-decimal list-inside">
                   <li>
                     Alttaki{" "}
                     <span className="inline-block text-cream/80">
-                      Payla\u015f
+                      Paylaş
                     </span>{" "}
                     ({"\u2B06"}) butonuna dokunun
                   </li>
@@ -95,17 +95,17 @@ export default function NotificationPrompt({ show }: NotificationPromptProps) {
                     <span className="text-cream/80">
                       Ana Ekrana Ekle
                     </span>{" "}
-                    se\u00e7ene\u011fini se\u00e7in
+                    seçeneğini seçin
                   </li>
                   <li>
-                    Uygulamay\u0131 ana ekrandan a\u00e7\u0131n
+                    Uygulamayı ana ekrandan açın
                   </li>
                 </ol>
                 <button
                   onClick={handleDismiss}
                   className="w-full py-2.5 rounded-xl border border-white/10 text-cream/50 text-sm active:scale-95 transition-transform"
                 >
-                  Anla\u015f\u0131ld\u0131
+                  Anlaşıldı
                 </button>
               </>
             )}
