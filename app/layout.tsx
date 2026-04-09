@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import PwaInit from '@/components/PwaInit'
 
 export const metadata: Metadata = {
   title: 'Sapphire Momentum II — Program',
@@ -8,6 +9,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Sapphire Momentum II',
     description: '24–26 Nisan 2026 · Kremlin Palace, Antalya',
+  },
+  icons: {
+    apple: '/icons/apple-touch-icon.png',
   },
 }
 
@@ -21,7 +25,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body>{children}</body>
+      <body>
+        <PwaInit />
+        {children}
+      </body>
     </html>
   )
 }
