@@ -36,10 +36,10 @@ export default function BoardingPass({
           <Image
             src="/x2-emblem.png"
             alt="Sapphire Momentum II ×2"
-            width={38}
-            height={38}
+            width={28}
+            height={28}
             className={styles.emblemImg}
-            sizes="38px"
+            sizes="28px"
             priority
           />
           <span className={styles.bpLabel}>Boarding Pass</span>
