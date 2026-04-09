@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_1" data-name="katman 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 770 773">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Adsız_degrade_102);
+      }
+
+      .cls-2 {
+        fill: url(#Adsız_degrade_53);
+      }
+
+      .cls-3 {
+        fill: url(#Adsız_degrade_75);
+      }
+
+      .cls-4 {
+        fill: url(#Adsız_degrade_13);
+      }
+
+      .cls-5 {
+        fill: url(#Adsız_degrade_38);
+      }
+
+      .cls-6 {
+        fill: url(#Adsız_degrade_46);
+      }
+
+      .cls-7 {
+        fill: #939393;
+      }
+
+      .cls-8 {
+        fill: #af9055;
+      }
+
+      .cls-9 {
+        fill: #030d5f;
+      }
+
+      .cls-10 {
+        fill: #3d82ff;
+      }
+
+      .cls-11 {
+        fill: #5884cc;
+      }
+
+      .cls-12 {
+        fill: #284589;
+      }
+
+      .cls-13 {
+        fill: #f4f3ef;
+      }
+    </style>
+    <linearGradient id="Adsız_degrade_13" data-name="Adsız degrade 13" x1="560.23" y1="400.6" x2="721.44" y2="400.6" gradientUnits="userSpaceOnUse">
+      <stop offset=".07" stop-color="#edd29d"/>
+      <stop offset=".59" stop-color="#95753a"/>
+      <stop offset="1" stop-color="#edd29d"/>
+    </linearGradient>
+    <linearGradient id="Adsız_degrade_38" data-name="Adsız degrade 38" x1="59.66" y1="157.99" x2="218.36" y2="312.89" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3d82ff"/>
+      <stop offset="1" stop-color="#030d5f"/>
+    </linearGradient>
+    <linearGradient id="Adsız_degrade_75" data-name="Adsız degrade 75" x1="59.66" y1="39.15" x2="218.36" y2="194.05" gradientUnits="userSpaceOnUse">
+      <stop offset=".26" stop-color="#5c89d1"/>
+      <stop offset="1" stop-color="#2b457a"/>
+    </linearGradient>
+    <linearGradient id="Adsız_degrade_102" data-name="Adsız degrade 102" x1="502.92" y1="70.28" x2="722.4" y2="284.5" gradientUnits="userSpaceOnUse">
+      <stop offset=".07" stop-color="#cdad70"/>
+      <stop offset=".53" stop-color="#5c89d1"/>
+      <stop offset="1" stop-color="#2b457a"/>
+    </linearGradient>
+    <linearGradient id="Adsız_degrade_46" data-name="Adsız degrade 46" x1="296.49" y1="39.15" x2="455.19" y2="194.05" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3d82ff"/>
+      <stop offset=".99" stop-color="#d0b275"/>
+    </linearGradient>
+    <linearGradient id="Adsız_degrade_53" data-name="Adsız degrade 53" x1="296.49" y1="160.73" x2="455.19" y2="315.63" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#030d5f"/>
+      <stop offset=".99" stop-color="#d0b275"/>
+    </linearGradient>
+  </defs>
+  <rect class="cls-11" x="207.47" y="306.98" width="161.21" height="187.24"/>
+  <rect class="cls-12" x="31.09" y="306.98" width="161.21" height="187.24"/>
+  <rect class="cls-7" x="383.85" y="306.98" width="161.21" height="187.24"/>
+  <rect class="cls-4" x="560.23" y="306.98" width="161.21" height="187.24"/>
+  <rect class="cls-9" x="207.04" y="511.26" width="161.21" height="187.24"/>
+  <rect class="cls-8" x="30.66" y="511.26" width="161.21" height="187.24"/>
+  <rect class="cls-10" x="383.42" y="511.26" width="161.21" height="187.24"/>
+  <rect class="cls-13" x="559.8" y="511.26" width="161.21" height="187.24"/>
+  <rect class="cls-5" x="30.23" y="188.14" width="217.56" height="94.6"/>
+  <rect class="cls-3" x="30.23" y="69.3" width="217.56" height="94.6"/>
+  <rect class="cls-1" x="503.88" y="69.3" width="217.56" height="216.18"/>
+  <rect class="cls-6" x="267.06" y="69.3" width="217.56" height="94.6"/>
+  <rect class="cls-2" x="267.06" y="190.88" width="217.56" height="94.6"/>
+</svg>
