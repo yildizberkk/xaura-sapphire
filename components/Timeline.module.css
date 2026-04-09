@@ -1,0 +1,82 @@
+/* components/Timeline.module.css */
+
+.wrap {
+  position: relative;
+}
+
+.header {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--c30);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.inner {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Vertical track */
+.track {
+  position: absolute;
+  left: 55px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(85,116,184,0.2) 6%,
+    rgba(85,116,184,0.2) 94%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* "You are here" notch on the track */
+.youAreHere {
+  position: absolute;
+  left: 51px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(179,147,105,0.6);
+  z-index: 2;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: top 1s ease;
+}
+
+.youAreHereRing {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(179,147,105,0.3);
+  animation: ringPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%,100% { transform: scale(1); opacity: 0.6; }
+  50%      { transform: scale(1.6); opacity: 0; }
+}
+
+.sessions { position: relative; z-index: 1; }
+
+.footer {
+  margin-top: 52px;
+  padding-top: 20px;
+  border-top: 1px solid var(--c08);
+  text-align: center;
+}
+
+.footerText {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: var(--c15);
+  text-transform: uppercase;
+}
