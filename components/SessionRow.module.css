@@ -148,18 +148,23 @@
   background: rgba(179,147,105,0.08);
 }
 .typeEntertainment .title { color: var(--gold-lt); }
+.typeEntertainment .timeStart { color: var(--gold); }
 
 /* session */
 .typeSession .dot {
   border-color: var(--blue-mid);
   background: rgba(85,116,184,0.1);
 }
+.typeSession .title    { color: var(--cream); }
+.typeSession .timeStart { color: var(--c50); }
 
 /* general */
 .typeGeneral .dot {
   border-color: var(--c30);
   background: rgba(244,243,239,0.05);
 }
+.typeGeneral .title    { color: var(--cream); }
+.typeGeneral .timeStart { color: var(--c50); }
 
 /* meal */
 .typeMeal .dot {

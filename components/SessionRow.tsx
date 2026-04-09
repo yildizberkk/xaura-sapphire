@@ -1,10 +1,10 @@
 // components/SessionRow.tsx
 'use client'
 import { motion } from 'framer-motion'
-import type { ClassifiedSession } from '@/lib/schedule'
+import type { ClassifiedSession, SessionType, SessionState } from '@/lib/schedule'
 import styles from './SessionRow.module.css'
 
-const TYPE_CLASS: Record<string, string> = {
+const TYPE_CLASS: Record<SessionType, string> = {
   keynote:       styles.typeKeynote,
   ceremony:      styles.typeCeremony,
   entertainment: styles.typeEntertainment,
@@ -14,7 +14,7 @@ const TYPE_CLASS: Record<string, string> = {
   break:         styles.typeBreak,
 }
 
-const STATE_CLASS: Record<string, string> = {
+const STATE_CLASS: Record<SessionState, string> = {
   active: styles.stateActive,
   next:   styles.stateNext,
   past:   styles.statePast,
