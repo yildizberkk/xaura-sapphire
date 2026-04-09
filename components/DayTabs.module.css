@@ -1,0 +1,55 @@
+/* components/DayTabs.module.css */
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.tab {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 6px 8px;
+  cursor: pointer;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.tabDay {
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--c30);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.tabDate {
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--c50);
+  display: block;
+}
+
+.pip {
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin: 5px auto 0;
+  display: block;
+}
+
+.tabActive {
+  background: linear-gradient(145deg, rgba(53,80,146,0.28) 0%, rgba(85,116,184,0.12) 100%);
+  border-color: rgba(85,116,184,0.5);
+}
+
+.tabActive .tabDay  { color: var(--blue-lt); }
+.tabActive .tabDate { color: var(--cream); }
