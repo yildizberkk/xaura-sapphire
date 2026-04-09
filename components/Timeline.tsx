@@ -1,5 +1,6 @@
 // components/Timeline.tsx
 'use client'
+import Image from 'next/image'
 import { useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ClassifiedSession } from '@/lib/schedule'
@@ -107,7 +108,14 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.footerText}>Xaura Global · Sapphire Momentum II · Nisan 2026</div>
+        <Image
+          src="/xaura-logo.png"
+          alt="Xaura Global"
+          width={110}
+          height={55}
+          className={styles.footerLogo}
+          sizes="110px"
+        />
       </div>
     </motion.div>
   )
