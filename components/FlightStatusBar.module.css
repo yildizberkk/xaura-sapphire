@@ -28,10 +28,10 @@
   text-transform: uppercase;
 }
 
-.scheduled { color: var(--blue-mid); }
-.active    { color: #5de89a; }
-.boarding  { color: var(--gold-lt); }
-.landed    { color: var(--c30); }
+.statusText.scheduled { color: var(--blue-mid); }
+.statusText.active    { color: #5de89a; }
+.statusText.boarding  { color: var(--gold-lt); }
+.statusText.landed    { color: var(--c30); }
 
 .right {
   display: flex;

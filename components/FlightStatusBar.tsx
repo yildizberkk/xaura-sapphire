@@ -7,10 +7,9 @@ import styles from './FlightStatusBar.module.css'
 
 interface FlightStatusBarProps {
   status: FlightStatus
-  now: Date
 }
 
-export default function FlightStatusBar({ status, now }: FlightStatusBarProps) {
+export default function FlightStatusBar({ status }: FlightStatusBarProps) {
   const [displayTime, setDisplayTime] = useState('')
 
   // Update clock every second (local to this component)
