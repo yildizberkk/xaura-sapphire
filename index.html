@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#06091a">
+  <title>Sapphire Momentum II — Program</title>
+
+  <style>
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-UltraLight.ttf') format('truetype'); font-weight: 100; font-style: normal; }
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; }
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; }
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-ExtraBold.ttf') format('truetype'); font-weight: 800; font-style: normal; }
+    @font-face { font-family: 'Gilroy'; src: url('website_materials_given/gilroy/Gilroy-Heavy.ttf') format('truetype'); font-weight: 900; font-style: normal; }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #06091a;
+      --card:      #0c1628;
+      --border:    rgba(85, 116, 184, 0.18);
+      --blue:      #345092;
+      --blue-mid:  #5574b8;
+      --blue-lt:   #7a95d0;
+      --gold:      #b39369;
+      --gold-lt:   #cbb08a;
+      --cream:     #f4f3ef;
+      --c70:       rgba(244,243,239,0.70);
+      --c50:       rgba(244,243,239,0.50);
+      --c30:       rgba(244,243,239,0.30);
+      --c15:       rgba(244,243,239,0.15);
+      --c08:       rgba(244,243,239,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Gilroy', 'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100svh;
+      overflow-x: hidden;
+      padding-bottom: max(40px, env(safe-area-inset-bottom, 40px));
+    }
+
+    /* ─── BACKGROUND ─────────────────────────── */
+    #stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+
+    .glow-top {
+      position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 560px; height: 320px; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse, rgba(53,80,146,0.22) 0%, transparent 70%);
+    }
+
+    .noise {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────── */
+    .container {
+      position: relative; z-index: 1;
+      max-width: 440px;
+      margin: 0 auto;
+      padding: max(20px, env(safe-area-inset-top, 20px)) 16px 0;
+    }
+
+    /* ─── BOARDING PASS ──────────────────────── */
+    .pass {
+      background: linear-gradient(158deg, #111f42 0%, #0b1530 45%, #080f25 100%);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      margin-bottom: 18px;
+      box-shadow:
+        0 0 0 1px rgba(85,116,184,0.06),
+        0 28px 80px rgba(0,0,0,0.75),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      animation: passIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes passIn {
+      from { opacity: 0; transform: translateY(32px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── pass top section ── */
+    .pass-top { padding: 20px 20px 18px; }
+
+    .pass-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .pass-airline {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.3em; color: var(--blue-mid); text-transform: uppercase;
+    }
+
+    .pass-bp-label {
+      font-size: 8px; font-weight: 700;
+      letter-spacing: 0.22em; color: var(--c30); text-transform: uppercase;
+    }
+
+    /* ── wordmark ── */
+    .pass-wordmark { margin-bottom: 16px; }
+    .pass-wordmark svg { width: 100%; height: auto; max-height: 24px; display: block; }
+
+    /* ── route ── */
+    .pass-route {
+      display: flex; align-items: center; margin-bottom: 16px; gap: 8px;
+    }
+
+    .pass-city { flex: 0 0 auto; }
+    .pass-city.right { text-align: right; }
+
+    .pass-iata {
+      font-size: 36px; font-weight: 900;
+      letter-spacing: -0.03em; line-height: 1; color: var(--cream);
+    }
+
+    .pass-city-name {
+      font-size: 8px; font-weight: 600;
+      letter-spacing: 0.18em; color: var(--c30); text-transform: uppercase; margin-top: 2px;
+    }
+
+    .pass-mid {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 5px; padding: 0 6px; overflow: hidden;
+    }
+
+    .pass-track {
+      width: 100%; display: flex; align-items: center; gap: 2px;
+    }
+
+    .pass-track-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(to right, rgba(85,116,184,0.45), rgba(179,147,105,0.45));
+    }
+
+    .pass-track-dot {
+      width: 4px; height: 4px; border-radius: 50%; background: var(--gold); flex-shrink: 0;
+    }
+
+    .pass-plane {
+      font-size: 15px; color: var(--gold); line-height: 1;
+    }
+
+    .pass-duration {
+      font-size: 8.5px; font-weight: 500;
+      letter-spacing: 0.12em; color: var(--c30);
+    }
+
+    /* ── details grid ── */
+    .pass-details {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 8px;
+    }
+
+    .pd { display: flex; flex-direction: column; gap: 3px; }
+    .pd.span2 { grid-column: span 2; }
+
+    .pd-label {
+      font-size: 7.5px; font-weight: 700;
+      letter-spacing: 0.22em; color: var(--c30); text-transform: uppercase;
+    }
+
+    .pd-val {
+      font-size: 11.5px; font-weight: 600; color: var(--cream); letter-spacing: 0.02em;
+    }
+
+    /* ── perforation ── */
+    .pass-perf {
+      position: relative; display: flex; align-items: center; height: 1px; margin: 0 -1px;
+    }
+
+    .pass-perf::before, .pass-perf::after {
+      content: ''; position: absolute;
+      width: 22px; height: 22px; background: var(--bg);
+      border-radius: 50%; top: 50%; transform: translateY(-50%);
+      z-index: 2; box-shadow: inset 0 0 0 1px rgba(85,116,184,0.15);
+    }
+    .pass-perf::before { left: -11px; }
+    .pass-perf::after  { right: -11px; }
+
+    .pass-perf-line {
+      flex: 1; border-top: 1px dashed rgba(85,116,184,0.22); margin: 0 20px;
+    }
+
+    /* ── stub (day tabs) ── */
+    .pass-stub {
+      padding: 14px 20px 18px;
+      background: rgba(4,7,18,0.55);
+      border-radius: 0 0 22px 22px;
+    }
+
+    .stub-label {
+      font-size: 8px; font-weight: 700;
+      letter-spacing: 0.25em; color: var(--c30); text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* ─── DAY TABS ───────────────────────────── */
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+    .tab {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 6px 8px;
+      cursor: pointer; text-align: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+
+    .tab:active { transform: scale(0.94); }
+
+    .tab-day {
+      font-size: 7.5px; font-weight: 700;
+      letter-spacing: 0.18em; color: var(--c30); text-transform: uppercase;
+      display: block; margin-bottom: 3px;
+    }
+
+    .tab-date {
+      font-size: 20px; font-weight: 900; line-height: 1; color: var(--c50);
+    }
+
+    .tab-pip {
+      width: 4px; height: 4px; background: var(--gold); border-radius: 50%;
+      margin: 5px auto 0; display: none;
+    }
+
+    .tab.is-today .tab-pip { display: block; }
+
+    .tab.is-active {
+      background: linear-gradient(145deg, rgba(53,80,146,0.28) 0%, rgba(85,116,184,0.12) 100%);
+      border-color: rgba(85,116,184,0.5);
+    }
+
+    .tab.is-active .tab-day  { color: var(--blue-lt); }
+    .tab.is-active .tab-date { color: var(--cream); }
+
+    /* ─── FLIGHT STATUS BAR ──────────────────── */
+    .status-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px 16px; margin-bottom: 20px;
+      animation: fadeUp 0.5s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-meta { display: flex; flex-direction: column; gap: 3px; }
+
+    .status-lbl {
+      font-size: 8px; font-weight: 700;
+      letter-spacing: 0.22em; color: var(--c30); text-transform: uppercase;
+    }
+
+    .status-val {
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    .status-val.v-scheduled { color: var(--blue-mid); }
+    .status-val.v-active    { color: #5de89a; }
+    .status-val.v-boarding  { color: var(--gold-lt); }
+    .status-val.v-landed    { color: var(--c30); }
+
+    .status-dot {
+      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    .status-dot.v-scheduled { background: var(--blue-mid); }
+    .status-dot.v-active    {
+      background: #5de89a;
+      box-shadow: 0 0 10px rgba(93,232,154,0.7);
+      animation: blink 1.8s ease-in-out infinite;
+    }
+    .status-dot.v-boarding  {
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(179,147,105,0.7);
+      animation: blink 2.2s ease-in-out infinite;
+    }
+    .status-dot.v-landed    { background: var(--c15); }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; } 50% { opacity: 0.35; }
+    }
+
+    /* ─── TIMELINE ───────────────────────────── */
+    .tl-wrap {
+      animation: fadeUp 0.5s 0.48s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .tl-title {
+      font-size: 8.5px; font-weight: 700;
+      letter-spacing: 0.28em; color: var(--c30); text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .timeline { position: relative; }
+
+    /* vertical track line */
+    .track {
+      position: absolute; left: 55px; top: 10px; bottom: 10px; width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(85,116,184,0.2) 6%,
+        rgba(85,116,184,0.2) 94%,
+        transparent 100%
+      );
+    }
+
+    /* ── session row ── */
+    .session {
+      display: flex; align-items: flex-start; position: relative;
+      padding: 8px 0; gap: 0;
+    }
+
+    .s-time {
+      flex: 0 0 55px; text-align: right;
+      padding-right: 16px; padding-top: 2px; user-select: none;
+    }
+
+    .s-t-start {
+      font-size: 12.5px; font-weight: 600; color: var(--c50); display: block;
+      line-height: 1.2; font-variant-numeric: tabular-nums;
+    }
+
+    .s-t-end {
+      font-size: 10px; font-weight: 400; color: var(--c15); display: block;
+      margin-top: 1px; font-variant-numeric: tabular-nums;
+    }
+
+    .s-node {
+      flex: 0 0 10px; display: flex; justify-content: center; padding-top: 4px;
+    }
+
+    .s-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--card);
+      position: relative; z-index: 1; flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .s-body {
+      flex: 1; padding-left: 14px; min-width: 0;
+    }
+
+    .s-title {
+      font-size: 14px; font-weight: 600; color: var(--cream); line-height: 1.35;
+    }
+
+    .s-sub {
+      font-size: 11px; font-weight: 400; color: var(--c30); margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .s-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 8px; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 5px; margin-top: 6px;
+    }
+
+    /* ── TYPE STYLES ── */
+    .session[data-type="keynote"] .s-dot {
+      width: 13px; height: 13px; border-color: var(--gold);
+      background: rgba(179,147,105,0.12); box-shadow: 0 0 14px rgba(179,147,105,0.28);
+    }
+    .session[data-type="keynote"] .s-title { color: var(--gold-lt); font-weight: 700; }
+    .session[data-type="keynote"] .s-t-start { color: var(--gold); }
+
+    .session[data-type="ceremony"] .s-dot {
+      width: 13px; height: 13px; border-color: var(--gold);
+      background: rgba(179,147,105,0.15); box-shadow: 0 0 18px rgba(179,147,105,0.35);
+    }
+    .session[data-type="ceremony"] .s-title { color: var(--gold-lt); font-weight: 700; }
+    .session[data-type="ceremony"] .s-t-start { color: var(--gold); }
+
+    .session[data-type="entertainment"] .s-dot {
+      border-color: var(--gold); background: rgba(179,147,105,0.08);
+    }
+    .session[data-type="entertainment"] .s-title { color: var(--gold-lt); }
+
+    .session[data-type="session"] .s-dot {
+      border-color: var(--blue-mid); background: rgba(85,116,184,0.1);
+    }
+
+    .session[data-type="general"] .s-dot {
+      border-color: var(--c30); background: rgba(244,243,239,0.05);
+    }
+
+    .session[data-type="meal"] .s-dot {
+      border-color: rgba(179,147,105,0.3); background: transparent;
+    }
+    .session[data-type="meal"] .s-title   { color: var(--c50); font-weight: 400; }
+    .session[data-type="meal"] .s-t-start { color: var(--c30); }
+
+    .session[data-type="break"] .s-dot {
+      width: 6px; height: 6px; border-color: var(--c15); background: transparent;
+    }
+    .session[data-type="break"] .s-title   { color: var(--c30); font-size: 11px; font-weight: 400; }
+    .session[data-type="break"] .s-t-start { color: var(--c20, rgba(244,243,239,0.2)); font-size: 11px; }
+
+    /* ── STATE STYLES ── */
+
+    /* active */
+    .session.is-active {
+      background: linear-gradient(to right, rgba(179,147,105,0.06), transparent);
+      border-radius: 14px; margin: 2px -10px; padding: 10px 10px 10px 0;
+    }
+
+    .session.is-active .s-dot {
+      border-color: var(--gold) !important;
+      background: var(--gold) !important;
+      box-shadow: 0 0 0 4px rgba(179,147,105,0.14), 0 0 22px rgba(179,147,105,0.45) !important;
+      animation: activeDot 2.5s ease-in-out infinite;
+    }
+
+    @keyframes activeDot {
+      0%,100% { box-shadow: 0 0 0 4px rgba(179,147,105,0.14), 0 0 22px rgba(179,147,105,0.45); }
+      50%      { box-shadow: 0 0 0 6px rgba(179,147,105,0.1),  0 0 32px rgba(179,147,105,0.55); }
+    }
+
+    .session.is-active .s-title   { color: var(--cream) !important; font-weight: 700 !important; }
+    .session.is-active .s-t-start { color: var(--gold-lt) !important; }
+
+    .s-badge.b-active {
+      background: rgba(179,147,105,0.14); color: var(--gold);
+      border: 1px solid rgba(179,147,105,0.25);
+    }
+
+    /* next */
+    .session.is-next .s-dot {
+      border-color: var(--blue-mid) !important;
+      animation: nextDot 3s ease-in-out infinite;
+    }
+
+    @keyframes nextDot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(85,116,184,0); }
+      50%      { box-shadow: 0 0 0 5px rgba(85,116,184,0.18); }
+    }
+
+    .s-badge.b-next {
+      background: rgba(85,116,184,0.12); color: var(--blue-lt);
+      border: 1px solid rgba(85,116,184,0.22);
+    }
+
+    /* past */
+    .session.is-past .s-dot     { border-color: var(--c08) !important; background: transparent !important; box-shadow: none !important; }
+    .session.is-past .s-title   { color: var(--c15) !important; }
+    .session.is-past .s-t-start { color: var(--c15) !important; }
+    .session.is-past .s-t-end   { color: var(--c08) !important; }
+
+    /* ─── FOOTER ─────────────────────────────── */
+    .footer {
+      margin-top: 52px; padding-top: 20px;
+      border-top: 1px solid var(--c08); text-align: center;
+    }
+
+    .footer-text {
+      font-size: 8.5px; font-weight: 600;
+      letter-spacing: 0.28em; color: var(--c15); text-transform: uppercase;
+    }
+
+    /* ─── UTILS ──────────────────────────────── */
+    * { scrollbar-width: none; }
+    *::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="glow-top"></div>
+<div class="noise"></div>
+
+<div class="container">
+
+  <!-- ═══ BOARDING PASS ═══ -->
+  <div class="pass">
+    <div class="pass-top">
+
+      <div class="pass-header">
+        <span class="pass-airline">Xaura Global</span>
+        <span class="pass-bp-label">Boarding Pass</span>
+      </div>
+
+      <!-- Inline SVG wordmark (light version) -->
+      <div class="pass-wordmark">
+        <svg viewBox="0 0 1316.5 159" xmlns="http://www.w3.org/2000/svg" aria-label="Sapphire Momentum II">
+          <style>.wg{fill:#b39369}.wc{fill:#f4f3ef}</style>
+          <path class="wc" d="M90.42,113.53c-6.95,0-12.79-1.55-17.53-4.66-4.74-3.11-8.08-7.33-10.02-12.67l11.82-6.91c2.74,7.15,8.11,10.72,16.12,10.72,3.87,0,6.71-.7,8.51-2.1s2.7-3.17,2.7-5.31c0-2.47-1.1-4.39-3.3-5.76-2.2-1.37-6.14-2.85-11.82-4.46-3.14-.93-5.79-1.87-7.96-2.8-2.17-.93-4.34-2.19-6.51-3.76-2.17-1.57-3.82-3.55-4.96-5.96-1.14-2.4-1.7-5.21-1.7-8.41,0-6.34,2.25-11.4,6.76-15.17,4.51-3.77,9.93-5.66,16.27-5.66,5.67,0,10.67,1.39,14.97,4.16,4.31,2.77,7.66,6.63,10.07,11.57l-11.62,6.71c-2.8-6.01-7.28-9.01-13.42-9.01-2.87,0-5.12.65-6.76,1.95-1.64,1.3-2.45,2.99-2.45,5.06,0,2.2.92,3.99,2.75,5.36,1.84,1.37,5.36,2.86,10.57,4.46,2.14.67,3.76,1.19,4.86,1.55,1.1.37,2.6.94,4.51,1.7,1.9.77,3.37,1.49,4.41,2.15,1.03.67,2.22,1.57,3.56,2.7,1.33,1.14,2.35,2.3,3.05,3.5.7,1.2,1.3,2.65,1.8,4.36.5,1.7.75,3.55.75,5.56,0,6.48-2.35,11.62-7.06,15.42s-10.83,5.71-18.38,5.71Z"/>
+          <path class="wc" d="M174.86,112.13l-4.46-12.62h-28.8l-4.21,12.62h-14.92l24.54-70.11h17.13l24.73,70.11h-14.01ZM146.11,86.59h19.73l-10.12-28.64-9.61,28.64Z"/>
+          <path class="wc" d="M226.83,42.02c6.74,0,12.42,2.27,17.03,6.81,4.61,4.54,6.91,10.12,6.91,16.73s-2.3,12.19-6.91,16.73c-4.61,4.54-10.28,6.81-17.03,6.81h-12.32v23.03h-13.82V42.02h26.14ZM226.83,76.17c2.94,0,5.37-1.02,7.31-3.05,1.94-2.04,2.9-4.56,2.9-7.56s-.97-5.61-2.9-7.61c-1.94-2-4.37-3-7.31-3h-12.32v21.23h12.32Z"/>
+          <path class="wc" d="M290.93,42.02c6.74,0,12.42,2.27,17.03,6.81,4.61,4.54,6.91,10.12,6.91,16.73s-2.3,12.19-6.91,16.73c-4.61,4.54-10.28,6.81-17.03,6.81h-12.32v23.03h-13.82V42.02h26.14ZM290.93,76.17c2.94,0,5.37-1.02,7.31-3.05,1.94-2.04,2.9-4.56,2.9-7.56s-.97-5.61-2.9-7.61c-1.94-2-4.37-3-7.31-3h-12.32v21.23h12.32Z"/>
+          <path class="wc" d="M368.74,42.02h13.72v70.11h-13.72v-29.04h-26.04v29.04h-13.82V42.02h13.82v27.84h26.04v-27.84Z"/>
+          <path class="wc" d="M400.49,42.02h13.82v70.11h-13.82V42.02Z"/>
+          <path class="wc" d="M470.8,112.13l-14.17-24.34h-10.47v24.34h-13.82V42.02h28.04c6.47,0,11.98,2.27,16.52,6.81,4.54,4.54,6.81,10.02,6.81,16.42,0,4.34-1.24,8.36-3.71,12.07-2.47,3.71-5.74,6.49-9.81,8.36l15.52,26.44h-14.92ZM446.16,54.94v20.73h14.22c2.6,0,4.84-1.02,6.71-3.05,1.87-2.04,2.8-4.49,2.8-7.36s-.94-5.31-2.8-7.31c-1.87-2-4.11-3-6.71-3h-14.22Z"/>
+          <path class="wc" d="M512.66,98.91h29.54v13.22h-43.37V42.02h42.87v13.22h-29.04v14.92h26.54v13.02h-26.54v15.72Z"/>
+          <path class="wg" d="M652.57,42.02v70.11h-7.01v-59.49l-24.54,41.06h-1l-24.54-41.06v59.49h-7.01V42.02h8.6l23.45,39.24,23.45-39.24h8.6Z"/>
+          <path class="wg" d="M731.59,102.76c-7.01,7.04-15.59,10.57-25.74,10.57s-18.73-3.52-25.74-10.57c-7.01-7.04-10.52-15.61-10.52-25.69s3.51-18.64,10.52-25.69c7.01-7.04,15.59-10.57,25.74-10.57s18.73,3.52,25.74,10.57c7.01,7.05,10.52,15.61,10.52,25.69s-3.5,18.65-10.52,25.69ZM685.02,97.96c5.61,5.71,12.55,8.56,20.83,8.56s15.22-2.85,20.83-8.56c5.61-5.71,8.41-12.67,8.41-20.88s-2.8-15.17-8.41-20.88-12.55-8.56-20.83-8.56-15.22,2.85-20.83,8.56-8.41,12.67-8.41,20.88,2.8,15.17,8.41,20.88Z"/>
+          <path class="wg" d="M823.23,42.02v70.11h-7.01v-59.49l-24.54,41.06h-1l-24.54-41.06v59.49h-7.01V42.02h8.6l23.45,39.24,23.45-39.24h8.6Z"/>
+          <path class="wg" d="M851.27,105.52h34.05v6.61h-41.06V42.02h40.56v6.61h-33.55v24.84h31.05v6.61h-31.05v25.44Z"/>
+          <path class="wg" d="M947.41,42.02h7.01v70.11h-6.01l-39.06-57.09v57.09h-7.01V42.02h6.11l38.96,56.94v-56.94Z"/>
+          <path class="wg" d="M1019.52,42.02v6.61h-21.53v63.5h-7.01v-63.5h-21.53v-6.61h50.08Z"/>
+          <path class="wg" d="M1078.41,106.52c-4.81,4.54-11.08,6.81-18.83,6.81s-14.02-2.27-18.83-6.81c-4.81-4.54-7.21-10.62-7.21-18.23v-46.27h7.01v46.27c0,5.61,1.67,10.05,5.01,13.32,3.34,3.27,8.01,4.91,14.02,4.91s10.68-1.63,14.02-4.91c3.34-3.27,5.01-7.71,5.01-13.32v-46.27h7.01v46.27c0,7.61-2.4,13.69-7.21,18.23Z"/>
+          <path class="wg" d="M1169.75,42.02v70.11h-7.01v-59.49l-24.54,41.06h-1l-24.54-41.06v59.49h-7.01V42.02h8.6l23.45,39.24,23.45-39.24h8.6Z"/>
+          <path class="wg" d="M1219.32,42.02h13.82v70.11h-13.82V42.02Z"/>
+          <path class="wg" d="M1251.17,42.02h13.82v70.11h-13.82V42.02Z"/>
+        </svg>
+      </div>
+
+      <!-- Route -->
+      <div class="pass-route">
+        <div class="pass-city">
+          <div class="pass-iata">IST</div>
+          <div class="pass-city-name">İstanbul</div>
+        </div>
+        <div class="pass-mid">
+          <div class="pass-track">
+            <div class="pass-track-line"></div>
+            <div class="pass-track-dot"></div>
+            <div class="pass-track-line" style="background:linear-gradient(to right, rgba(179,147,105,0.4), rgba(85,116,184,0.2))"></div>
+          </div>
+          <div class="pass-plane">✈</div>
+          <div class="pass-duration">3 Gün · 2026</div>
+        </div>
+        <div class="pass-city right">
+          <div class="pass-iata">AYT</div>
+          <div class="pass-city-name">Antalya</div>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="pass-details">
+        <div class="pd">
+          <span class="pd-label">Kalkış</span>
+          <span class="pd-val">24 Nis</span>
+        </div>
+        <div class="pd">
+          <span class="pd-label">İniş</span>
+          <span class="pd-val">26 Nis</span>
+        </div>
+        <div class="pd">
+          <span class="pd-label">Sınıf</span>
+          <span class="pd-val">Liderlik</span>
+        </div>
+        <div class="pd span2">
+          <span class="pd-label">Kapı / Otel</span>
+          <span class="pd-val">Kremlin Palace, Antalya</span>
+        </div>
+        <div class="pd">
+          <span class="pd-label">Uçuş</span>
+          <span class="pd-val">SM–II</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perforation -->
+    <div class="pass-perf">
+      <div class="pass-perf-line"></div>
+    </div>
+
+    <!-- Stub -->
+    <div class="pass-stub">
+      <div class="stub-label">Gün Seçin</div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+  </div>
+
+  <!-- ═══ STATUS BAR ═══ -->
+  <div class="status-bar">
+    <div class="status-meta">
+      <span class="status-lbl">Uçuş Durumu</span>
+      <span class="status-val v-scheduled" id="statusVal">Bekleniyor</span>
+    </div>
+    <div class="status-dot v-scheduled" id="statusDot"></div>
+  </div>
+
+  <!-- ═══ TIMELINE ═══ -->
+  <div class="tl-wrap">
+    <div class="tl-title">Uçuş Programı</div>
+    <div class="timeline" id="timeline">
+      <div class="track"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">Xaura Global · Sapphire Momentum II · Nisan 2026</div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ─── SCHEDULE DATA ─────────────────────────────────────────────────────────
+const SCHEDULE = {
+  event: {
+    name: "Sapphire Momentum II",
+    subtitle: "2nd Anniversary Edition",
+    dates: "24-26 Nisan",
+    location: "Kremlin Palace, Antalya"
+  },
+  days: [
+    {
+      day: "Cuma", dayEN: "Friday", date: "2026-04-24",
+      sessions: [
+        { start: "10:00", end: "12:30", title: "Giriş", type: "general" },
+        { start: "12:30", end: "14:30", title: "Öğle Yemeği", type: "meal" },
+        { start: "16:15", end: "17:30", title: "Ruby Okulu", type: "session" },
+        { start: "17:30", end: "20:30", title: "Serbest Zaman ve Akşam Yemeği", type: "meal" },
+        { start: "20:30", end: null,    title: "Kapı Açılış", type: "general" },
+        { start: "20:45", end: null,    title: "2. Yıl Dönümü Açılış Konuşması", type: "keynote" },
+        { start: "21:15", end: null,    title: "Konser", type: "entertainment" }
+      ]
+    },
+    {
+      day: "Cumartesi", dayEN: "Saturday", date: "2026-04-25",
+      sessions: [
+        { start: "07:00", end: "09:30", title: "Kahvaltı", type: "meal" },
+        { start: "09:30", end: "10:15", title: "Eğitim - 1", type: "session" },
+        { start: "10:15", end: "10:30", title: "Ara", type: "break" },
+        { start: "10:30", end: "11:15", title: "Eğitim - 2", type: "session" },
+        { start: "11:15", end: "11:30", title: "Ara", type: "break" },
+        { start: "11:30", end: "12:30", title: "Eğitim - 3", type: "session" },
+        { start: "12:30", end: "13:45", title: "Öğle Yemeği", type: "meal" },
+        { start: "13:45", end: "15:15", title: "Eğitim - 4", type: "session" },
+        { start: "15:15", end: "15:30", title: "Ara", type: "break" },
+        { start: "15:30", end: "16:30", title: "Sistem Kurmak: Sen Olmadan Çalışan Organizasyon", type: "session" },
+        { start: "16:30", end: "18:00", title: "Ara", type: "break" },
+        { start: "18:00", end: null,    title: "Vizyon Liderliği", type: "session" },
+        { start: null,    end: null,    title: "Akşam Yemeği", type: "meal" },
+        { start: "21:00", end: null,    title: "Takdir Töreni", subtitle: "SP Kutlaması — Son ve Yenisi", type: "ceremony" }
+      ]
+    },
+    {
+      day: "Pazar", dayEN: "Sunday", date: "2026-04-26",
+      sessions: [
+        { start: "07:00", end: "09:30", title: "Kahvaltı", type: "meal" },
+        { start: "09:45", end: "10:30", title: "Eğitim - 1", type: "session" },
+        { start: "10:30", end: "10:45", title: "Ara", type: "break" },
+        { start: "10:45", end: "12:00", title: "Eğitim - 2", type: "session" },
+        { start: "12:00", end: "13:00", title: "Oda Boşaltma ve Coffee Break", type: "break" },
+        { start: "13:15", end: "15:00", title: "Kapanış Konuşması", type: "keynote" }
+      ]
+    }
+  ]
+};
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────
+function parseTime(dateStr, timeStr) {
+  if (!timeStr) return null;
+  const [h, m] = timeStr.split(':').map(Number);
+  const d = new Date(dateStr);
+  d.setHours(h, m, 0, 0);
+  return d;
+}
+
+function getTodayDayIdx() {
+  const today = new Date().toLocaleDateString('sv'); // "YYYY-MM-DD"
+  return SCHEDULE.days.findIndex(d => d.date === today);
+}
+
+// ─── SESSION CLASSIFICATION ────────────────────────────────────────────────
+function classifySessions(dayIdx) {
+  const day = SCHEDULE.days[dayIdx];
+  const now = new Date();
+
+  const parsed = day.sessions.map((s, i) => ({
+    ...s,
+    idx: i,
+    startDt: parseTime(day.date, s.start),
+    endDt:   parseTime(day.date, s.end),
+  }));
+
+  let activeIdx = -1;
+  for (let i = 0; i < parsed.length; i++) {
+    const s = parsed[i];
+    if (!s.startDt) continue;
+    // effective end: explicit end, or next session's start, or +90min
+    let eff = s.endDt;
+    if (!eff) {
+      const nxt = parsed.slice(i + 1).find(n => n.startDt);
+      eff = nxt?.startDt || new Date(s.startDt.getTime() + 90 * 60000);
+    }
+    if (now >= s.startDt && now <= eff) { activeIdx = i; break; }
+  }
+
+  let nextIdx = -1;
+  const fromIdx = activeIdx >= 0 ? activeIdx + 1 : 0;
+  for (let i = fromIdx; i < parsed.length; i++) {
+    if (parsed[i].startDt && parsed[i].startDt > now) { nextIdx = i; break; }
+  }
+
+  return parsed.map((s, i) => ({
+    ...s,
+    state: i === activeIdx ? 'active'
+         : i === nextIdx   ? 'next'
+         : (s.startDt && s.startDt < now) ? 'past'
+         : 'future',
+  }));
+}
+
+// ─── FLIGHT STATUS ─────────────────────────────────────────────────────────
+function getFlightStatus(dayIdx) {
+  const day = SCHEDULE.days[dayIdx];
+  const now = new Date();
+  const d0 = new Date(day.date); d0.setHours(0,0,0,0);
+  const d1 = new Date(day.date); d1.setHours(23,59,59,999);
+
+  if (now < d0) return { text: 'Bekleniyor', cls: 'v-scheduled' };
+  if (now > d1) return { text: 'Tamamlandı', cls: 'v-landed' };
+
+  const sessions = classifySessions(dayIdx);
+  if (sessions.some(s => s.state === 'active')) return { text: 'Aktif Uçuş', cls: 'v-active' };
+  if (sessions.some(s => s.state === 'next'))   return { text: 'İnişe Hazır', cls: 'v-boarding' };
+  return { text: 'Aktif', cls: 'v-active' };
+}
+
+// ─── TYPE ICONS ────────────────────────────────────────────────────────────
+const TYPE_ICON = {
+  keynote:       '✦',
+  ceremony:      '◆',
+  entertainment: '♪',
+  meal:          '',
+  session:       '',
+  general:       '',
+  break:         '',
+};
+
+// ─── RENDER ────────────────────────────────────────────────────────────────
+let activeDay = 0;
+
+function renderTabs() {
+  const todayIdx = getTodayDayIdx();
+  const container = document.getElementById('tabs');
+  container.innerHTML = SCHEDULE.days.map((d, i) => {
+    const date = new Date(d.date).getDate();
+    const classes = ['tab', i === activeDay ? 'is-active' : '', i === todayIdx ? 'is-today' : '']
+      .filter(Boolean).join(' ');
+    return `
+      <button class="${classes}" onclick="selectDay(${i})" aria-label="${d.day}">
+        <span class="tab-day">${d.day}</span>
+        <span class="tab-date">${date}</span>
+        <div class="tab-pip"></div>
+      </button>`;
+  }).join('');
+}
+
+function renderTimeline(dayIdx) {
+  const sessions = classifySessions(dayIdx);
+  const container = document.getElementById('timeline');
+
+  container.innerHTML = '<div class="track"></div>' + sessions.map(s => {
+    const icon = TYPE_ICON[s.type] || '';
+    let badge = '';
+    if (s.state === 'active') badge = `<span class="s-badge b-active">${icon ? icon + ' ' : ''}Aktif</span>`;
+    else if (s.state === 'next') badge = `<span class="s-badge b-next">Sıradaki</span>`;
+
+    const sub = s.subtitle ? `<div class="s-sub">${s.subtitle}</div>` : '';
+    const endTime = s.end ? `<span class="s-t-end">${s.end}</span>` : '';
+    const startTime = s.start || '—';
+
+    return `
+      <div class="session is-${s.state}" data-type="${s.type}">
+        <div class="s-time">
+          <span class="s-t-start">${startTime}</span>
+          ${endTime}
+        </div>
+        <div class="s-node"><div class="s-dot"></div></div>
+        <div class="s-body">
+          <div class="s-title">${s.title}</div>
+          ${sub}
+          ${badge}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderStatus(dayIdx) {
+  const st = getFlightStatus(dayIdx);
+  const val = document.getElementById('statusVal');
+  const dot = document.getElementById('statusDot');
+  val.className = 'status-val ' + st.cls;
+  val.textContent = st.text;
+  dot.className = 'status-dot ' + st.cls;
+}
+
+function selectDay(idx) {
+  activeDay = idx;
+  renderTabs();
+  renderTimeline(idx);
+  renderStatus(idx);
+  document.getElementById('timeline').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const today = getTodayDayIdx();
+  activeDay = today >= 0 ? today : 0;
+  renderTabs();
+  renderTimeline(activeDay);
+  renderStatus(activeDay);
+
+  // Scroll to active session after animation
+  setTimeout(() => {
+    const active = document.querySelector('.session.is-active');
+    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 900);
+});
+
+// ─── STARFIELD ─────────────────────────────────────────────────────────────
+(function () {
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function init() {
+    stars = [];
+    const n = Math.floor((W * H) / 9000);
+    for (let i = 0; i < n; i++) {
+      stars.push({
+        x:     Math.random() * W,
+        y:     Math.random() * H,
+        r:     Math.random() * 1.1 + 0.15,
+        base:  Math.random() * 0.35 + 0.05,
+        amp:   Math.random() * 0.35,
+        speed: Math.random() * 0.5 + 0.15,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.012;
+    stars.forEach(s => {
+      const a = s.base + s.amp * Math.sin(s.phase + t * s.speed);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(244,243,239,${a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize(); init();
+  window.addEventListener('resize', () => { resize(); init(); });
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
