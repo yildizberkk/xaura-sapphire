@@ -1,0 +1,68 @@
+/* components/CountdownDisplay.module.css */
+
+.wrap {
+  text-align: center;
+  padding: 32px 20px 28px;
+  background: linear-gradient(145deg, rgba(53,80,146,0.12) 0%, rgba(11,21,48,0.6) 100%);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  margin-bottom: 20px;
+}
+
+.label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--c30);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.units {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 52px;
+}
+
+.value {
+  font-size: 38px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+}
+
+.unitLabel {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--c30);
+  text-transform: uppercase;
+}
+
+.sep {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--c15);
+  line-height: 1;
+  padding-top: 6px;
+}
+
+.subtext {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--c30);
+  letter-spacing: 0.08em;
+}
+
+.gold { color: var(--gold-lt); }
