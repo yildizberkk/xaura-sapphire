@@ -40,6 +40,7 @@ export default function BoardingPass({
             height={38}
             className={styles.emblemImg}
             sizes="38px"
+            priority
           />
           <span className={styles.bpLabel}>Boarding Pass</span>
         </div>
