@@ -1,0 +1,76 @@
+/* components/FlightStatusBar.module.css */
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.left { display: flex; flex-direction: column; gap: 3px; }
+
+.lbl {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--c30);
+  text-transform: uppercase;
+}
+
+.statusText {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scheduled { color: var(--blue-mid); }
+.active    { color: #5de89a; }
+.boarding  { color: var(--gold-lt); }
+.landed    { color: var(--c30); }
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clock {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c30);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot.scheduled { background: var(--blue-mid); }
+
+.dot.active {
+  background: #5de89a;
+  box-shadow: 0 0 10px rgba(93,232,154,0.7);
+  animation: blink 1.8s ease-in-out infinite;
+}
+
+.dot.boarding {
+  background: var(--gold);
+  box-shadow: 0 0 10px rgba(179,147,105,0.7);
+  animation: blink 2.2s ease-in-out infinite;
+}
+
+.dot.landed { background: var(--c15); }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
