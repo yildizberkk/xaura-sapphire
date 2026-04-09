@@ -1,0 +1,14 @@
+/* app/client-page.module.css */
+
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  padding-bottom: max(40px, env(safe-area-inset-bottom, 40px));
+}
+
+.container {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: max(20px, env(safe-area-inset-top, 20px)) 16px 0;
+}
