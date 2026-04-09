@@ -1,6 +1,6 @@
 // components/Timeline.tsx
 'use client'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ClassifiedSession } from '@/lib/schedule'
 import SessionRow from './SessionRow'
@@ -9,17 +9,21 @@ import styles from './Timeline.module.css'
 interface TimelineProps {
   sessions: ClassifiedSession[]
   selectedDay: number
+  onSwipeLeft?: () => void
+  onSwipeRight?: () => void
 }
 
 // Direction of day transition: +1 = forward (slide left), -1 = backward (slide right)
 function useDirection(selectedDay: number) {
   const prev = useRef(selectedDay)
   const dir = selectedDay > prev.current ? 1 : -1
-  prev.current = selectedDay
+  useEffect(() => {
+    prev.current = selectedDay
+  })
   return dir
 }
 
-export default function Timeline({ sessions, selectedDay }: TimelineProps) {
+export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRight }: TimelineProps) {
   const direction = useDirection(selectedDay)
 
   // Swipe gesture state
@@ -29,23 +33,24 @@ export default function Timeline({ sessions, selectedDay }: TimelineProps) {
     touchStart.current = e.touches[0].clientX
   }
 
-  function handleTouchEnd(e: React.TouchEvent, onSwipeLeft: () => void, onSwipeRight: () => void) {
+  function handleTouchEnd(e: React.TouchEvent) {
     if (touchStart.current === null) return
     const delta = e.changedTouches[0].clientX - touchStart.current
-    if (delta < -50) onSwipeLeft()
-    if (delta >  50) onSwipeRight()
+    if (delta < -50) onSwipeLeft?.()
+    if (delta >  50) onSwipeRight?.()
     touchStart.current = null
   }
 
   // Compute "you are here" notch position as % of total session span
   const positionedSessions = sessions.filter(s => s.startDt)
-  const activeOrNext = sessions.find(s => s.state === 'active' || s.state === 'next')
+  const hasActiveOrNext = sessions.some(s => s.state === 'active' || s.state === 'next')
   const youAreHerePct = (() => {
-    if (!activeOrNext?.startDt || positionedSessions.length < 2) return null
-    const first = positionedSessions[0].startDt!
-    const last  = positionedSessions[positionedSessions.length - 1].startDt!
-    const now   = activeOrNext.startDt
-    const span  = last.getTime() - first.getTime()
+    if (!hasActiveOrNext || positionedSessions.length < 2) return null
+    const first = positionedSessions[0].startDt
+    const last  = positionedSessions[positionedSessions.length - 1].startDt
+    if (!first || !last) return null
+    const now  = new Date()
+    const span = last.getTime() - first.getTime()
     if (span === 0) return null
     return Math.min(100, Math.max(0, ((now.getTime() - first.getTime()) / span) * 100))
   })()
@@ -65,7 +70,11 @@ export default function Timeline({ sessions, selectedDay }: TimelineProps) {
     >
       <div className={styles.header}>Uçuş Programı</div>
 
-      <div className={styles.inner}>
+      <div
+        className={styles.inner}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className={styles.track} />
 
         {/* "You are here" notch */}
