@@ -1,5 +1,6 @@
 // components/BoardingPass.tsx
 'use client'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import type { Day } from '@/lib/schedule'
 import DayTabs from './DayTabs'
@@ -32,7 +33,14 @@ export default function BoardingPass({
     >
       <div className={styles.top}>
         <div className={styles.header}>
-          <span className={styles.airline}>Xaura Global</span>
+          <Image
+            src="/x2-emblem.png"
+            alt="Sapphire Momentum II ×2"
+            width={38}
+            height={38}
+            className={styles.emblemImg}
+            sizes="38px"
+          />
           <span className={styles.bpLabel}>Boarding Pass</span>
         </div>
 
