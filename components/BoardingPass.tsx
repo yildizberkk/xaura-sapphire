@@ -18,7 +18,8 @@ export default function BoardingPass({
   const day = days[selectedDay]
 
   function fmtDate(dateStr: string) {
-    const d = new Date(dateStr)
+    const [y, m, day] = dateStr.split('-').map(Number)
+    const d = new Date(y, m - 1, day)
     return d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })
   }
 

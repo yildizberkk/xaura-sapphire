@@ -19,7 +19,9 @@ export default function StarfieldCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext('2d')!
+    const ctxOrNull = canvas.getContext('2d')
+    if (!ctxOrNull) return
+    const ctx: CanvasRenderingContext2D = ctxOrNull
     const cv = canvas
     let W = 0, H = 0
     let stars: Star[] = []
@@ -60,11 +62,17 @@ export default function StarfieldCanvas() {
     }
 
     resize()
-    window.addEventListener('resize', resize)
+    let resizeTimer: ReturnType<typeof setTimeout>
+    function onResize() {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(resize, 150)
+    }
+    window.addEventListener('resize', onResize)
     raf = requestAnimationFrame(draw)
 
     return () => {
-      window.removeEventListener('resize', resize)
+      window.removeEventListener('resize', onResize)
+      clearTimeout(resizeTimer)
       cancelAnimationFrame(raf)
     }
   }, [])

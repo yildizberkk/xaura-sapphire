@@ -15,7 +15,7 @@ export default function DayTabs({ days, selectedDay, todayIdx, onSelect }: DayTa
   return (
     <div className={styles.tabs}>
       {days.map((d, i) => {
-        const date = new Date(d.date).getDate()
+        const date = parseInt(d.date.split('-')[2], 10)
         const isActive = i === selectedDay
         const isToday  = i === todayIdx
         return (
