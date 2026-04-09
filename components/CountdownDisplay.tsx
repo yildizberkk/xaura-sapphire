@@ -1,6 +1,5 @@
 // components/CountdownDisplay.tsx
 'use client'
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import styles from './CountdownDisplay.module.css'
 
@@ -27,17 +26,7 @@ function pad(n: number) {
 }
 
 export default function CountdownDisplay({ msUntilEvent }: CountdownDisplayProps) {
-  const [ms, setMs] = useState(msUntilEvent)
-
-  // Tick every minute
-  useEffect(() => {
-    const id = setInterval(() => {
-      setMs(prev => Math.max(0, prev - 60_000))
-    }, 60_000)
-    return () => clearInterval(id)
-  }, [])
-
-  const { days, hours, minutes } = getParts(ms)
+  const { days, hours, minutes } = getParts(msUntilEvent)
 
   return (
     <motion.div
