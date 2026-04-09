@@ -15,13 +15,13 @@
 
 .inner {
   position: relative;
-  overflow: hidden;
+  overflow-x: clip;
 }
 
 /* Vertical track */
 .track {
   position: absolute;
-  left: 55px;
+  left: 60px;
   top: 10px;
   bottom: 10px;
   width: 1px;
@@ -39,7 +39,7 @@
 /* "You are here" notch on the track */
 .youAreHere {
   position: absolute;
-  left: 51px;
+  left: 55.5px;
   width: 9px;
   height: 9px;
   border-radius: 50%;
