@@ -74,8 +74,6 @@
 }
 
 .footerLogo {
-  width: 110px;
-  height: 55px;
   opacity: 0.75;
   object-fit: contain;
   display: block;
