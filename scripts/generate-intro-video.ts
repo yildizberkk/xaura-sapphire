@@ -1,12 +1,13 @@
 import { fal } from '@fal-ai/client'
-import { writeFileSync } from 'fs'
-import sharp from 'sharp'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
 
 fal.config({ credentials: process.env.FAL_API_KEY })
 
+const FRAME_CACHE = 'public/intro-frame.jpg'
+
 const START_PROMPT = `Pre-dawn airport runway shot from ground level, camera positioned at centerline looking straight down the runway into darkness. Two parallel rows of amber-gold runway edge lights (#edd29d, #af9055) converge sharply to a single vanishing point at the very center of the horizon. Wet dark asphalt reflects the amber lights in long golden streaks (#cdad70). Deep midnight navy sky above (#030d5f). A soft cobalt-gold glow radiates from the vanishing point on the horizon (#5c89d1, #cdad70) — as if a light source or beacon sits exactly at the end of the runway. White painted centerline dashes stretch ahead into that glow. No aircraft, no people, no terminal buildings visible. Cinematic wide-angle perspective with extreme depth compression, photorealistic, dramatic, moody.`
 
-const VIDEO_PROMPT = `Camera starts perfectly still at runway level, then begins a very slow and deliberate forward push that gradually and smoothly accelerates — as if a plane beginning its takeoff roll. The amber runway edge lights (#edd29d, #af9055) on both sides slowly begin to stream past. The acceleration builds steadily — lights blur into golden streaks on both sides. The glowing beacon at the horizon grows larger and more radiant as the camera rushes toward it, filling more of the frame. The cobalt-gold glow (#5c89d1, #cdad70) at the vanishing point intensifies. Pure forward motion only — no tilt, no lift, no vertical movement — just an unstoppable momentum building toward the light ahead. Smooth continuous acceleration, no cuts, perfectly cinematic, awe-inspiring sense of momentum and destiny.`
+const VIDEO_PROMPT = `Camera starts perfectly still at runway level, then begins a very slow and deliberate forward push that gradually and smoothly accelerates — as if a plane beginning its takeoff roll. The amber runway edge lights (#edd29d, #af9055) on both sides slowly begin to stream past. The acceleration builds steadily — lights blur into golden streaks on both sides. The glowing cobalt-gold beacon at the horizon (#5c89d1, #cdad70) grows steadily larger and more radiant as the camera rushes forward. In the final moments, the beacon light expands and floods more and more of the frame — the horizon dissolves into a radiant wash of cobalt-gold light that fills the screen as the camera charges into it. Pure forward motion only — no tilt, no lift, no vertical movement — just an unstoppable momentum building into the light. Smooth continuous acceleration into a luminous ending, no cuts, perfectly cinematic.`
 
 const NEGATIVE_PROMPT = `camera shake, tilt, lift, vertical movement, quick cut, daylight, sunrise, sunset, people, text, watermark, airplane, helicopter, blur, distortion, low quality, overexposed, washed out colors, desaturated, gray tones`
 
@@ -39,54 +40,21 @@ async function downloadToBuffer(url: string): Promise<Buffer> {
   return Buffer.from(await response.arrayBuffer())
 }
 
-async function compositeLogoOnHorizon(imageUrl: string, logoPath: string): Promise<Buffer> {
-  console.log('\n[COMPOSITE] Overlaying X² emblem on horizon vanishing point...')
-
-  const baseBuffer = await downloadToBuffer(imageUrl)
-  const baseMeta   = await sharp(baseBuffer).metadata()
-  const W = baseMeta.width!
-  const H = baseMeta.height!
-
-  // Vanishing point sits at roughly 52% down (just below center — runway perspective)
-  // Logo placed centered horizontally, vertically centered on the vanishing point
-  const logoSize   = Math.round(W * 0.18)   // 18% of width — visible but distant
-  const logoX      = Math.round((W - logoSize) / 2)
-  const logoY      = Math.round(H * 0.52) - Math.round(logoSize / 2)
-
-  // Resize logo with transparency preserved
-  const logoBuffer = await sharp(logoPath)
-    .resize(logoSize, logoSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .toBuffer()
-
-  // Soft glow behind logo — a blurred radial highlight
-  const glowSize   = Math.round(logoSize * 2.5)
-  const glowBuffer = await sharp({
-    create: {
-      width: glowSize, height: glowSize,
-      channels: 4,
-      background: { r: 205, g: 173, b: 112, alpha: 180 }, // #cdad70 warm gold
-    },
-  })
-    .blur(glowSize * 0.22)
-    .toBuffer()
-
-  const glowX = Math.round((W - glowSize) / 2)
-  const glowY = Math.round(H * 0.52) - Math.round(glowSize / 2)
-
-  const composited = await sharp(baseBuffer)
-    .composite([
-      { input: glowBuffer,  left: glowX,  top: glowY,  blend: 'screen' },
-      { input: logoBuffer,  left: logoX,  top: logoY,  blend: 'over'   },
-    ])
-    .jpeg({ quality: 95 })
-    .toBuffer()
-
-  console.log(`[COMPOSITE] Done — logo at (${logoX},${logoY}), size ${logoSize}px`)
-  return composited
+async function getStartFrame(): Promise<Buffer> {
+  if (existsSync(FRAME_CACHE)) {
+    console.log(`\n[FRAME] Reusing cached frame from ${FRAME_CACHE}`)
+    return readFileSync(FRAME_CACHE)
+  }
+  console.log(`\n[FRAME] No cache found — generating new start frame...`)
+  const url = await generateImage(START_PROMPT, 'START IMAGE')
+  const buffer = await downloadToBuffer(url)
+  writeFileSync(FRAME_CACHE, buffer)
+  console.log(`[FRAME] Cached to ${FRAME_CACHE}`)
+  return buffer
 }
 
 async function uploadToFal(buffer: Buffer, filename: string): Promise<string> {
-  console.log('\n[UPLOAD] Uploading composited image to fal storage...')
+  console.log('\n[UPLOAD] Uploading start frame to fal storage...')
   const file = new File([new Uint8Array(buffer)], filename, { type: 'image/jpeg' })
   const url  = await fal.storage.upload(file)
   console.log(`[UPLOAD] Done: ${url}`)
@@ -131,10 +99,19 @@ async function main() {
     process.exit(1)
   }
 
-  const rawImageUrl    = await generateImage(START_PROMPT, 'START IMAGE')
-  const composited     = await compositeLogoOnHorizon(rawImageUrl, 'public/x2-emblem.png')
-  const startImageUrl  = await uploadToFal(composited, 'runway-with-logo.jpg')
-  const videoUrl       = await generateVideo(startImageUrl)
+  // Remove --no-cache flag to skip cached frame
+  const noCache = process.argv.includes('--no-cache')
+  if (noCache && existsSync(FRAME_CACHE)) {
+    console.log('[FRAME] --no-cache flag set, ignoring cached frame')
+  }
+  if (noCache) {
+    const { unlinkSync } = await import('fs')
+    if (existsSync(FRAME_CACHE)) unlinkSync(FRAME_CACHE)
+  }
+
+  const frameBuffer   = await getStartFrame()
+  const startImageUrl = await uploadToFal(frameBuffer, 'runway-start.jpg')
+  const videoUrl      = await generateVideo(startImageUrl)
   await downloadMp4(videoUrl, 'public/intro.mp4')
 
   console.log('\n✓ Done. public/intro.mp4 is ready.')

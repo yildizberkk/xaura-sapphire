@@ -3,6 +3,7 @@
 import { useSchedule } from '@/hooks/useSchedule'
 import type { ScheduleData } from '@/lib/schedule'
 
+import IntroVideo      from '@/components/IntroVideo'
 import StarfieldCanvas  from '@/components/StarfieldCanvas'
 import BoardingPass     from '@/components/BoardingPass'
 import FlightStatusBar  from '@/components/FlightStatusBar'
@@ -30,6 +31,7 @@ export default function ClientPage({ schedule }: ClientPageProps) {
 
   return (
     <div className={styles.page}>
+      <IntroVideo />
       <StarfieldCanvas />
 
       <div className={styles.container}>
