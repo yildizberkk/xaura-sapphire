@@ -3,11 +3,9 @@ import { writeFileSync } from 'fs'
 
 fal.config({ credentials: process.env.FAL_API_KEY })
 
-const START_PROMPT = `Bird's eye aerial night photography of Kremlin Palace hotel complex in Lara Beach, Antalya, Turkey, shot from approximately 800 meters altitude directly above. The night sky is deep midnight blue-black (#030d5f), fading into dark cobalt (#2b457a) near the horizon. The dense Lara Beach city grid glows with warm amber-gold lights (#edd29d, #cdad70), the hotel complex itself radiating a warmer bronze-gold light (#af9055). Multiple large swimming pools scatter across the resort, each shimmering with vivid electric sapphire blue (#3d82ff). A thin cobalt atmospheric haze (#5c89d1) softens the light spread across the city. The dark Mediterranean sea (#030d5f to #2b457a) is visible at the frame edges. Photorealistic drone photography, cinematic, no plane, no people, no text.`
+const START_PROMPT = `Pre-dawn airport runway shot from ground level, camera positioned at centerline looking straight down the runway into darkness. Two parallel rows of amber-gold runway edge lights (#edd29d, #af9055) converge sharply to a vanishing point in the far distance. Wet dark asphalt reflects the amber lights in long golden streaks (#cdad70). Deep midnight navy sky above (#030d5f). A razor-thin line of cobalt-gold pre-dawn glow at the horizon (#5c89d1, #cdad70) — the faintest suggestion of dawn breaking. White painted centerline dashes stretch ahead into the darkness. No aircraft, no people, no terminal buildings visible. Cinematic wide-angle perspective with strong depth compression, photorealistic, dramatic, moody.`
 
-const END_PROMPT = `Bird's eye aerial night photography of Kremlin Palace hotel complex in Lara Beach, Antalya, Turkey, shot from approximately 200 meters altitude directly above. The grand resort architecture fills most of the frame with warm bronze-gold illumination (#af9055, #d0b275). Multiple large luxurious swimming pools glow intensely with electric sapphire blue light (#3d82ff) — clearly defined and prominent. Surrounding Lara Beach city lights (#edd29d) are visible but peripheral, the hotel dominating the composition. Dark Mediterranean sea (#030d5f) barely visible at extreme edges. The deep night sky (#030d5f) is only a thin strip. Cobalt atmospheric glow (#5c89d1) emanates from the resort. Photorealistic drone photography, cinematic, no plane, no people, no text.`
-
-const VIDEO_PROMPT = `Extremely slow and perfectly smooth vertical aerial descent from 800 meters down to 200 meters, zero camera shake, steady dolly-down movement, no drift or lateral movement. The deep midnight navy sky (#030d5f) gradually recedes as the warm gold city lights (#edd29d, #cdad70) of Lara Beach grow larger and more detailed. The Kremlin Palace resort rises to dominate the frame, its bronze-gold light (#af9055) intensifying, electric sapphire blue pools (#3d82ff) shimmering and expanding. A soft cobalt atmospheric haze (#5c89d1) pulses gently over the city. The dark cobalt Mediterranean sea (#2b457a, #030d5f) slowly disappears to the edges. IMAX aerial drone cinematography, luxury travel documentary, breathtaking arrival, awe-inspiring.`
+const VIDEO_PROMPT = `Camera starts perfectly still at runway level, then begins a slow deliberate forward movement that gradually accelerates as if a plane beginning its takeoff roll. The amber runway edge lights (#edd29d, #af9055) on both sides start to blur and stream past faster and faster. The acceleration builds — the lights trail into streaks. Then the camera tilts slightly upward, the nose lifts, and the ground drops away as we lift off the runway. In the final moments the runway disappears below and a vast dark coastline reveals itself, dense warm gold city lights (#af9055, #cdad70) spreading across the darkness to the horizon, the cobalt pre-dawn sky (#5c89d1, #030d5f) glowing at the edge of the world. Smooth continuous motion, no cuts, perfectly cinematic takeoff sequence, awe-inspiring.`
 
 const NEGATIVE_PROMPT = `camera shake, fast movement, quick cut, daylight, sunrise, sunset, people, text, watermark, airplane, helicopter, blur, distortion, low quality, overexposed, washed out colors, desaturated, gray tones`
 
@@ -34,13 +32,12 @@ async function generateImage(prompt: string, label: string): Promise<string> {
   return url
 }
 
-async function generateVideo(startImageUrl: string, endImageUrl: string): Promise<string> {
+async function generateVideo(startImageUrl: string): Promise<string> {
   console.log('\n[VIDEO] Generating video with Kling v3 Pro...')
   const result = await fal.subscribe('fal-ai/kling-video/v3/pro/image-to-video', {
     input: {
       prompt: VIDEO_PROMPT,
       start_image_url: startImageUrl,
-      end_image_url: endImageUrl,
       duration: '8',
       generate_audio: false,
       cfg_scale: 0.7,
@@ -76,8 +73,7 @@ async function main() {
   }
 
   const startImageUrl = await generateImage(START_PROMPT, 'START IMAGE')
-  const endImageUrl   = await generateImage(END_PROMPT,   'END IMAGE')
-  const videoUrl      = await generateVideo(startImageUrl, endImageUrl)
+  const videoUrl      = await generateVideo(startImageUrl)
   await downloadMp4(videoUrl, 'public/intro.mp4')
 
   console.log('\n✓ Done. public/intro.mp4 is ready.')
