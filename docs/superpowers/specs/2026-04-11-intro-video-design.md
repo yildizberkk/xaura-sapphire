@@ -19,7 +19,7 @@ A cinematic aerial entrance video shown to first-time visitors before they see t
 **Perspective:** Pure bird's eye — no plane, no aircraft visible  
 **Camera movement:** Perfectly smooth vertical descent from ~800m to ~200m altitude, zero lateral drift, zero shake  
 **Aspect ratio:** 9:16 portrait (mobile-first — site accessed via QR code on phones)  
-**Resolution:** 1080×1920 for both images and video  
+**Resolution:** 576×1024 — native Flux 2 Pro `"portrait_9_16"` preset  
 **Duration:** 8 seconds  
 **Audio:** Silent (`generate_audio: false`)  
 **Cost:** ~$0.90 (Kling 8s silent) + ~$0.10 (2× Flux Pro images) = ~$1.00
@@ -54,12 +54,12 @@ All prompts are anchored to the brand palette from the SVG design system:
 **API parameters:**
 ```json
 {
-  "image_size": { "width": 1080, "height": 1920 },
+  "image_size": "portrait_9_16",
   "seed": 42,
   "output_format": "jpeg"
 }
 ```
-> Use the **same `seed`** for both start and end images — ensures consistent lighting style, color temperature, and atmospheric conditions across both frames.
+> `"portrait_9_16"` is the native Flux 2 Pro enum preset producing **576×1024** images (confirmed in playground). Use the **same `seed`** for both start and end images — ensures consistent lighting style, color temperature, and atmospheric conditions across both frames.
 
 **Prompt:**
 ```
@@ -165,7 +165,7 @@ Higher adherence to prompt means the specific hex colors and shot composition ar
 Kling's `multi_prompt` divides the video into distinct shots with their own prompts. For a smooth unbroken 8-second aerial descent this would introduce visible cut transitions between phases. Using `start_image_url` + `end_image_url` + a single prompt gives Kling two anchor frames to interpolate between, which produces a more fluid and predictable continuous motion.
 
 ### `aspect_ratio` — not a Kling parameter
-The Kling v3 Pro image-to-video API has no `aspect_ratio` parameter. The video output ratio is automatically inherited from the `start_image_url` dimensions. Providing a 1080×1920 (9:16) start image produces a 9:16 video.
+The Kling v3 Pro image-to-video API has no `aspect_ratio` parameter. The video output ratio is automatically inherited from the `start_image_url` dimensions. Providing a 576×1024 (9:16) start image via Flux 2 Pro's `"portrait_9_16"` preset produces a 9:16 video.
 
 ### `elements` — not applicable
 The `elements` parameter injects custom characters or objects referenced as `@Element1` etc. Not relevant for an abstract aerial landscape shot.
