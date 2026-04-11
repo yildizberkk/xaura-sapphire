@@ -54,12 +54,12 @@ All prompts are anchored to the brand palette from the SVG design system:
 **API parameters:**
 ```json
 {
-  "image_size": "portrait_9_16",
+  "image_size": "portrait_16_9",
   "seed": 42,
   "output_format": "jpeg"
 }
 ```
-> `"portrait_9_16"` is the native Flux 2 Pro enum preset producing **576×1024** images (confirmed in playground). Use the **same `seed`** for both start and end images — ensures consistent lighting style, color temperature, and atmospheric conditions across both frames.
+> `"portrait_16_9"` is the correct Flux 2 Pro enum for portrait orientation (576×1024). The fal.ai convention names it after the ratio with the larger number first — the playground label "Portrait 9:16" is human-readable, the API string is `"portrait_16_9"`. Use the **same `seed`** for both start and end images — ensures consistent lighting style, color temperature, and atmospheric conditions across both frames.
 
 **Prompt:**
 ```

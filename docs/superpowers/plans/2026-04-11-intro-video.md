@@ -79,7 +79,7 @@ async function generateImage(prompt: string, label: string): Promise<string> {
   const result = await fal.subscribe('fal-ai/flux-2-pro', {
     input: {
       prompt,
-      image_size: 'portrait_9_16',
+      image_size: 'portrait_16_9',
       seed: 42,
       output_format: 'jpeg',
     },
