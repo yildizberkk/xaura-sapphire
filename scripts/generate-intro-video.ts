@@ -23,11 +23,13 @@ async function generateImage(prompt: string, label: string): Promise<string> {
     logs: true,
     onQueueUpdate: (update) => {
       if (update.status === 'IN_PROGRESS') {
-        update.logs?.map((log: { message: string }) => log.message).forEach(console.log)
+        update.logs?.forEach((log) => console.log(`[${log.level}] ${log.message}`))
       }
     },
   })
-  const url = (result.data as { images: { url: string }[] }).images[0].url
+  const images = (result.data as { images?: { url: string }[] }).images
+  if (!images?.length) throw new Error(`[${label}] No images in response: ${JSON.stringify(result.data)}`)
+  const url = images[0].url
   console.log(`[${label}] Done: ${url}`)
   return url
 }
@@ -47,11 +49,13 @@ async function generateVideo(startImageUrl: string, endImageUrl: string): Promis
     logs: true,
     onQueueUpdate: (update) => {
       if (update.status === 'IN_PROGRESS') {
-        update.logs?.map((log: { message: string }) => log.message).forEach(console.log)
+        update.logs?.forEach((log) => console.log(`[${log.level}] ${log.message}`))
       }
     },
   })
-  const url = (result.data as { video: { url: string } }).video.url
+  const video = (result.data as { video?: { url: string } }).video
+  if (!video?.url) throw new Error(`[VIDEO] No video URL in response: ${JSON.stringify(result.data)}`)
+  const url = video.url
   console.log(`[VIDEO] Done: ${url}`)
   return url
 }
