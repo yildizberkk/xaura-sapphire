@@ -18,6 +18,8 @@ A cinematic aerial entrance video shown to first-time visitors before they see t
 **Theme:** Cinematic night aerial descent over Kremlin Palace, Lara Beach, Antalya  
 **Perspective:** Pure bird's eye — no plane, no aircraft visible  
 **Camera movement:** Perfectly smooth vertical descent from ~800m to ~200m altitude, zero lateral drift, zero shake  
+**Aspect ratio:** 9:16 portrait (mobile-first — site accessed via QR code on phones)  
+**Resolution:** 1080×1920 for both images and video  
 **Duration:** 8 seconds  
 **Audio:** Silent (`generate_audio: false`)  
 **Cost:** ~$0.90 (Kling 8s silent) + ~$0.10 (2× Flux Pro images) = ~$1.00
@@ -48,7 +50,8 @@ All prompts are anchored to the brand palette from the SVG design system:
 ### Step 1 — Start Image (Flux Pro, fal-ai/flux-pro)
 
 **Altitude:** ~800m  
-**Frame:** Kremlin Palace small but centered, dense Lara Beach city grid fills lower 60%, Mediterranean sea at top/edges, stars visible
+**Frame:** Kremlin Palace small but centered, dense Lara Beach city grid fills lower 60%, Mediterranean sea at top/edges, stars visible  
+**Image size:** `{ "width": 1080, "height": 1920 }` (9:16 portrait)
 
 **Prompt:**
 ```
@@ -58,7 +61,8 @@ Bird's eye aerial night photography of Kremlin Palace hotel complex in Lara Beac
 ### Step 2 — End Image (Flux Pro, fal-ai/flux-pro)
 
 **Altitude:** ~200m  
-**Frame:** Kremlin Palace fills most of frame, pools prominent and vivid, city lights peripheral, sea barely visible at extreme edges
+**Frame:** Kremlin Palace fills most of frame, pools prominent and vivid, city lights peripheral, sea barely visible at extreme edges  
+**Image size:** `{ "width": 1080, "height": 1920 }` (9:16 portrait)
 
 **Prompt:**
 ```
@@ -143,6 +147,9 @@ Higher adherence to prompt means the specific hex colors and shot composition ar
 
 ### `multi_prompt` — deliberately not used
 Kling's `multi_prompt` divides the video into distinct shots with their own prompts. For a smooth unbroken 8-second aerial descent this would introduce visible cut transitions between phases. Using `start_image_url` + `end_image_url` + a single prompt gives Kling two anchor frames to interpolate between, which produces a more fluid and predictable continuous motion.
+
+### `aspect_ratio` — not a Kling parameter
+The Kling v3 Pro image-to-video API has no `aspect_ratio` parameter. The video output ratio is automatically inherited from the `start_image_url` dimensions. Providing a 1080×1920 (9:16) start image produces a 9:16 video.
 
 ### `elements` — not applicable
 The `elements` parameter injects custom characters or objects referenced as `@Element1` etc. Not relevant for an abstract aerial landscape shot.
