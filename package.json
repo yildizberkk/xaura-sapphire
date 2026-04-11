@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "generate:intro": "dotenv -e .env.local -- tsx scripts/generate-intro-video.ts"
   },
   "dependencies": {
     "@fal-ai/client": "^1.9.5",
