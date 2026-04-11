@@ -47,22 +47,38 @@ All prompts are anchored to the brand palette from the SVG design system:
 
 ## Generation Pipeline
 
-### Step 1 — Start Image (Flux Pro, fal-ai/flux-pro)
+### Step 1 — Start Image (Flux 2 Pro, fal-ai/flux-2-pro)
 
 **Altitude:** ~800m  
 **Frame:** Kremlin Palace small but centered, dense Lara Beach city grid fills lower 60%, Mediterranean sea at top/edges, stars visible  
-**Image size:** `{ "width": 1080, "height": 1920 }` (9:16 portrait)
+**API parameters:**
+```json
+{
+  "image_size": { "width": 1080, "height": 1920 },
+  "seed": 42,
+  "output_format": "jpeg"
+}
+```
+> Use the **same `seed`** for both start and end images — ensures consistent lighting style, color temperature, and atmospheric conditions across both frames.
 
 **Prompt:**
 ```
 Bird's eye aerial night photography of Kremlin Palace hotel complex in Lara Beach, Antalya, Turkey, shot from approximately 800 meters altitude directly above. The night sky is deep midnight blue-black (#030d5f), fading into dark cobalt (#2b457a) near the horizon. The dense Lara Beach city grid glows with warm amber-gold lights (#edd29d, #cdad70), the hotel complex itself radiating a warmer bronze-gold light (#af9055). Multiple large swimming pools scatter across the resort, each shimmering with vivid electric sapphire blue (#3d82ff). A thin cobalt atmospheric haze (#5c89d1) softens the light spread across the city. The dark Mediterranean sea (#030d5f to #2b457a) is visible at the frame edges. Photorealistic drone photography, cinematic, no plane, no people, no text.
 ```
 
-### Step 2 — End Image (Flux Pro, fal-ai/flux-pro)
+### Step 2 — End Image (Flux 2 Pro, fal-ai/flux-2-pro)
 
 **Altitude:** ~200m  
 **Frame:** Kremlin Palace fills most of frame, pools prominent and vivid, city lights peripheral, sea barely visible at extreme edges  
-**Image size:** `{ "width": 1080, "height": 1920 }` (9:16 portrait)
+**API parameters:**
+```json
+{
+  "image_size": { "width": 1080, "height": 1920 },
+  "seed": 42,
+  "output_format": "jpeg"
+}
+```
+> Same `seed: 42` as start image — locks in matching color palette and atmosphere.
 
 **Prompt:**
 ```
