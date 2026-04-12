@@ -35,14 +35,6 @@
   text-transform: uppercase;
 }
 
-.clock {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--cream);
-  font-variant-numeric: tabular-nums;
-}
-
 .wordmark { margin-bottom: 16px; }
 .wordmark svg { width: 100%; height: auto; max-height: 24px; display: block; }
 
@@ -117,38 +109,27 @@
   color: var(--c30);
 }
 
-/* ── Details grid ── */
+/* ── Details grid — 2 columns, 3 rows ── */
 .details {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px 0;
 }
 
-/* Each cell aligns its own content to the left by default */
 .detail {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  padding-right: 6px;
 }
 
-/* Last column in a row — flush right */
+/* Right column — flush right */
 .colRight {
   text-align: right;
-  padding-right: 0;
 }
 
-/* Full-width rows */
-.col3 { grid-column: 1 / -1; }
+/* Ended state — spans both columns */
+.col2 { grid-column: 1 / -1; }
 
-/* Two-column span starting from col 2 */
-.col2 {
-  grid-column: span 2;
-  text-align: right;
-  padding-right: 0;
-}
-
-/* Ended state */
 .endedDetail {
   padding: 4px 0 2px;
 }

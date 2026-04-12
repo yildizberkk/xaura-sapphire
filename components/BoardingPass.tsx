@@ -1,6 +1,5 @@
 // components/BoardingPass.tsx
 'use client'
-import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import type { Day } from '@/lib/schedule'
@@ -20,19 +19,6 @@ interface BoardingPassProps {
 export default function BoardingPass({
   days, selectedDay, todayIdx, onDayChange, segment, passenger,
 }: BoardingPassProps) {
-  const [clock, setClock] = useState('')
-
-  useEffect(() => {
-    function tick() {
-      setClock(new Date().toLocaleTimeString('tr-TR', {
-        hour: '2-digit', minute: '2-digit', hour12: false,
-      }))
-    }
-    tick()
-    const id = setInterval(tick, 1_000)
-    return () => clearInterval(id)
-  }, [])
-
   function fmtDate(dateStr: string) {
     const [y, m, d] = dateStr.split('-').map(Number)
     return new Date(y, m - 1, d).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })
@@ -60,7 +46,6 @@ export default function BoardingPass({
             sizes="28px"
             priority
           />
-          <span className={styles.clock}>{clock}</span>
           <span className={styles.bpLabel}>Boarding Pass</span>
         </div>
 
@@ -110,47 +95,52 @@ export default function BoardingPass({
           </div>
         </div>
 
-        {/* Details grid */}
+        {/* Details grid — 2 columns × 3 rows */}
         <div className={styles.details}>
 
-          {passenger && (
-            <div className={`${styles.detail} ${styles.col3}`}>
-              <span className={styles.detailLabel}>Yolcu</span>
-              <span className={styles.detailVal}>
-                {passenger.firstName.toUpperCase()} {passenger.lastName.toUpperCase()}
-              </span>
-            </div>
-          )}
+          {/* Row 1: Yolcu | Kapı/Otel */}
+          <div className={styles.detail}>
+            <span className={styles.detailLabel}>Yolcu</span>
+            <span className={styles.detailVal}>
+              {passenger
+                ? `${passenger.firstName.toUpperCase()} ${passenger.lastName.toUpperCase()}`
+                : '–'}
+            </span>
+          </div>
+          <div className={`${styles.detail} ${styles.colRight}`}>
+            <span className={styles.detailLabel}>Kapı / Otel</span>
+            <span className={styles.detailVal}>Kremlin Palace</span>
+          </div>
 
+          {/* Row 2 & 3: times / date / duration — or ended message */}
           {isEnded ? (
-            <div className={`${styles.detail} ${styles.col3} ${styles.endedDetail}`}>
+            <div className={`${styles.detail} ${styles.col2} ${styles.endedDetail}`}>
               <span className={styles.endedText}>
                 Uçuşunuz sona erdi — liderlik yolunda önümüzdeki yolculuklarda görüşmek üzere.
               </span>
             </div>
           ) : (
             <>
+              {/* Row 2: Kalkış | İniş */}
               <div className={styles.detail}>
                 <span className={styles.detailLabel}>Kalkış</span>
                 <span className={styles.detailVal}>{segment.kalkis ?? '--:--'}</span>
               </div>
-              <div className={styles.detail}>
+              <div className={`${styles.detail} ${styles.colRight}`}>
                 <span className={styles.detailLabel}>İniş</span>
                 <span className={styles.detailVal}>{segment.inis ?? '--:--'}</span>
               </div>
-              <div className={`${styles.detail} ${styles.colRight}`}>
-                <span className={styles.detailLabel}>Uçuş Süresi</span>
-                <span className={styles.detailVal}>{segment.suresi ?? '–'}</span>
-              </div>
+
+              {/* Row 3: Tarih | Uçuş Süresi */}
               <div className={styles.detail}>
                 <span className={styles.detailLabel}>Tarih</span>
                 <span className={styles.detailVal}>
                   {segment.dateStr ? fmtDate(segment.dateStr) : '–'}
                 </span>
               </div>
-              <div className={`${styles.detail} ${styles.col2}`}>
-                <span className={styles.detailLabel}>Kapı / Otel</span>
-                <span className={styles.detailVal}>Kremlin Palace</span>
+              <div className={`${styles.detail} ${styles.colRight}`}>
+                <span className={styles.detailLabel}>Uçuş Süresi</span>
+                <span className={styles.detailVal}>{segment.suresi ?? '–'}</span>
               </div>
             </>
           )}

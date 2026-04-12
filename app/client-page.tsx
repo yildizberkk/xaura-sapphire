@@ -26,6 +26,19 @@ interface ClientPageProps {
   schedule: ScheduleData
 }
 
+function Clock() {
+  const [time, setTime] = useState('')
+  useEffect(() => {
+    function tick() {
+      setTime(new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }))
+    }
+    tick()
+    const id = setInterval(tick, 1_000)
+    return () => clearInterval(id)
+  }, [])
+  return <p className={styles.clock}>{time}</p>
+}
+
 export default function ClientPage({ schedule }: ClientPageProps) {
   const [phase,  setPhase] = useState<Phase>('loading')
   const [user,   setUser]  = useState<StoredUser | null>(null)
@@ -106,6 +119,8 @@ export default function ClientPage({ schedule }: ClientPageProps) {
           {nextSessionDeadline && (
             <CountdownDisplay deadline={nextSessionDeadline} />
           )}
+
+          <Clock />
 
           <Timeline
             sessions={sessions}

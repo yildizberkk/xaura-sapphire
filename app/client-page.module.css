@@ -22,3 +22,13 @@
   /* ambient amber haze behind all cards — mirrors login page at lower intensity */
   background: radial-gradient(ellipse 80% 40% at 50% 15%, rgba(205, 173, 112, 0.04) 0%, transparent 70%);
 }
+
+.clock {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 20px;
+}
