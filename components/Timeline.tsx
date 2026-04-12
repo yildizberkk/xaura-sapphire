@@ -1,7 +1,7 @@
 // components/Timeline.tsx
 'use client'
 import Image from 'next/image'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ClassifiedSession } from '@/lib/schedule'
 import SessionRow from './SessionRow'
@@ -42,6 +42,12 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
     touchStart.current = null
   }
 
+  const [now, setNow] = useState(() => new Date())
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 10_000)
+    return () => clearInterval(id)
+  }, [])
+
   // Compute "you are here" notch position as % of total session span
   const positionedSessions = sessions.filter(s => s.startDt)
   const hasActiveOrNext = sessions.some(s => s.state === 'active' || s.state === 'next')
@@ -50,7 +56,6 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
     const first = positionedSessions[0].startDt
     const last  = positionedSessions[positionedSessions.length - 1].startDt
     if (!first || !last) return null
-    const now  = new Date()
     const span = last.getTime() - first.getTime()
     if (span === 0) return null
     return Math.min(100, Math.max(0, ((now.getTime() - first.getTime()) / span) * 100))
