@@ -66,10 +66,6 @@ export default function SessionRow({ session, index }: SessionRowProps) {
         {state === 'active' && (
           <span className={styles.badge + ' ' + styles.badgeActive}>✦ Aktif</span>
         )}
-        {state === 'next' && (
-          <span className={styles.badge + ' ' + styles.badgeNext}>Sıradaki</span>
-        )}
-
         {/* Live progress bar for active session */}
         {state === 'active' && progressPct !== null && (
           <div className={styles.progressTrack}>
