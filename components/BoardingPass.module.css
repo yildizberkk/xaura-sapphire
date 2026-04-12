@@ -35,6 +35,14 @@
   text-transform: uppercase;
 }
 
+.clock {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+}
+
 .wordmark { margin-bottom: 16px; }
 .wordmark svg { width: 100%; height: auto; max-height: 24px; display: block; }
 
@@ -64,6 +72,10 @@
   color: var(--c30);
   text-transform: uppercase;
   margin-top: 2px;
+  max-width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .routeMid {
@@ -108,13 +120,46 @@
 /* ── Details grid ── */
 .details {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px 0;
 }
 
-.detail { display: flex; flex-direction: column; gap: 3px; }
-.detailSpan2 { grid-column: span 2; }
-.detailSpan3 { grid-column: span 3; }
+/* Each cell aligns its own content to the left by default */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-right: 6px;
+}
+
+/* Last column in a row — flush right */
+.colRight {
+  text-align: right;
+  padding-right: 0;
+}
+
+/* Full-width rows */
+.col3 { grid-column: 1 / -1; }
+
+/* Two-column span starting from col 2 */
+.col2 {
+  grid-column: span 2;
+  text-align: right;
+  padding-right: 0;
+}
+
+/* Ended state */
+.endedDetail {
+  padding: 4px 0 2px;
+}
+
+.endedText {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--c30);
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+}
 
 .detailLabel {
   font-size: 7.5px;

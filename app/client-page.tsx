@@ -10,7 +10,6 @@ import StarfieldCanvas   from '@/components/StarfieldCanvas'
 import IntroVideo        from '@/components/IntroVideo'
 import RegistrationForm  from '@/components/RegistrationForm'
 import BoardingPass      from '@/components/BoardingPass'
-import FlightStatusBar   from '@/components/FlightStatusBar'
 import CountdownDisplay  from '@/components/CountdownDisplay'
 import Timeline          from '@/components/Timeline'
 import styles from './client-page.module.css'
@@ -36,9 +35,8 @@ export default function ClientPage({ schedule }: ClientPageProps) {
     setSelectedDay,
     todayIdx,
     sessions,
-    status,
-    isPreEvent,
-    msUntilEvent,
+    currentSegment,
+    nextSessionDeadline,
   } = useSchedule(schedule.days)
 
   useEffect(() => {
@@ -101,13 +99,12 @@ export default function ClientPage({ schedule }: ClientPageProps) {
             selectedDay={selectedDay}
             todayIdx={todayIdx}
             onDayChange={setSelectedDay}
+            segment={currentSegment}
             passenger={user ?? undefined}
           />
 
-          <FlightStatusBar status={status} />
-
-          {isPreEvent && (
-            <CountdownDisplay msUntilEvent={msUntilEvent} />
+          {nextSessionDeadline && (
+            <CountdownDisplay deadline={nextSessionDeadline} />
           )}
 
           <Timeline

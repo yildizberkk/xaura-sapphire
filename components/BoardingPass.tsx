@@ -1,8 +1,10 @@
 // components/BoardingPass.tsx
 'use client'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import type { Day } from '@/lib/schedule'
+import type { BoardingSegment } from '@/lib/schedule'
 import DayTabs from './DayTabs'
 import styles from './BoardingPass.module.css'
 
@@ -11,19 +13,32 @@ interface BoardingPassProps {
   selectedDay: number
   todayIdx: number
   onDayChange: (idx: number) => void
+  segment: BoardingSegment
   passenger?: { firstName: string; lastName: string }
 }
 
 export default function BoardingPass({
-  days, selectedDay, todayIdx, onDayChange, passenger,
+  days, selectedDay, todayIdx, onDayChange, segment, passenger,
 }: BoardingPassProps) {
-  const day = days[selectedDay]
+  const [clock, setClock] = useState('')
+
+  useEffect(() => {
+    function tick() {
+      setClock(new Date().toLocaleTimeString('tr-TR', {
+        hour: '2-digit', minute: '2-digit', hour12: false,
+      }))
+    }
+    tick()
+    const id = setInterval(tick, 1_000)
+    return () => clearInterval(id)
+  }, [])
 
   function fmtDate(dateStr: string) {
-    const [y, m, day] = dateStr.split('-').map(Number)
-    const d = new Date(y, m - 1, day)
-    return d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })
+    const [y, m, d] = dateStr.split('-').map(Number)
+    return new Date(y, m - 1, d).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })
   }
+
+  const isEnded = segment.type === 'ended'
 
   return (
     <motion.div
@@ -33,6 +48,8 @@ export default function BoardingPass({
       transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className={styles.top}>
+
+        {/* Header */}
         <div className={styles.header}>
           <Image
             src="/x2-emblem.png"
@@ -43,10 +60,11 @@ export default function BoardingPass({
             sizes="28px"
             priority
           />
+          <span className={styles.clock}>{clock}</span>
           <span className={styles.bpLabel}>Boarding Pass</span>
         </div>
 
-        {/* Wordmark SVG — light version (cream + gold) */}
+        {/* Wordmark SVG */}
         <div className={styles.wordmark}>
           <svg viewBox="0 0 1316.5 159" xmlns="http://www.w3.org/2000/svg" aria-label="Sapphire Momentum II">
             <style>{`.wg{fill:#b39369}.wc{fill:#f4f3ef}`}</style>
@@ -74,8 +92,8 @@ export default function BoardingPass({
         {/* Route */}
         <div className={styles.route}>
           <div className={styles.city}>
-            <div className={styles.iata}>IST</div>
-            <div className={styles.cityName}>İstanbul</div>
+            <div className={styles.iata}>{segment.dep || '–'}</div>
+            <div className={styles.cityName}>{segment.depName}</div>
           </div>
           <div className={styles.routeMid}>
             <div className={styles.routeTrack}>
@@ -87,41 +105,56 @@ export default function BoardingPass({
             <div className={styles.duration}>3 Gün · 2026</div>
           </div>
           <div className={`${styles.city} ${styles.cityRight}`}>
-            <div className={styles.iata}>AYT</div>
-            <div className={styles.cityName}>Antalya</div>
+            <div className={styles.iata}>{segment.arr || '–'}</div>
+            <div className={styles.cityName}>{segment.arrName}</div>
           </div>
         </div>
 
-        {/* Details grid — dynamic based on selected day */}
+        {/* Details grid */}
         <div className={styles.details}>
+
           {passenger && (
-            <div className={`${styles.detail} ${styles.detailSpan3}`}>
+            <div className={`${styles.detail} ${styles.col3}`}>
               <span className={styles.detailLabel}>Yolcu</span>
               <span className={styles.detailVal}>
                 {passenger.firstName.toUpperCase()} {passenger.lastName.toUpperCase()}
               </span>
             </div>
           )}
-          <div className={styles.detail}>
-            <span className={styles.detailLabel}>Kalkış</span>
-            <span className={styles.detailVal}>{fmtDate(day.date)}</span>
-          </div>
-          <div className={styles.detail}>
-            <span className={styles.detailLabel}>İniş</span>
-            <span className={styles.detailVal}>{fmtDate(days[days.length - 1].date)}</span>
-          </div>
-          <div className={styles.detail}>
-            <span className={styles.detailLabel}>Sınıf</span>
-            <span className={styles.detailVal}>Liderlik</span>
-          </div>
-          <div className={`${styles.detail} ${styles.detailSpan2}`}>
-            <span className={styles.detailLabel}>Kapı / Otel</span>
-            <span className={styles.detailVal}>Kremlin Palace</span>
-          </div>
-          <div className={styles.detail}>
-            <span className={styles.detailLabel}>Uçuş</span>
-            <span className={styles.detailVal}>SM–II</span>
-          </div>
+
+          {isEnded ? (
+            <div className={`${styles.detail} ${styles.col3} ${styles.endedDetail}`}>
+              <span className={styles.endedText}>
+                Uçuşunuz sona erdi — liderlik yolunda önümüzdeki yolculuklarda görüşmek üzere.
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className={styles.detail}>
+                <span className={styles.detailLabel}>Kalkış</span>
+                <span className={styles.detailVal}>{segment.kalkis ?? '--:--'}</span>
+              </div>
+              <div className={styles.detail}>
+                <span className={styles.detailLabel}>İniş</span>
+                <span className={styles.detailVal}>{segment.inis ?? '--:--'}</span>
+              </div>
+              <div className={`${styles.detail} ${styles.colRight}`}>
+                <span className={styles.detailLabel}>Uçuş Süresi</span>
+                <span className={styles.detailVal}>{segment.suresi ?? '–'}</span>
+              </div>
+              <div className={styles.detail}>
+                <span className={styles.detailLabel}>Tarih</span>
+                <span className={styles.detailVal}>
+                  {segment.dateStr ? fmtDate(segment.dateStr) : '–'}
+                </span>
+              </div>
+              <div className={`${styles.detail} ${styles.col2}`}>
+                <span className={styles.detailLabel}>Kapı / Otel</span>
+                <span className={styles.detailVal}>Kremlin Palace</span>
+              </div>
+            </>
+          )}
+
         </div>
       </div>
 
