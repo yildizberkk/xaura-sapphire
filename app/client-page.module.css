@@ -7,6 +7,14 @@
   padding-bottom: max(40px, env(safe-area-inset-bottom, 40px));
 }
 
+/* Prevents any flash of the main app before localStorage is checked */
+.loadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #030d5f;
+}
+
 .container {
   max-width: 440px;
   margin: 0 auto;

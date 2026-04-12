@@ -1,0 +1,205 @@
+/* components/RegistrationForm.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #030d5f;
+  /* amber halo from the video's warm ending */
+  background-image: radial-gradient(
+    ellipse 80% 50% at 50% -5%,
+    rgba(205, 173, 112, 0.28) 0%,
+    transparent 65%
+  );
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(40px, env(safe-area-inset-top, 40px)) 24px
+           max(40px, env(safe-area-inset-bottom, 40px));
+}
+
+.inner {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── Logo ── */
+.logoWrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoGlow {
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(205, 173, 112, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.logo {
+  position: relative;
+  z-index: 1;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+
+/* ── Headings ── */
+.greeting {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f4f3ef;
+  letter-spacing: 0.01em;
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #cdad70;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 36px;
+  text-align: center;
+}
+
+/* ── Form ── */
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(205, 173, 112, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f4f3ef;
+  font-family: 'Gilroy', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+
+.input::placeholder {
+  color: rgba(244, 243, 239, 0.35);
+}
+
+.input:focus {
+  border-color: rgba(205, 173, 112, 0.6);
+  background: rgba(205, 173, 112, 0.06);
+}
+
+/* ── Consent row ── */
+.consentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.consentText {
+  font-size: 13px;
+  color: rgba(244, 243, 239, 0.65);
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* toggle pill */
+.toggle {
+  flex-shrink: 0;
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(244, 243, 239, 0.5);
+  transition: transform 0.25s, background 0.25s;
+}
+
+.toggleOn {
+  background: #cdad70;
+}
+
+.toggleOn::after {
+  transform: translateX(18px);
+  background: #030d5f;
+}
+
+/* ── Error ── */
+.error {
+  font-size: 13px;
+  color: #ff8a8a;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Submit ── */
+.submitBtn {
+  margin-top: 8px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #cdad70 0%, #af9055 100%);
+  color: #030d5f;
+  font-family: 'Gilroy', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

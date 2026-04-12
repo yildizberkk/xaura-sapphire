@@ -5,33 +5,27 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import styles from './IntroVideo.module.css'
 
-export default function IntroVideo() {
-  // null = not yet hydrated (avoids SSR mismatch)
-  const [show, setShow]         = useState<boolean | null>(null)
+interface Props {
+  onComplete: () => void
+}
+
+export default function IntroVideo({ onComplete }: Props) {
+  const [show, setShow]         = useState(true)
   const [showSkip, setShowSkip] = useState(false)
   const videoRef                = useRef<HTMLVideoElement>(null)
 
-  useEffect(() => {
-    setShow(!localStorage.getItem('intro_seen'))
-  }, [])
-
   // Reveal skip button after 2 s
   useEffect(() => {
-    if (!show) return
     const t = setTimeout(() => setShowSkip(true), 2000)
     return () => clearTimeout(t)
-  }, [show])
+  }, [])
 
   function finish() {
-    localStorage.setItem('intro_seen', '1')
     setShow(false)
   }
 
-  // Not yet hydrated — render nothing to avoid layout shift
-  if (show === null) return null
-
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={onComplete}>
       {show && (
         <motion.div
           className={styles.overlay}
@@ -42,7 +36,7 @@ export default function IntroVideo() {
           <video
             ref={videoRef}
             className={styles.video}
-            src="/intro.mp4"
+            src="/intro-v2.mp4"
             autoPlay
             muted
             playsInline
