@@ -11,10 +11,11 @@ interface BoardingPassProps {
   selectedDay: number
   todayIdx: number
   onDayChange: (idx: number) => void
+  passenger?: { firstName: string; lastName: string }
 }
 
 export default function BoardingPass({
-  days, selectedDay, todayIdx, onDayChange,
+  days, selectedDay, todayIdx, onDayChange, passenger,
 }: BoardingPassProps) {
   const day = days[selectedDay]
 
@@ -93,6 +94,14 @@ export default function BoardingPass({
 
         {/* Details grid — dynamic based on selected day */}
         <div className={styles.details}>
+          {passenger && (
+            <div className={`${styles.detail} ${styles.detailSpan3}`}>
+              <span className={styles.detailLabel}>Yolcu</span>
+              <span className={styles.detailVal}>
+                {passenger.firstName.toUpperCase()} {passenger.lastName.toUpperCase()}
+              </span>
+            </div>
+          )}
           <div className={styles.detail}>
             <span className={styles.detailLabel}>Kalkış</span>
             <span className={styles.detailVal}>{fmtDate(day.date)}</span>

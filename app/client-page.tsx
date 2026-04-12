@@ -29,7 +29,7 @@ interface ClientPageProps {
 
 export default function ClientPage({ schedule }: ClientPageProps) {
   const [phase,  setPhase] = useState<Phase>('loading')
-  const [_user,  setUser]  = useState<StoredUser | null>(null) // used for personalization
+  const [user,   setUser]  = useState<StoredUser | null>(null)
 
   const {
     selectedDay,
@@ -101,6 +101,7 @@ export default function ClientPage({ schedule }: ClientPageProps) {
             selectedDay={selectedDay}
             todayIdx={todayIdx}
             onDayChange={setSelectedDay}
+            passenger={user ?? undefined}
           />
 
           <FlightStatusBar status={status} />

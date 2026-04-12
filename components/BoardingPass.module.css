@@ -112,6 +112,7 @@
 
 .detail { display: flex; flex-direction: column; gap: 3px; }
 .detailSpan2 { grid-column: span 2; }
+.detailSpan3 { grid-column: span 3; }
 
 .detailLabel {
   font-size: 7.5px;
