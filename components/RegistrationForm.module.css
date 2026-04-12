@@ -4,13 +4,12 @@
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background: #030d5f;
-  /* amber halo from the video's warm ending */
-  background-image: radial-gradient(
-    ellipse 80% 50% at 50% -5%,
-    rgba(205, 173, 112, 0.28) 0%,
-    transparent 65%
-  );
+  /* same base as main page, layered amber glows on top */
+  background-color: #06091a;
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% 0%,   rgba(205, 173, 112, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 80%,  rgba(175, 144, 85, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 80% 85%,  rgba(237, 210, 157, 0.08) 0%, transparent 55%);
   overflow-y: auto;
   display: flex;
   align-items: center;
