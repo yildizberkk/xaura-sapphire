@@ -53,7 +53,11 @@ export default function RegistrationForm({ onComplete }: Props) {
         expiresAt:  EXPIRES_AT,
       }))
       setExiting(true)
-    } catch {
+    } catch (err) {
+      // Fail loud — the underlying error is what diagnosed the missing env vars.
+      // Keep the user-facing message generic, but log the real cause so it shows
+      // up in Vercel runtime logs and browser DevTools if anything breaks at the event.
+      console.error('[RegistrationForm] registerUser failed', err)
       setError('Bir hata oluştu, lütfen tekrar deneyin.')
       setLoading(false)
     }
