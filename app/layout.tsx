@@ -28,6 +28,16 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
+      <head>
+        {/*
+          Preload the intro video in parallel with HTML parse + JS hydration.
+          Most first-time visitors at the event need this asset almost immediately,
+          so getting a head start on the download cuts perceived latency on venue wifi.
+          Returning users (localStorage set) will skip the intro phase, but the file
+          is 1.5 MB and cached — the wasted bandwidth is negligible.
+        */}
+        <link rel="preload" as="video" href="/intro-v2.mp4" type="video/mp4" />
+      </head>
       <body>
         <PwaInit />
         {children}
