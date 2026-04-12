@@ -19,4 +19,6 @@
   max-width: 440px;
   margin: 0 auto;
   padding: max(20px, env(safe-area-inset-top, 20px)) 16px 0;
+  /* ambient amber haze behind all cards — mirrors login page at lower intensity */
+  background: radial-gradient(ellipse 80% 40% at 50% 15%, rgba(205, 173, 112, 0.04) 0%, transparent 70%);
 }

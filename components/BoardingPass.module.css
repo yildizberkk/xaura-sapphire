@@ -2,11 +2,13 @@
 
 .pass {
   background: linear-gradient(158deg, #111f42 0%, #0b1530 45%, #080f25 100%);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(205, 173, 112, 0.2);
   border-radius: 22px;
   margin-bottom: 18px;
   box-shadow:
-    0 0 0 1px rgba(85,116,184,0.06),
+    0 0 0 1px rgba(205, 173, 112, 0.09),
+    0 0 40px rgba(205, 173, 112, 0.11),
+    0 0 100px rgba(205, 173, 112, 0.06),
     0 28px 80px rgba(0,0,0,0.75),
     inset 0 1px 0 rgba(255,255,255,0.04);
 }
