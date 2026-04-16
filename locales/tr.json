@@ -1,0 +1,47 @@
+{
+  "reg": {
+    "welcome": "Hoş Geldiniz",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "phone": "Telefon",
+    "email": "E-posta (isteğe bağlı)",
+    "consent": "Etkinlik süresince bildirim almak istiyorum",
+    "submit": "Devam Et",
+    "loading": "Kaydediliyor…",
+    "fieldError": "Ad, soyad ve telefon zorunludur.",
+    "serverError": "Bir hata oluştu, lütfen tekrar deneyin."
+  },
+  "boarding": {
+    "pass": "Boarding Pass",
+    "passenger": "Yolcu",
+    "gate": "Kapı / Otel",
+    "departure": "Kalkış",
+    "arrival": "İniş",
+    "date": "Tarih",
+    "duration": "Uçuş Süresi",
+    "days3": "3 Gün · 2026",
+    "daySelect": "Gün Seçin",
+    "ended": "Uçuşunuz sona erdi — liderlik yolunda önümüzdeki yolculuklarda görüşmek üzere.",
+    "h": "sa",
+    "m": "dak"
+  },
+  "timeline": {
+    "header": "Uçuş Programı",
+    "active": "✦ Aktif"
+  },
+  "countdown": {
+    "preEvent": "Uçuşa Kalan Süre",
+    "nextFlight": "Sonraki Kalkışa Kalan",
+    "days": "Gün",
+    "hours": "Saat",
+    "minutes": "Dakika",
+    "seconds": "Saniye"
+  },
+  "schedule": {
+    "scheduled": "Bekleniyor",
+    "activeFlight": "Aktif Uçuş",
+    "boarding": "İnişe Hazır",
+    "landed": "Tamamlandı",
+    "active": "Aktif"
+  }
+}

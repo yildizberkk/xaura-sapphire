@@ -4,8 +4,11 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useSchedule } from '@/hooks/useSchedule'
+import { useTranslation } from '@/hooks/useTranslation'
+import { LOCALE_META } from '@/lib/i18n'
 import type { ScheduleData } from '@/lib/schedule'
 
+import { LanguageProvider } from '@/components/LanguageProvider'
 import StarfieldCanvas   from '@/components/StarfieldCanvas'
 import IntroVideo        from '@/components/IntroVideo'
 import RegistrationForm  from '@/components/RegistrationForm'
@@ -27,19 +30,21 @@ interface ClientPageProps {
 }
 
 function Clock() {
+  const { locale } = useTranslation()
   const [time, setTime] = useState('')
   useEffect(() => {
     function tick() {
-      setTime(new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }))
+      const bcp47 = LOCALE_META[locale].bcp47
+      setTime(new Date().toLocaleTimeString(bcp47, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }))
     }
     tick()
     const id = setInterval(tick, 1_000)
     return () => clearInterval(id)
-  }, [])
+  }, [locale])
   return <p className={styles.clock}>{time}</p>
 }
 
-export default function ClientPage({ schedule }: ClientPageProps) {
+function ClientPageInner({ schedule }: ClientPageProps) {
   const [phase,  setPhase] = useState<Phase>('loading')
   const [user,   setUser]  = useState<StoredUser | null>(null)
 
@@ -83,28 +88,21 @@ export default function ClientPage({ schedule }: ClientPageProps) {
 
   return (
     <div className={styles.page}>
-
-      {/* Starfield always runs — same bg in every phase */}
       <StarfieldCanvas />
-
-      {/* Prevent any flash of raw content while localStorage is checked */}
       {phase === 'loading' && <div className={styles.loadingScreen} />}
 
-      {/* Intro video — AnimatePresence plays exit animation when phase leaves 'intro' */}
       <AnimatePresence>
         {phase === 'intro' && (
           <IntroVideo key="intro" onComplete={handleIntroComplete} />
         )}
       </AnimatePresence>
 
-      {/* Registration form — fades in over the starfield (no solid bg) */}
       <AnimatePresence>
         {phase === 'register' && (
           <RegistrationForm key="register" onComplete={handleRegistrationComplete} />
         )}
       </AnimatePresence>
 
-      {/* Main content — only rendered once registered, no flash risk */}
       {phase === 'app' && (
         <div className={styles.container}>
           <BoardingPass
@@ -130,7 +128,14 @@ export default function ClientPage({ schedule }: ClientPageProps) {
           />
         </div>
       )}
-
     </div>
+  )
+}
+
+export default function ClientPage({ schedule }: ClientPageProps) {
+  return (
+    <LanguageProvider>
+      <ClientPageInner schedule={schedule} />
+    </LanguageProvider>
   )
 }

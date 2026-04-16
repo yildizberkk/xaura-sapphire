@@ -8,51 +8,135 @@
   },
   "days": [
     {
-      "day": "Cuma",
-      "dayEN": "Friday",
+      "day": "Cuma", "dayEN": "Friday", "dayRU": "Пятница", "dayBG": "Петък", "dayIT": "Venerdì", "dayMN": "Баасан",
       "date": "2026-04-24",
       "sessions": [
-        { "start": "10:00", "end": "12:30", "title": "Giriş", "titleEN": "Entry", "type": "general" },
-        { "start": "12:30", "end": "14:30", "title": "Öğle Yemeği", "titleEN": "Lunch", "type": "meal" },
-        { "start": "16:15", "end": "17:30", "title": "Ruby Okulu", "type": "session" },
-        { "start": "17:30", "end": "20:30", "title": "Serbest Zaman ve Akşam Yemeği", "titleEN": "Free Time & Dinner", "type": "meal" },
-        { "start": "20:30", "end": null, "title": "Kapı Açılış", "titleEN": "Door Opening", "type": "general" },
-        { "start": "20:45", "end": null, "title": "2. Yıl Dönümü Açılış Konuşması", "type": "keynote" },
-        { "start": "21:15", "end": null, "title": "Konser", "titleEN": "Concert", "type": "entertainment" }
+        {
+          "start": "10:00", "end": "12:30", "type": "general",
+          "title": "Giriş", "titleEN": "Entry", "titleRU": "Вход", "titleBG": "Вход", "titleIT": "Ingresso", "titleMN": "Оролт"
+        },
+        {
+          "start": "12:30", "end": "14:30", "type": "meal",
+          "title": "Öğle Yemeği", "titleEN": "Lunch", "titleRU": "Обед", "titleBG": "Обяд", "titleIT": "Pranzo", "titleMN": "Өдрийн хоол"
+        },
+        {
+          "start": "16:15", "end": "17:30", "type": "session",
+          "title": "Ruby Okulu", "titleEN": "Ruby School", "titleRU": "Школа Ruby", "titleBG": "Школа Ruby", "titleIT": "Scuola Ruby", "titleMN": "Ruby Сургууль"
+        },
+        {
+          "start": "17:30", "end": "20:30", "type": "meal",
+          "title": "Serbest Zaman ve Akşam Yemeği", "titleEN": "Free Time & Dinner", "titleRU": "Свободное время и ужин", "titleBG": "Свободно време и вечеря", "titleIT": "Tempo libero e cena", "titleMN": "Чөлөөт цаг ба оройн хоол"
+        },
+        {
+          "start": "20:30", "end": null, "type": "general",
+          "title": "Kapı Açılış", "titleEN": "Door Opening", "titleRU": "Открытие дверей", "titleBG": "Отваряне на вратите", "titleIT": "Apertura porte", "titleMN": "Хаалга нээлт"
+        },
+        {
+          "start": "20:45", "end": null, "type": "keynote",
+          "title": "2. Yıl Dönümü Açılış Konuşması", "titleEN": "2nd Anniversary Opening Speech", "titleRU": "Вступительная речь 2-й годовщины", "titleBG": "Встъпително слово на 2-годишнината", "titleIT": "Discorso di apertura del 2° anniversario", "titleMN": "2 дахь ойн нээлтийн үг"
+        },
+        {
+          "start": "21:15", "end": null, "type": "entertainment",
+          "title": "Konser", "titleEN": "Concert", "titleRU": "Концерт", "titleBG": "Концерт", "titleIT": "Concerto", "titleMN": "Тоглолт"
+        }
       ]
     },
     {
-      "day": "Cumartesi",
-      "dayEN": "Saturday",
+      "day": "Cumartesi", "dayEN": "Saturday", "dayRU": "Суббота", "dayBG": "Събота", "dayIT": "Sabato", "dayMN": "Бямба",
       "date": "2026-04-25",
       "sessions": [
-        { "start": "07:00", "end": "09:30", "title": "Kahvaltı", "titleEN": "Breakfast", "type": "meal" },
-        { "start": "09:30", "end": "10:15", "title": "Eğitim - 1", "type": "session" },
-        { "start": "10:15", "end": "10:30", "title": "Ara", "titleEN": "Break", "type": "break" },
-        { "start": "10:30", "end": "11:15", "title": "Eğitim - 2", "type": "session" },
-        { "start": "11:15", "end": "11:30", "title": "Ara", "titleEN": "Break", "type": "break" },
-        { "start": "11:30", "end": "12:30", "title": "Eğitim - 3", "type": "session" },
-        { "start": "12:30", "end": "13:45", "title": "Öğle Yemeği", "titleEN": "Lunch", "type": "meal" },
-        { "start": "13:45", "end": "15:15", "title": "Eğitim - 4", "type": "session" },
-        { "start": "15:15", "end": "15:30", "title": "Ara", "titleEN": "Break", "type": "break" },
-        { "start": "15:30", "end": "16:30", "title": "Sistem Kurmak: Sen Olmadan Çalışan Organizasyon", "type": "session" },
-        { "start": "16:30", "end": "18:00", "title": "Ara", "titleEN": "Break", "type": "break" },
-        { "start": "18:00", "end": null, "title": "Vizyon Liderliği", "type": "session" },
-        { "start": null, "end": null, "title": "Akşam Yemeği", "titleEN": "Dinner", "type": "meal" },
-        { "start": "21:00", "end": null, "title": "Takdir Töreni", "titleEN": "Awards Ceremony", "subtitle": "SP Kutlaması Son ve Yenisi", "type": "ceremony"}
+        {
+          "start": "07:00", "end": "09:30", "type": "meal",
+          "title": "Kahvaltı", "titleEN": "Breakfast", "titleRU": "Завтрак", "titleBG": "Закуска", "titleIT": "Colazione", "titleMN": "Өглийн цай"
+        },
+        {
+          "start": "09:30", "end": "10:15", "type": "session",
+          "title": "Eğitim - 1", "titleEN": "Training - 1", "titleRU": "Обучение - 1", "titleBG": "Обучение - 1", "titleIT": "Formazione - 1", "titleMN": "Сургалт - 1"
+        },
+        {
+          "start": "10:15", "end": "10:30", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
+          "start": "10:30", "end": "11:15", "type": "session",
+          "title": "Eğitim - 2", "titleEN": "Training - 2", "titleRU": "Обучение - 2", "titleBG": "Обучение - 2", "titleIT": "Formazione - 2", "titleMN": "Сургалт - 2"
+        },
+        {
+          "start": "11:15", "end": "11:30", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
+          "start": "11:30", "end": "12:30", "type": "session",
+          "title": "Eğitim - 3", "titleEN": "Training - 3", "titleRU": "Обучение - 3", "titleBG": "Обучение - 3", "titleIT": "Formazione - 3", "titleMN": "Сургалт - 3"
+        },
+        {
+          "start": "12:30", "end": "13:45", "type": "meal",
+          "title": "Öğle Yemeği", "titleEN": "Lunch", "titleRU": "Обед", "titleBG": "Обяд", "titleIT": "Pranzo", "titleMN": "Өдрийн хоол"
+        },
+        {
+          "start": "13:45", "end": "15:15", "type": "session",
+          "title": "Eğitim - 4", "titleEN": "Training - 4", "titleRU": "Обучение - 4", "titleBG": "Обучение - 4", "titleIT": "Formazione - 4", "titleMN": "Сургалт - 4"
+        },
+        {
+          "start": "15:15", "end": "15:30", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
+          "start": "15:30", "end": "16:30", "type": "session",
+          "title": "Sistem Kurmak: Sen Olmadan Çalışan Organizasyon",
+          "titleEN": "Building Systems: Organization That Works Without You",
+          "titleRU": "Построение систем: организация, работающая без вас",
+          "titleBG": "Изграждане на системи: организация, работеща без вас",
+          "titleIT": "Costruire sistemi: organizzazione che funziona senza di te",
+          "titleMN": "Системийг бүтээх: Чамгүйгээр ажилладаг байгууллага"
+        },
+        {
+          "start": "16:30", "end": "18:00", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
+          "start": "18:00", "end": null, "type": "session",
+          "title": "Vizyon Liderliği", "titleEN": "Vision Leadership", "titleRU": "Лидерство с видением", "titleBG": "Лидерство с визия", "titleIT": "Leadership Visionaria", "titleMN": "Алсын харааны манлайлал"
+        },
+        {
+          "start": null, "end": null, "type": "meal",
+          "title": "Akşam Yemeği", "titleEN": "Dinner", "titleRU": "Ужин", "titleBG": "Вечеря", "titleIT": "Cena", "titleMN": "Оройн хоол"
+        },
+        {
+          "start": "21:00", "end": null, "type": "ceremony",
+          "title": "Takdir Töreni", "titleEN": "Awards Ceremony", "titleRU": "Церемония награждения", "titleBG": "Церемония по награждаване", "titleIT": "Cerimonia dei premi", "titleMN": "Шагналын ёслол",
+          "subtitle": "SP Kutlaması Son ve Yenisi"
+        }
       ]
     },
     {
-      "day": "Pazar",
-      "dayEN": "Sunday",
+      "day": "Pazar", "dayEN": "Sunday", "dayRU": "Воскресенье", "dayBG": "Неделя", "dayIT": "Domenica", "dayMN": "Ням",
       "date": "2026-04-26",
       "sessions": [
-        { "start": "07:00", "end": "09:30", "title": "Kahvaltı", "titleEN": "Breakfast", "type": "meal" },
-        { "start": "09:45", "end": "10:30", "title": "Eğitim - 1", "type": "session" },
-        { "start": "10:30", "end": "10:45", "title": "Ara", "titleEN": "Break", "type": "break" },
-        { "start": "10:45", "end": "12:00", "title": "Eğitim - 2", "type": "session" },
-        { "start": "12:00", "end": "13:00", "title": "Oda Boşaltma ve Coffee Break", "titleEN": "Room Checkout & Coffee Break", "type": "break" },
-        { "start": "13:15", "end": "15:00", "title": "Kapanış Konuşması", "type": "keynote" }
+        {
+          "start": "07:00", "end": "09:30", "type": "meal",
+          "title": "Kahvaltı", "titleEN": "Breakfast", "titleRU": "Завтрак", "titleBG": "Закуска", "titleIT": "Colazione", "titleMN": "Өглийн цай"
+        },
+        {
+          "start": "09:45", "end": "10:30", "type": "session",
+          "title": "Eğitim - 1", "titleEN": "Training - 1", "titleRU": "Обучение - 1", "titleBG": "Обучение - 1", "titleIT": "Formazione - 1", "titleMN": "Сургалт - 1"
+        },
+        {
+          "start": "10:30", "end": "10:45", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
+          "start": "10:45", "end": "12:00", "type": "session",
+          "title": "Eğitim - 2", "titleEN": "Training - 2", "titleRU": "Обучение - 2", "titleBG": "Обучение - 2", "titleIT": "Formazione - 2", "titleMN": "Сургалт - 2"
+        },
+        {
+          "start": "12:00", "end": "13:00", "type": "break",
+          "title": "Oda Boşaltma ve Coffee Break", "titleEN": "Room Checkout & Coffee Break", "titleRU": "Выезд из номера и кофе-пауза", "titleBG": "Освобождаване на стаята и кафе пауза", "titleIT": "Check-out e pausa caffè", "titleMN": "Өрөө чөлөөлөх ба кофены завсарлага"
+        },
+        {
+          "start": "13:15", "end": "15:00", "type": "keynote",
+          "title": "Kapanış Konuşması", "titleEN": "Closing Speech", "titleRU": "Заключительная речь", "titleBG": "Заключителна реч", "titleIT": "Discorso di chiusura", "titleMN": "Хаалтын үг"
+        }
       ]
     }
   ]

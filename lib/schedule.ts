@@ -11,6 +11,10 @@ export interface RawSession {
   end: string | null
   title: string
   titleEN?: string
+  titleRU?: string
+  titleBG?: string
+  titleIT?: string
+  titleMN?: string
   subtitle?: string
   type: SessionType
 }
@@ -18,6 +22,10 @@ export interface RawSession {
 export interface Day {
   day: string
   dayEN: string
+  dayRU?: string
+  dayBG?: string
+  dayIT?: string
+  dayMN?: string
   date: string // "YYYY-MM-DD"
   sessions: RawSession[]
 }
@@ -163,13 +171,13 @@ function fmtHHMM(d: Date): string {
   return d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', hour12: false })
 }
 
-function fmtDuration(ms: number): string {
+function fmtDuration(ms: number, units = { h: 'sa', m: 'dak' }): string {
   const total = Math.round(ms / 60_000)
   const h = Math.floor(total / 60)
   const m = total % 60
-  if (h === 0) return `${m}dak`
-  if (m === 0) return `${h}sa`
-  return `${h}sa ${m}dak`
+  if (h === 0) return `${m}${units.m}`
+  if (m === 0) return `${h}${units.h}`
+  return `${h}${units.h} ${m}${units.m}`
 }
 
 function buildFlatSessions(days: Day[]): FlatSess[] {
@@ -211,7 +219,11 @@ function buildFlatSessions(days: Day[]): FlatSess[] {
   return flat
 }
 
-export function getCurrentSegment(days: Day[], now: Date): BoardingSegment {
+export function getCurrentSegment(
+  days: Day[],
+  now: Date,
+  durationUnits = { h: 'sa', m: 'dak' },
+): BoardingSegment {
   const eventDay0Midnight = new Date('2026-04-24T00:00:00')
 
   if (now < eventDay0Midnight) {
@@ -240,7 +252,7 @@ export function getCurrentSegment(days: Day[], now: Date): BoardingSegment {
       kalkis: curr.startDt ? fmtHHMM(curr.startDt) : null,
       inis:   curr.hasKnownEnd ? fmtHHMM(curr.effectiveEndDt) : null,
       suresi: curr.startDt && curr.hasKnownEnd
-        ? fmtDuration(curr.effectiveEndDt.getTime() - curr.startDt.getTime())
+        ? fmtDuration(curr.effectiveEndDt.getTime() - curr.startDt.getTime(), durationUnits)
         : null,
       dateStr: curr.dateStr,
     }
@@ -314,7 +326,7 @@ export function getCurrentSegment(days: Day[], now: Date): BoardingSegment {
     kalkis: prevSess.hasKnownEnd ? fmtHHMM(prevSess.effectiveEndDt) : null,
     inis:   nextSess.startDt ? fmtHHMM(nextSess.startDt!) : null,
     suresi: prevSess.hasKnownEnd && nextSess.startDt
-      ? fmtDuration(nextSess.startDt!.getTime() - prevSess.effectiveEndDt.getTime())
+      ? fmtDuration(nextSess.startDt!.getTime() - prevSess.effectiveEndDt.getTime(), durationUnits)
       : null,
     dateStr: prevSess.dateStr,
   }

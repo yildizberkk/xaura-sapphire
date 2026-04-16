@@ -2,6 +2,8 @@
 'use client'
 import { motion } from 'framer-motion'
 import type { ClassifiedSession, SessionType, SessionState } from '@/lib/schedule'
+import { useTranslation } from '@/hooks/useTranslation'
+import { getSessionTitle } from '@/lib/i18n'
 import styles from './SessionRow.module.css'
 
 const TYPE_CLASS: Record<SessionType, string> = {
@@ -29,7 +31,9 @@ interface SessionRowProps {
 }
 
 export default function SessionRow({ session, index }: SessionRowProps) {
-  const { state, type, start, end, title, subtitle, progressPct } = session
+  const { t, locale } = useTranslation()
+  const { state, type, start, end, subtitle, progressPct } = session
+  const title = getSessionTitle(session, locale)
   const isSpotlight = SPOTLIGHT_TYPES.has(type) && state !== 'past'
 
   return (
@@ -64,7 +68,7 @@ export default function SessionRow({ session, index }: SessionRowProps) {
         {subtitle && <div className={styles.sub}>{subtitle}</div>}
 
         {state === 'active' && (
-          <span className={styles.badge + ' ' + styles.badgeActive}>✦ Aktif</span>
+          <span className={styles.badge + ' ' + styles.badgeActive}>{t('timeline.active')}</span>
         )}
         {/* Live progress bar for active session */}
         {state === 'active' && progressPct !== null && (
