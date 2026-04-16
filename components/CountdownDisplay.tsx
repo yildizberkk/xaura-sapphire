@@ -1,6 +1,6 @@
 // components/CountdownDisplay.tsx
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from '@/hooks/useTranslation'
 import { LOCALE_META } from '@/lib/i18n'
@@ -37,10 +37,10 @@ export default function CountdownDisplay({ deadline }: CountdownDisplayProps) {
   const { days, hours, minutes, seconds } = getParts(deadline, now)
   const label = isPreEvent ? t('countdown.preEvent') : t('countdown.nextFlight')
 
-  const formattedEventDate = EVENT_DATE.toLocaleDateString(
-    LOCALE_META[locale].bcp47,
-    { day: 'numeric', month: 'long' },
-  ) + ' 2026'
+  const formattedEventDate = useMemo(
+    () => EVENT_DATE.toLocaleDateString(LOCALE_META[locale].bcp47, { day: 'numeric', month: 'long' }) + ' 2026',
+    [locale],
+  )
 
   return (
     <motion.div

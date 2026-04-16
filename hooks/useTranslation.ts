@@ -2,7 +2,7 @@
 import { createContext, useContext } from 'react'
 import type { Locale } from '@/lib/i18n'
 
-type Messages = Record<string, Record<string, string>>
+export type Messages = Record<string, Record<string, string>>
 
 export interface LanguageContextValue {
   locale: Locale

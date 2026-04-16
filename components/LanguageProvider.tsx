@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback, useMemo, type ReactNode } from 'react'
-import { LanguageContext } from '@/hooks/useTranslation'
+import { LanguageContext, type Messages } from '@/hooks/useTranslation'
 import { detectLocale, LOCALES, type Locale } from '@/lib/i18n'
 import tr from '@/locales/tr.json'
 import en from '@/locales/en.json'
@@ -8,8 +8,6 @@ import ru from '@/locales/ru.json'
 import bg from '@/locales/bg.json'
 import it from '@/locales/it.json'
 import mn from '@/locales/mn.json'
-
-type Messages = Record<string, Record<string, string>>
 
 const ALL_MESSAGES: Record<Locale, Messages> = {
   tr: tr as Messages,
