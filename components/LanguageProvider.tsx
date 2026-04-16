@@ -1,0 +1,47 @@
+'use client'
+import { useState, useEffect, type ReactNode } from 'react'
+import { LanguageContext } from '@/hooks/useTranslation'
+import { detectLocale, LOCALES, type Locale } from '@/lib/i18n'
+import tr from '@/locales/tr.json'
+import en from '@/locales/en.json'
+import ru from '@/locales/ru.json'
+import bg from '@/locales/bg.json'
+import it from '@/locales/it.json'
+import mn from '@/locales/mn.json'
+
+type Messages = Record<string, Record<string, string>>
+
+const ALL_MESSAGES: Record<Locale, Messages> = {
+  tr: tr as Messages,
+  en: en as Messages,
+  ru: ru as Messages,
+  bg: bg as Messages,
+  it: it as Messages,
+  mn: mn as Messages,
+}
+
+const STORAGE_KEY = 'sapphire_lang'
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>('tr')
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored && (LOCALES as readonly string[]).includes(stored)) {
+      setLocaleState(stored as Locale)
+    } else {
+      setLocaleState(detectLocale(navigator.language))
+    }
+  }, [])
+
+  function setLocale(l: Locale) {
+    localStorage.setItem(STORAGE_KEY, l)
+    setLocaleState(l)
+  }
+
+  return (
+    <LanguageContext.Provider value={{ locale, messages: ALL_MESSAGES[locale], setLocale }}>
+      {children}
+    </LanguageContext.Provider>
+  )
+}
