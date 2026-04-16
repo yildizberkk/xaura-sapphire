@@ -1,0 +1,93 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  background: #0f0f1e;
+  border-radius: 20px 20px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin: 10px auto 6px;
+}
+
+.title {
+  text-align: center;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 0 1rem 0.875rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0 0.875rem 1.25rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+.rowActive {
+  background: rgba(179, 147, 105, 0.15);
+  border-color: rgba(179, 147, 105, 0.4);
+}
+
+.flag {
+  font-size: 1.375rem;
+  line-height: 1;
+}
+
+.names {
+  flex: 1;
+}
+
+.nativeName {
+  font-size: 0.8rem;
+  color: #f4f3ef;
+  font-weight: 500;
+}
+
+.enName {
+  font-size: 0.63rem;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #b39369;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: #08080f;
+  flex-shrink: 0;
+  font-weight: 700;
+}
