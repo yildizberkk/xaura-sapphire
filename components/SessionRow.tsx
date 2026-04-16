@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import type { ClassifiedSession, SessionType, SessionState } from '@/lib/schedule'
 import { useTranslation } from '@/hooks/useTranslation'
-import { getSessionTitle } from '@/lib/i18n'
+import { getSessionTitle, getSessionSubtitle } from '@/lib/i18n'
 import styles from './SessionRow.module.css'
 
 const TYPE_CLASS: Record<SessionType, string> = {
@@ -32,8 +32,9 @@ interface SessionRowProps {
 
 export default function SessionRow({ session, index }: SessionRowProps) {
   const { t, locale } = useTranslation()
-  const { state, type, start, end, subtitle, progressPct } = session
-  const title = getSessionTitle(session, locale)
+  const { state, type, start, end, progressPct } = session
+  const title    = getSessionTitle(session, locale)
+  const subtitle = getSessionSubtitle(session, locale)
   const isSpotlight = SPOTLIGHT_TYPES.has(type) && state !== 'past'
 
   return (

@@ -33,6 +33,12 @@ interface SessionLike {
   titleBG?: string
   titleIT?: string
   titleMN?: string
+  subtitle?: string
+  subtitleEN?: string
+  subtitleRU?: string
+  subtitleBG?: string
+  subtitleIT?: string
+  subtitleMN?: string
 }
 
 interface DayLike {
@@ -62,8 +68,21 @@ const LOCALE_DAY_KEY: Record<Locale, keyof DayLike> = {
   mn: 'dayMN',
 }
 
+const LOCALE_SUBTITLE_KEY: Record<Locale, keyof SessionLike> = {
+  tr: 'subtitle',
+  en: 'subtitleEN',
+  ru: 'subtitleRU',
+  bg: 'subtitleBG',
+  it: 'subtitleIT',
+  mn: 'subtitleMN',
+}
+
 export function getSessionTitle(session: SessionLike, locale: Locale): string {
   return (session[LOCALE_TITLE_KEY[locale]] as string | undefined) ?? session.title
+}
+
+export function getSessionSubtitle(session: SessionLike, locale: Locale): string | undefined {
+  return (session[LOCALE_SUBTITLE_KEY[locale]] as string | undefined) ?? session.subtitle
 }
 
 export function getDayName(day: DayLike, locale: Locale): string {

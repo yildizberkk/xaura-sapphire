@@ -16,6 +16,11 @@ export interface RawSession {
   titleIT?: string
   titleMN?: string
   subtitle?: string
+  subtitleEN?: string
+  subtitleRU?: string
+  subtitleBG?: string
+  subtitleIT?: string
+  subtitleMN?: string
   type: SessionType
 }
 

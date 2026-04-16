@@ -105,7 +105,12 @@
         {
           "start": "21:00", "end": null, "type": "ceremony",
           "title": "Takdir Töreni", "titleEN": "Awards Ceremony", "titleRU": "Церемония награждения", "titleBG": "Церемония по награждаване", "titleIT": "Cerimonia dei premi", "titleMN": "Шагналын ёслол",
-          "subtitle": "SP Kutlaması Son ve Yenisi"
+          "subtitle": "SP Kutlaması Son ve Yenisi",
+          "subtitleEN": "SP Celebration — Last & New",
+          "subtitleRU": "Праздник SP — Последний и Новый",
+          "subtitleBG": "Тържество SP — Последно и Ново",
+          "subtitleIT": "Celebrazione SP — Ultimo e Nuovo",
+          "subtitleMN": "SP-ийн баяр — Сүүлчийн ба Шинэ"
         }
       ]
     },
