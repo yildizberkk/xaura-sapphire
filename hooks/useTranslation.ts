@@ -13,7 +13,7 @@ export interface LanguageContextValue {
 export const LanguageContext = createContext<LanguageContextValue>({
   locale: 'tr',
   messages: {},
-  setLocale: () => {},
+  setLocale: () => { throw new Error('useTranslation must be used within LanguageProvider') },
 })
 
 export function useTranslation() {

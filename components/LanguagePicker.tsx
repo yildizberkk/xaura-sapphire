@@ -22,6 +22,7 @@ export default function LanguagePicker({ open, onClose }: LanguagePickerProps) {
     <AnimatePresence>
       {open && (
         <motion.div
+          key="language-picker-overlay"
           className={styles.overlay}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -31,6 +32,9 @@ export default function LanguagePicker({ open, onClose }: LanguagePickerProps) {
         >
           <motion.div
             className={styles.sheet}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Dil Seçin"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
@@ -44,10 +48,12 @@ export default function LanguagePicker({ open, onClose }: LanguagePickerProps) {
                 const meta = LOCALE_META[l]
                 const isActive = l === locale
                 return (
-                  <div
+                  <button
                     key={l}
+                    type="button"
                     className={`${styles.row} ${isActive ? styles.rowActive : ''}`}
                     onClick={() => pick(l)}
+                    aria-pressed={isActive}
                   >
                     <span className={styles.flag}>{meta.flag}</span>
                     <div className={styles.names}>
@@ -57,7 +63,7 @@ export default function LanguagePicker({ open, onClose }: LanguagePickerProps) {
                       )}
                     </div>
                     {isActive && <div className={styles.check}>✓</div>}
-                  </div>
+                  </button>
                 )
               })}
             </div>
