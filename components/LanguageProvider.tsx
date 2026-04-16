@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, type ReactNode } from 'react'
+import { useState, useEffect, useCallback, useMemo, type ReactNode } from 'react'
 import { LanguageContext } from '@/hooks/useTranslation'
 import { detectLocale, LOCALES, type Locale } from '@/lib/i18n'
 import tr from '@/locales/tr.json'
@@ -34,13 +34,18 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  function setLocale(l: Locale) {
+  const setLocale = useCallback((l: Locale) => {
     localStorage.setItem(STORAGE_KEY, l)
     setLocaleState(l)
-  }
+  }, [])
+
+  const contextValue = useMemo(
+    () => ({ locale, messages: ALL_MESSAGES[locale], setLocale }),
+    [locale, setLocale],
+  )
 
   return (
-    <LanguageContext.Provider value={{ locale, messages: ALL_MESSAGES[locale], setLocale }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   )
