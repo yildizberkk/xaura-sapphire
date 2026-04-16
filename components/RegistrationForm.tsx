@@ -49,7 +49,7 @@ export default function RegistrationForm({ onComplete }: Props) {
         consent:   form.consent,
       }
       await registerUser(input)
-      localStorage.setItem('sapphire_user', JSON.stringify({
+      localStorage.setItem('sapphire_user_v2', JSON.stringify({
         firstName:  input.firstName,
         lastName:   input.lastName,
         expiresAt:  EXPIRES_AT,

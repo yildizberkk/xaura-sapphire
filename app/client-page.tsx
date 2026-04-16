@@ -58,7 +58,7 @@ function ClientPageInner({ schedule }: ClientPageProps) {
   } = useSchedule(schedule.days)
 
   useEffect(() => {
-    const raw = localStorage.getItem('sapphire_user')
+    const raw = localStorage.getItem('sapphire_user_v2')
     if (raw) {
       try {
         const saved: StoredUser = JSON.parse(raw)
@@ -68,7 +68,7 @@ function ClientPageInner({ schedule }: ClientPageProps) {
           return
         }
       } catch {}
-      localStorage.removeItem('sapphire_user')
+      localStorage.removeItem('sapphire_user_v2')
     }
     setPhase('intro')
   }, [])
