@@ -5,16 +5,18 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { registerUser, type RegistrationInput } from '@/app/actions/register'
+import { useTranslation } from '@/hooks/useTranslation'
+import { LOCALES, LOCALE_META } from '@/lib/i18n'
 import styles from './RegistrationForm.module.css'
 
 interface Props {
   onComplete: (user: { firstName: string; lastName: string }) => void
 }
 
-// Persists through the event + 2 days buffer
 const EXPIRES_AT = '2026-04-28T00:00:00.000Z'
 
 export default function RegistrationForm({ onComplete }: Props) {
+  const { t, locale, setLocale } = useTranslation()
   const [form, setForm] = useState({
     firstName: '',
     lastName:  '',
@@ -33,7 +35,7 @@ export default function RegistrationForm({ onComplete }: Props) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!form.firstName.trim() || !form.lastName.trim() || !form.phone.trim()) {
-      setError('Ad, soyad ve telefon zorunludur.')
+      setError(t('reg.fieldError'))
       return
     }
     setLoading(true)
@@ -58,7 +60,7 @@ export default function RegistrationForm({ onComplete }: Props) {
       // Keep the user-facing message generic, but log the real cause so it shows
       // up in Vercel runtime logs and browser DevTools if anything breaks at the event.
       console.error('[RegistrationForm] registerUser failed', err)
-      setError('Bir hata oluştu, lütfen tekrar deneyin.')
+      setError(t('reg.serverError'))
       setLoading(false)
     }
   }
@@ -91,7 +93,22 @@ export default function RegistrationForm({ onComplete }: Props) {
               />
             </div>
 
-            <h1 className={styles.greeting}>Hoş Geldiniz</h1>
+            {/* Language strip */}
+            <div className={styles.langStrip}>
+              {LOCALES.map(l => (
+                <button
+                  key={l}
+                  type="button"
+                  className={`${styles.langPill} ${l === locale ? styles.langPillActive : ''}`}
+                  onClick={() => setLocale(l)}
+                  aria-label={LOCALE_META[l].nativeName}
+                >
+                  {LOCALE_META[l].flag} {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            <h1 className={styles.greeting}>{t('reg.welcome')}</h1>
             <p className={styles.subtitle}>Sapphire Momentum II</p>
 
             <form onSubmit={handleSubmit} className={styles.form} noValidate>
@@ -99,7 +116,7 @@ export default function RegistrationForm({ onComplete }: Props) {
                 <input
                   className={styles.input}
                   type="text"
-                  placeholder="Ad"
+                  placeholder={t('reg.firstName')}
                   value={form.firstName}
                   onChange={e => update('firstName', e.target.value)}
                   autoComplete="given-name"
@@ -108,7 +125,7 @@ export default function RegistrationForm({ onComplete }: Props) {
                 <input
                   className={styles.input}
                   type="text"
-                  placeholder="Soyad"
+                  placeholder={t('reg.lastName')}
                   value={form.lastName}
                   onChange={e => update('lastName', e.target.value)}
                   autoComplete="family-name"
@@ -119,7 +136,7 @@ export default function RegistrationForm({ onComplete }: Props) {
               <input
                 className={styles.input}
                 type="tel"
-                placeholder="Telefon"
+                placeholder={t('reg.phone')}
                 value={form.phone}
                 onChange={e => update('phone', e.target.value)}
                 autoComplete="tel"
@@ -129,7 +146,7 @@ export default function RegistrationForm({ onComplete }: Props) {
               <input
                 className={styles.input}
                 type="email"
-                placeholder="E-posta (isteğe bağlı)"
+                placeholder={t('reg.email')}
                 value={form.email}
                 onChange={e => update('email', e.target.value)}
                 autoComplete="email"
@@ -137,7 +154,7 @@ export default function RegistrationForm({ onComplete }: Props) {
 
               <label className={styles.consentRow}>
                 <span className={styles.consentText}>
-                  Etkinlik süresince bildirim almak istiyorum
+                  {t('reg.consent')}
                 </span>
                 <button
                   type="button"
@@ -167,7 +184,7 @@ export default function RegistrationForm({ onComplete }: Props) {
                 className={styles.submitBtn}
                 disabled={loading}
               >
-                {loading ? 'Kaydediliyor…' : 'Devam Et'}
+                {loading ? t('reg.loading') : t('reg.submit')}
               </button>
             </form>
 
