@@ -8,8 +8,10 @@ import {
   getTodayDayIdx,
 } from '@/lib/schedule'
 import type { Day, ClassifiedSession, BoardingSegment } from '@/lib/schedule'
+import { useTranslation } from '@/hooks/useTranslation'
 
 export function useSchedule(days: Day[]) {
+  const { t } = useTranslation()
   const todayIdx = useMemo(() => getTodayDayIdx(days), [days])
   const [selectedDay, setSelectedDay] = useState(() => todayIdx >= 0 ? todayIdx : 0)
   const [now, setNow] = useState<Date>(() => new Date())
@@ -25,9 +27,15 @@ export function useSchedule(days: Day[]) {
     [days, selectedDay, now],
   )
 
+  const durationUnits = useMemo(
+    () => ({ h: t('boarding.h'), m: t('boarding.m') }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [t],
+  )
+
   const currentSegment: BoardingSegment = useMemo(
-    () => getCurrentSegment(days, now),
-    [days, now],
+    () => getCurrentSegment(days, now, durationUnits),
+    [days, now, durationUnits],
   )
 
   const nextSessionDeadline: Date | null = useMemo(
