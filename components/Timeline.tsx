@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useRef, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ClassifiedSession } from '@/lib/schedule'
+import { useTranslation } from '@/hooks/useTranslation'
 import SessionRow from './SessionRow'
 import styles from './Timeline.module.css'
 
@@ -25,6 +26,7 @@ function useDirection(selectedDay: number) {
 }
 
 export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRight }: TimelineProps) {
+  const { t } = useTranslation()
   const direction = useDirection(selectedDay)
 
   // Swipe gesture state
@@ -74,7 +76,7 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className={styles.header}>Uçuş Programı</div>
+      <div className={styles.header}>{t('timeline.header')}</div>
 
       <div
         className={styles.inner}
