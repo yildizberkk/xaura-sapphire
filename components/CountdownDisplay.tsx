@@ -2,14 +2,16 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from '@/hooks/useTranslation'
+import { LOCALE_META } from '@/lib/i18n'
 import styles from './CountdownDisplay.module.css'
 
 interface CountdownDisplayProps {
   deadline: Date
 }
 
-// Show "Gün" only while we're before this moment
 const SHOW_DAYS_BEFORE = new Date('2026-04-24T00:00:00')
+const EVENT_DATE = new Date(2026, 3, 24) // April 24 2026
 
 function getParts(deadline: Date, now: Date) {
   const ms      = Math.max(0, deadline.getTime() - now.getTime())
@@ -23,6 +25,7 @@ function getParts(deadline: Date, now: Date) {
 function pad(n: number) { return String(n).padStart(2, '0') }
 
 export default function CountdownDisplay({ deadline }: CountdownDisplayProps) {
+  const { t, locale } = useTranslation()
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
@@ -31,9 +34,13 @@ export default function CountdownDisplay({ deadline }: CountdownDisplayProps) {
   }, [])
 
   const isPreEvent = now < SHOW_DAYS_BEFORE
-  const showDays   = isPreEvent
   const { days, hours, minutes, seconds } = getParts(deadline, now)
-  const label = isPreEvent ? 'Uçuşa Kalan Süre' : 'Sonraki Kalkışa Kalan'
+  const label = isPreEvent ? t('countdown.preEvent') : t('countdown.nextFlight')
+
+  const formattedEventDate = EVENT_DATE.toLocaleDateString(
+    LOCALE_META[locale].bcp47,
+    { day: 'numeric', month: 'long' },
+  ) + ' 2026'
 
   return (
     <motion.div
@@ -44,33 +51,33 @@ export default function CountdownDisplay({ deadline }: CountdownDisplayProps) {
     >
       <span className={styles.label}>{label}</span>
       <div className={styles.units}>
-        {showDays && (
+        {isPreEvent && (
           <>
             <div className={styles.unit}>
               <span className={`${styles.value} ${styles.gold}`}>{pad(days)}</span>
-              <span className={styles.unitLabel}>Gün</span>
+              <span className={styles.unitLabel}>{t('countdown.days')}</span>
             </div>
             <span className={styles.sep}>:</span>
           </>
         )}
         <div className={styles.unit}>
           <span className={styles.value}>{pad(hours)}</span>
-          <span className={styles.unitLabel}>Saat</span>
+          <span className={styles.unitLabel}>{t('countdown.hours')}</span>
         </div>
         <span className={styles.sep}>:</span>
         <div className={styles.unit}>
           <span className={styles.value}>{pad(minutes)}</span>
-          <span className={styles.unitLabel}>Dakika</span>
+          <span className={styles.unitLabel}>{t('countdown.minutes')}</span>
         </div>
         <span className={styles.sep}>:</span>
         <div className={styles.unit}>
           <span className={`${styles.value} ${styles.seconds}`}>{pad(seconds)}</span>
-          <span className={styles.unitLabel}>Saniye</span>
+          <span className={styles.unitLabel}>{t('countdown.seconds')}</span>
         </div>
       </div>
       {isPreEvent && (
         <p className={styles.subtext}>
-          24 Nisan 2026 · Kremlin Palace, <span className={styles.gold}>Antalya</span>
+          {formattedEventDate} · Kremlin Palace, <span className={styles.gold}>Antalya</span>
         </p>
       )}
     </motion.div>
