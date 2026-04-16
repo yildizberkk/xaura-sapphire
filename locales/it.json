@@ -30,7 +30,7 @@
     "active": "✦ Attivo"
   },
   "countdown": {
-    "preEvent": "Tempo al volo",
+    "preEvent": "Tempo al decollo",
     "nextFlight": "Al prossimo decollo",
     "days": "Giorni",
     "hours": "Ore",
