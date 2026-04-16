@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useMemo, type ReactNode } from 'react'
 import { LanguageContext, type Messages } from '@/hooks/useTranslation'
-import { detectLocale, LOCALES, type Locale } from '@/lib/i18n'
+import { detectLocale, LOCALE_META, LOCALES, type Locale } from '@/lib/i18n'
 import tr from '@/locales/tr.json'
 import en from '@/locales/en.json'
 import ru from '@/locales/ru.json'
@@ -31,6 +31,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       setLocaleState(detectLocale(navigator.language))
     }
   }, [])
+
+  // Sync <html lang> with selected locale so CSS text-transform uses the right rules
+  useEffect(() => {
+    document.documentElement.lang = LOCALE_META[locale].bcp47
+  }, [locale])
 
   const setLocale = useCallback((l: Locale) => {
     localStorage.setItem(STORAGE_KEY, l)

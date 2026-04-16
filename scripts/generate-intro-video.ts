@@ -7,9 +7,16 @@ const FRAME_CACHE = 'public/intro-frame.jpg'
 
 const START_PROMPT = `Pre-dawn airport runway shot from ground level, camera positioned at centerline looking straight down the runway into darkness. Two parallel rows of amber-gold runway edge lights (#edd29d, #af9055) converge sharply to a single vanishing point at the very center of the horizon. Wet dark asphalt reflects the amber lights in long golden streaks (#cdad70). Deep midnight navy sky above (#030d5f). A soft cobalt-gold glow radiates from the vanishing point on the horizon (#5c89d1, #cdad70) — as if a light source or beacon sits exactly at the end of the runway. White painted centerline dashes stretch ahead into that glow. No aircraft, no people, no terminal buildings visible. Cinematic wide-angle perspective with extreme depth compression, photorealistic, dramatic, moody.`
 
-const VIDEO_PROMPT = `Camera starts perfectly still at runway level, then begins a very slow and deliberate forward push that gradually and smoothly accelerates — as if a plane beginning its takeoff roll. The amber runway edge lights (#edd29d, #af9055) on both sides slowly begin to stream past. The acceleration builds steadily — lights blur into golden streaks on both sides. The glowing cobalt-gold beacon at the horizon (#5c89d1, #cdad70) grows steadily larger and more radiant as the camera rushes forward. In the final moments, the beacon light expands and floods more and more of the frame — the horizon dissolves into a radiant wash of cobalt-gold light that fills the screen as the camera charges into it. Pure forward motion only — no tilt, no lift, no vertical movement — just an unstoppable momentum building into the light. Smooth continuous acceleration into a luminous ending, no cuts, perfectly cinematic.`
+// v1 — 8s, cobalt-gold ending
+const VIDEO_PROMPT_V1 = `Camera starts perfectly still at runway level, then begins a very slow and deliberate forward push that gradually and smoothly accelerates — as if a plane beginning its takeoff roll. The amber runway edge lights (#edd29d, #af9055) on both sides slowly begin to stream past. The acceleration builds steadily — lights blur into golden streaks on both sides. The glowing cobalt-gold beacon at the horizon (#5c89d1, #cdad70) grows steadily larger and more radiant as the camera rushes forward. In the final moments, the beacon light expands and floods more and more of the frame — the horizon dissolves into a radiant wash of cobalt-gold light that fills the screen as the camera charges into it. Pure forward motion only — no tilt, no lift, no vertical movement — just an unstoppable momentum building into the light. Smooth continuous acceleration into a luminous ending, no cuts, perfectly cinematic.`
 
-const NEGATIVE_PROMPT = `camera shake, tilt, lift, vertical movement, quick cut, daylight, sunrise, sunset, people, text, watermark, airplane, helicopter, blur, distortion, low quality, overexposed, washed out colors, desaturated, gray tones`
+// v2 — 12s, full warm amber overexposure ending
+const VIDEO_PROMPT_V2 = `Camera starts perfectly still at runway level, then begins a very slow and deliberate forward push that gradually and smoothly accelerates — as if a plane beginning its takeoff roll. The amber runway edge lights (#edd29d, #af9055) on both sides slowly begin to stream past. The acceleration builds with relentless smoothness — lights blur into long rivers of warm gold on both sides. The cobalt-gold beacon at the horizon grows steadily, pulling the camera toward it with increasing urgency. As the camera charges forward, the amber glow expands from the center — first flooding the lower half of the frame, then rising to consume the sky. In the final 4 seconds, the entire frame is overwhelmed by a pure saturated warm amber light (#edd29d, #cdad70, #af9055) — the runway, the darkness, the sky all dissolve completely into a blinding luminous amber-gold overexposure that fills every pixel from edge to edge. The ending is a total immersion in warm amber radiance, held for a long graceful beat. Pure forward motion only — no tilt, no lift — just unstoppable momentum dissolving into light. Smooth, cinematic, breathtaking.`
+
+// v3 — 12s, parabolic (exponential) acceleration: near-still start → explosive finish
+const VIDEO_PROMPT_V3 = `Camera begins absolutely motionless at runway level — the opening seconds are nearly frozen, barely a breath of forward movement, as if the world is holding still. Then the motion begins to creep — so slowly at first it is almost imperceptible. But the acceleration is relentless and exponential: each second measurably faster than the last, the pace compounding on itself like a curve bending upward. The amber runway edge lights (#edd29d, #af9055) start as fixed points on either side, then gradually begin to drift past — first slowly, then flowing, then streaming. The dark wet asphalt and centerline dashes begin to blur. By the midpoint the camera is moving at real speed, lights becoming golden rivers. In the final third, the acceleration explodes — the runway lights smear into continuous blazing streaks of amber-gold (#cdad70), the beacon at the horizon expands and floods the frame with overwhelming warm light, and the camera is hurtling forward at full velocity, completely unstoppable. The very last moments are pure kinetic rush — maximum speed, frame filled with radiant golden light. Pure forward motion only — no tilt, no lift — a parabolic arc from absolute stillness to explosive momentum. One seamless continuous take, perfectly cinematic.`
+
+const NEGATIVE_PROMPT = `camera shake, tilt, lift, vertical movement, quick cut, daylight, people, text, watermark, airplane, helicopter, distortion, low quality, desaturated, gray tones, cold blue`
 
 async function generateImage(prompt: string, label: string): Promise<string> {
   console.log(`\n[${label}] Generating image with Flux 2 Pro...`)
@@ -35,13 +42,13 @@ async function generateImage(prompt: string, label: string): Promise<string> {
 }
 
 async function downloadToBuffer(url: string): Promise<Buffer> {
-  const response = await fetch(url)
+  const response = await fetch(url, { signal: AbortSignal.timeout(120_000) })
   if (!response.ok) throw new Error(`Fetch failed: ${response.status}`)
   return Buffer.from(await response.arrayBuffer())
 }
 
-async function getStartFrame(): Promise<Buffer> {
-  if (existsSync(FRAME_CACHE)) {
+async function getStartFrame(noCache: boolean): Promise<Buffer> {
+  if (!noCache && existsSync(FRAME_CACHE)) {
     console.log(`\n[FRAME] Reusing cached frame from ${FRAME_CACHE}`)
     return readFileSync(FRAME_CACHE)
   }
@@ -61,13 +68,13 @@ async function uploadToFal(buffer: Buffer, filename: string): Promise<string> {
   return url
 }
 
-async function generateVideo(startImageUrl: string): Promise<string> {
-  console.log('\n[VIDEO] Generating video with Kling v3 Pro...')
+async function generateVideo(startImageUrl: string, prompt: string, duration: string): Promise<string> {
+  console.log(`\n[VIDEO] Generating ${duration}s video with Kling v3 Pro...`)
   const result = await fal.subscribe('fal-ai/kling-video/v3/pro/image-to-video', {
     input: {
-      prompt: VIDEO_PROMPT,
+      prompt,
       start_image_url: startImageUrl,
-      duration: '8',
+      duration,
       generate_audio: false,
       cfg_scale: 0.7,
       negative_prompt: NEGATIVE_PROMPT,
@@ -99,22 +106,26 @@ async function main() {
     process.exit(1)
   }
 
-  // Remove --no-cache flag to skip cached frame
-  const noCache = process.argv.includes('--no-cache')
-  if (noCache && existsSync(FRAME_CACHE)) {
-    console.log('[FRAME] --no-cache flag set, ignoring cached frame')
-  }
-  if (noCache) {
-    const { unlinkSync } = await import('fs')
-    if (existsSync(FRAME_CACHE)) unlinkSync(FRAME_CACHE)
-  }
+  const args    = process.argv.slice(2)
+  const noCache = args.includes('--no-cache')
+  const version = args.includes('--v3') ? 'v3' : args.includes('--v2') ? 'v2' : 'v1'
 
-  const frameBuffer   = await getStartFrame()
+  const prompts  = { v1: VIDEO_PROMPT_V1, v2: VIDEO_PROMPT_V2, v3: VIDEO_PROMPT_V3 }
+  const durations = { v1: '8', v2: '12', v3: '12' }
+  const outputs   = { v1: 'public/intro.mp4', v2: 'public/intro-v2.mp4', v3: 'public/intro-v3.mp4' }
+
+  const prompt   = prompts[version]
+  const duration = durations[version]
+  const output   = outputs[version]
+
+  console.log(`\n[CONFIG] version=${version} duration=${duration}s output=${output}`)
+
+  const frameBuffer   = await getStartFrame(noCache)
   const startImageUrl = await uploadToFal(frameBuffer, 'runway-start.jpg')
-  const videoUrl      = await generateVideo(startImageUrl)
-  await downloadMp4(videoUrl, 'public/intro.mp4')
+  const videoUrl      = await generateVideo(startImageUrl, prompt, duration)
+  await downloadMp4(videoUrl, output)
 
-  console.log('\n✓ Done. public/intro.mp4 is ready.')
+  console.log(`\n✓ Done. ${output} is ready.`)
 }
 
 main().catch((err) => { console.error(err); process.exit(1) })

@@ -61,7 +61,7 @@ export default function IntroVideo({ onComplete }: Props) {
     >
       <video
         className={styles.video}
-        src="/intro-v2.mp4"
+        src="/intro-v4.mp4"
         poster="/intro-frame.jpg"
         autoPlay
         muted

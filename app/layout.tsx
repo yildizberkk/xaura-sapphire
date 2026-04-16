@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Returning users (localStorage set) will skip the intro phase, but the file
           is 1.5 MB and cached — the wasted bandwidth is negligible.
         */}
-        <link rel="preload" as="video" href="/intro-v2.mp4" type="video/mp4" />
+        <link rel="preload" as="video" href="/intro-v4.mp4" type="video/mp4" />
       </head>
       <body>
         <PwaInit />
