@@ -64,17 +64,18 @@ function ClientPageInner({ schedule }: ClientPageProps) {
         const saved: StoredUser = JSON.parse(raw)
         if (new Date(saved.expiresAt) > new Date()) {
           setUser(saved)
-          setPhase('app')
-          return
+        } else {
+          localStorage.removeItem('sapphire_user_v2')
         }
-      } catch {}
-      localStorage.removeItem('sapphire_user_v2')
+      } catch {
+        localStorage.removeItem('sapphire_user_v2')
+      }
     }
     setPhase('intro')
   }, [])
 
   function handleIntroComplete() {
-    setPhase('register')
+    setPhase(user ? 'app' : 'register')
   }
 
   function handleRegistrationComplete(newUser: { firstName: string; lastName: string }) {
