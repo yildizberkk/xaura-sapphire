@@ -58,24 +58,23 @@ function ClientPageInner({ schedule }: ClientPageProps) {
   } = useSchedule(schedule.days)
 
   useEffect(() => {
-    const raw = localStorage.getItem('sapphire_user_v2')
+    const raw = localStorage.getItem('sapphire_user_v3')
     if (raw) {
       try {
         const saved: StoredUser = JSON.parse(raw)
         if (new Date(saved.expiresAt) > new Date()) {
           setUser(saved)
-        } else {
-          localStorage.removeItem('sapphire_user_v2')
+          setPhase('app')
+          return
         }
-      } catch {
-        localStorage.removeItem('sapphire_user_v2')
-      }
+      } catch {}
+      localStorage.removeItem('sapphire_user_v3')
     }
     setPhase('intro')
   }, [])
 
   function handleIntroComplete() {
-    setPhase(user ? 'app' : 'register')
+    setPhase('register')
   }
 
   function handleRegistrationComplete(newUser: { firstName: string; lastName: string }) {
