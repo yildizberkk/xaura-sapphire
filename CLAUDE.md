@@ -21,3 +21,15 @@ All assets are in `website_materials_given/`:
 - `days` array — 3 days (Cuma/Cumartesi/Pazar), each with a `date` (YYYY-MM-DD) and `sessions` array
 - Each session has `start`/`end` (`"HH:MM"` or `null`), `title`, optional `titleEN`, optional `subtitle`, and `type`
 - Session types: `general`, `meal`, `session`, `keynote`, `entertainment`, `ceremony`, `break`
+
+## SMS Integration (Netgsm)
+
+For sending SMS via the Netgsm API, use the official Python SDK (`netgsm-sms`).  
+Full reference docs (installation, all methods, error codes): [`netgsm-ptyhon-sdk/netgsm-sdk-docs.md`](netgsm-ptyhon-sdk/netgsm-sdk-docs.md)
+
+**Quick reference:**
+- Install: `pip install netgsm-sms`
+- Init: `Netgsm(username=..., password=..., appname=...)`
+- Send: `netgsm.sms.send(msgheader="HEADER", messages=[{"msg": "...", "no": "5XXXXXXXXX"}])`
+- Business errors come back as HTTP 406 → `NotAcceptableException` with an `e.code` string
+- Env vars: `NETGSM_USERNAME`, `NETGSM_PASSWORD`, `NETGSM_MSGHEADER`, `NETGSM_APPNAME`

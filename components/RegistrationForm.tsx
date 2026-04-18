@@ -47,6 +47,7 @@ export default function RegistrationForm({ onComplete }: Props) {
         phone:     form.phone.trim(),
         email:     form.email.trim() || undefined,
         consent:   form.consent,
+        locale,
       }
       await registerUser(input)
       localStorage.setItem('sapphire_user_v2', JSON.stringify({
