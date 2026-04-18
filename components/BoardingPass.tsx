@@ -55,7 +55,7 @@ export default function BoardingPass({
               sizes="28px"
               priority
             />
-            <span className={styles.bpLabel}>{t('boarding.pass')}</span>
+            <span className={styles.bpLabel} lang="en">{t('boarding.pass')}</span>
           </div>
 
           {/* Wordmark SVG — unchanged */}

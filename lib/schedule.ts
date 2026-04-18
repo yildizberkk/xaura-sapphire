@@ -235,7 +235,7 @@ export function getCurrentSegment(
     return {
       type: 'pre-event',
       dep: 'AYT', depName: 'Antalya',
-      arr: 'KP',  arrName: 'Kremlin Palace',
+      arr: 'KP',  arrName: 'KREMLIN PALACE',
       kalkis: null, inis: null, suresi: null, dateStr: null,
     }
   }
@@ -253,7 +253,7 @@ export function getCurrentSegment(
     return {
       type: 'active',
       dep: curr.code,    depName: curr.title,
-      arr: next?.code  ?? 'KP', arrName: next?.title ?? 'Kremlin Palace',
+      arr: next?.code  ?? 'KP', arrName: next?.title ?? 'KREMLIN PALACE',
       kalkis: curr.startDt ? fmtHHMM(curr.startDt) : null,
       inis:   curr.hasKnownEnd ? fmtHHMM(curr.effectiveEndDt) : null,
       suresi: curr.startDt && curr.hasKnownEnd
@@ -289,7 +289,7 @@ export function getCurrentSegment(
   if (prevIdx < 0) {
     return {
       type: 'between-days',
-      dep: 'KP', depName: 'Kremlin Palace',
+      dep: 'KP', depName: 'KREMLIN PALACE',
       arr: nextSess.code, arrName: nextSess.title,
       kalkis: null, inis: null, suresi: null,
       dateStr: nextSess.dateStr,
@@ -306,7 +306,7 @@ export function getCurrentSegment(
       // Past midnight → KP → first session of new day
       return {
         type: 'between-days',
-        dep: 'KP', depName: 'Kremlin Palace',
+        dep: 'KP', depName: 'KREMLIN PALACE',
         arr: nextSess.code, arrName: nextSess.title,
         kalkis: null, inis: null, suresi: null,
         dateStr: nextSess.dateStr,
@@ -316,7 +316,7 @@ export function getCurrentSegment(
     return {
       type: 'end-of-day',
       dep: prevSess.code, depName: prevSess.title,
-      arr: 'KP', arrName: 'Kremlin Palace',
+      arr: 'KP', arrName: 'KREMLIN PALACE',
       kalkis: prevSess.startDt ? fmtHHMM(prevSess.startDt) : null,
       inis: null, suresi: null,
       dateStr: prevSess.dateStr,

@@ -110,7 +110,7 @@ export default function RegistrationForm({ onComplete }: Props) {
             </div>
 
             <h1 className={styles.greeting}>{t('reg.welcome')}</h1>
-            <p className={styles.subtitle}>Sapphire Momentum II</p>
+            <p className={styles.subtitle} lang="en">Sapphire Momentum II</p>
 
             <form onSubmit={handleSubmit} className={styles.form} noValidate>
               <div className={styles.row}>
