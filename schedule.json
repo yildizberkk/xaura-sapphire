@@ -4,7 +4,8 @@
     "subtitle": "2nd Anniversary Edition",
     "dates": "24-26 Nisan",
     "location": "Kremlin Palace, Antalya",
-    "address": "Kundu Mah. Yaşar Sobutay Bulv. Kremlin Otel Sit. No:98/10 No: A201 Aksu / Antalya"
+    "address": "Kundu Mah. Yaşar Sobutay Bulv. Kremlin Otel Sit. No:98/10 No: A201 Aksu / Antalya",
+    "timezone": "Europe/Istanbul"
   },
   "days": [
     {
@@ -13,7 +14,8 @@
       "sessions": [
         {
           "start": "10:00", "end": "12:30", "type": "general",
-          "title": "Giriş", "titleEN": "Entry", "titleRU": "Вход", "titleBG": "Вход", "titleIT": "Ingresso", "titleMN": "Оролт"
+          "title": "Giriş", "titleEN": "Entry", "titleRU": "Вход", "titleBG": "Вход", "titleIT": "Ingresso", "titleMN": "Оролт",
+          "smsReminder": false
         },
         {
           "start": "12:30", "end": "14:30", "type": "meal",
@@ -29,7 +31,8 @@
         },
         {
           "start": "20:30", "end": null, "type": "general",
-          "title": "Kapı Açılış", "titleEN": "Door Opening", "titleRU": "Открытие дверей", "titleBG": "Отваряне на вратите", "titleIT": "Apertura porte", "titleMN": "Хаалга нээлт"
+          "title": "Kapı Açılış", "titleEN": "Door Opening", "titleRU": "Открытие дверей", "titleBG": "Отваряне на вратите", "titleIT": "Apertura porte", "titleMN": "Хаалга нээлт",
+          "smsReminder": false
         },
         {
           "start": "20:45", "end": null, "type": "keynote",
