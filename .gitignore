@@ -47,3 +47,6 @@ yarn-error.log*
 next-env.d.ts
 .env*.local
 public/intro.mp4
+
+# local test-data backup before go-live
+registrations_test_backup.json
