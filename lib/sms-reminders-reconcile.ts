@@ -22,6 +22,14 @@ export async function reconcileDeliveryReports(): Promise<ReconcileSummary> {
   const threeMinAgo = new Date(now - 3 * 60_000).toISOString()
   const fiveMinAgo  = new Date(now - 5 * 60_000).toISOString()
 
+  const { data: eligibleSm, error: smErr } = await supabaseAdmin
+    .from('scheduled_messages')
+    .select('id')
+    .lt('reminder_at', threeMinAgo)
+  if (smErr) throw new Error(`reconcile: load eligible scheduled_messages failed: ${smErr.message}`)
+  const eligibleSmIds = (eligibleSm ?? []).map(r => r.id)
+  if (eligibleSmIds.length === 0) return summary
+
   const { data: rows, error } = await supabaseAdmin
     .from('message_sends')
     .select(`
@@ -32,7 +40,7 @@ export async function reconcileDeliveryReports(): Promise<ReconcileSummary> {
     `)
     .in('status', ['published', 'retry_published'])
     .not('netgsm_jobid', 'is', null)
-    .lt('scheduled_messages.reminder_at', threeMinAgo)
+    .in('scheduled_message_id', eligibleSmIds)
     .or(`last_checked_at.is.null,last_checked_at.lt.${fiveMinAgo}`)
     .limit(200)
   if (error) throw new Error(`reconcile: load published failed: ${error.message}`)

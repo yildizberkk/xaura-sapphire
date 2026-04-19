@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   if (process.env.NODE_ENV === 'production') {
     const authHeader = request.headers.get('authorization') ?? ''
     const cronSecret = process.env.CRON_SECRET
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
     }
   }
@@ -54,6 +54,34 @@ export async function GET(request: Request) {
       .update({ alerted_at: new Date().toISOString() })
       .eq('id', row.id)
     alertsFired++
+  }
+
+  const missedWindowCutoff = new Date(Date.now() - 5 * 60_000).toISOString()
+  const { data: staleSmIds } = await supabaseAdmin
+    .from('scheduled_messages')
+    .select('id')
+    .lt('reminder_at', missedWindowCutoff)
+  const staleIds = (staleSmIds ?? []).map(r => r.id)
+  if (staleIds.length > 0) {
+    const { data: missedWindow } = await supabaseAdmin
+      .from('message_sends')
+      .select('id, scheduled_message_id, phone_snapshot')
+      .eq('status', 'pending')
+      .in('scheduled_message_id', staleIds)
+      .is('alerted_at', null)
+      .limit(25)
+    for (const row of missedWindow ?? []) {
+      await alertOps('error', 'message_send missed publish window', {
+        id: row.id,
+        scheduled_message_id: row.scheduled_message_id,
+        phone: row.phone_snapshot,
+      })
+      await supabaseAdmin
+        .from('message_sends')
+        .update({ alerted_at: new Date().toISOString() })
+        .eq('id', row.id)
+      alertsFired++
+    }
   }
   result.alertsFired = alertsFired
   result.elapsedMs = Date.now() - started

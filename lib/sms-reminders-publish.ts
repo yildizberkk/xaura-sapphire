@@ -141,6 +141,10 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
   const scheduledIds = scheduled.map(s => s.id)
   sendQuery.in('scheduled_message_id', scheduledIds)
 
+  if (scope.kind === 'registration') {
+    sendQuery.eq('registration_id', scope.registrationId)
+  }
+
   const { data: pending, error: pendErr } = await sendQuery
   if (pendErr) throw new Error(`load pending sends failed: ${pendErr.message}`)
   if (!pending) return summary

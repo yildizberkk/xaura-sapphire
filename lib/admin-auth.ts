@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { timingSafeEqual as nodeTimingSafeEqual } from 'node:crypto'
 
 /**
  * Returns null when authorized, or a NextResponse 401/403 when not.
@@ -29,8 +30,12 @@ export function requireAdminAuth(request: Request): NextResponse | null {
 }
 
 function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false
-  let diff = 0
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
-  return diff === 0
+  const aBuf = Buffer.from(a, 'utf8')
+  const bBuf = Buffer.from(b, 'utf8')
+  const maxLen = Math.max(aBuf.length, bBuf.length)
+  const aPadded = Buffer.alloc(maxLen)
+  const bPadded = Buffer.alloc(maxLen)
+  aBuf.copy(aPadded)
+  bBuf.copy(bPadded)
+  return nodeTimingSafeEqual(aPadded, bPadded) && aBuf.length === bBuf.length
 }
