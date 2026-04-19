@@ -116,12 +116,31 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
 
       <div className={styles.footer}>
         <Image
+          src="/x2-emblem.png"
+          alt="X² 2nd Anniversary Edition"
+          width={168}
+          height={161}
+          className={styles.footerMarkWide}
+          sizes="42px"
+          style={{ width: 'auto', height: 40 }}
+        />
+        <Image
           src="/xaura-logo.png"
           alt="Xaura Global"
-          width={110}
-          height={55}
+          width={2500}
+          height={1250}
           className={styles.footerLogo}
           sizes="110px"
+          style={{ width: 110, height: 'auto' }}
+        />
+        <Image
+          src="/x-logo.png"
+          alt="X"
+          width={1637}
+          height={1002}
+          className={styles.footerMarkWide}
+          sizes="65px"
+          style={{ width: 'auto', height: 40 }}
         />
       </div>
     </motion.div>
