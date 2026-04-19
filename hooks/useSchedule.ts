@@ -9,18 +9,21 @@ import {
 } from '@/lib/schedule'
 import type { Day, ClassifiedSession, BoardingSegment } from '@/lib/schedule'
 import { useTranslation } from '@/hooks/useTranslation'
+import { parseEventClock, currentVirtualTime } from '@/lib/event-clock'
 
 export function useSchedule(days: Day[]) {
   const { t, locale } = useTranslation()
   const todayIdx = useMemo(() => getTodayDayIdx(days), [days])
   const [selectedDay, setSelectedDay] = useState(() => todayIdx >= 0 ? todayIdx : 0)
-  const [now, setNow] = useState<Date>(() => new Date())
+  const [clockCfg] = useState(() => parseEventClock())
+  const [now, setNow] = useState<Date>(() => currentVirtualTime(clockCfg))
 
-  // Tick every 30 seconds — enough for session boundary detection
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 30_000)
+    if (clockCfg.speed === 0) return
+    const interval = clockCfg.speed >= 10 ? 500 : 30_000
+    const id = setInterval(() => setNow(currentVirtualTime(clockCfg)), interval)
     return () => clearInterval(id)
-  }, [])
+  }, [clockCfg])
 
   const sessions: ClassifiedSession[] = useMemo(
     () => classifySessions(days[selectedDay], now),
