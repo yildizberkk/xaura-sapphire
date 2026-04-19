@@ -9,7 +9,6 @@ import scheduleProd from '@/schedule.json'
 export async function loadSchedule(): Promise<ScheduleData> {
   if (process.env.USE_DEV_SCHEDULE === 'true') {
     try {
-      // @ts-expect-error — schedule.dev.json may not exist in the working tree
       const dev = (await import('@/schedule.dev.json')).default
       return dev as unknown as ScheduleData
     } catch {
