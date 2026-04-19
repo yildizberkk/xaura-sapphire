@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { normalizePhone } from '@/lib/phone'
 import { sendWelcomeSms } from '@/lib/netgsm'
 import { buildWelcomeSms } from '@/lib/sms-templates'
+import { publishPendingReminders } from '@/lib/sms-reminders-publish'
 import type { Locale } from '@/lib/i18n'
 
 export interface RegistrationInput {
@@ -36,7 +37,7 @@ export async function registerUser(data: RegistrationInput): Promise<void> {
     smsCode = 'INVALID_PHONE'
   }
 
-  const { error } = await supabaseAdmin.from('registrations').insert({
+  const { data: inserted, error } = await supabaseAdmin.from('registrations').insert({
     first_name:           data.firstName,
     last_name:            data.lastName,
     phone:                normalized?.e164 ?? data.phone,
@@ -46,6 +47,12 @@ export async function registerUser(data: RegistrationInput): Promise<void> {
     sms_successful:       smsSuccessful,
     sms_api_return_code:  smsCode,
     sms_jobid:            smsJobid,
-  })
+  }).select('id').single()
   if (error) throw new Error(error.message)
+
+  try {
+    await publishPendingReminders({ kind: 'registration', registrationId: inserted.id })
+  } catch (err) {
+    console.error('[register] inline reminder publish failed', err)
+  }
 }
