@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "generate:intro": "dotenv -e .env.local -- tsx scripts/generate-intro-video.ts"
   },
   "dependencies": {
@@ -26,6 +28,7 @@
     "dotenv-cli": "^11.0.0",
     "sharp": "^0.34.5",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.4"
   }
 }
