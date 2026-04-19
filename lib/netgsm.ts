@@ -13,6 +13,8 @@ export interface SendSmsResult {
   success: boolean
   /** Netgsm code ("00" on success, "40"/"50"/... on business error) or a synthetic code on network/HTTP failure. */
   code: string
+  /** Netgsm jobid — present when Netgsm accepted the request (code "00"). Use it to query the Netgsm delivery report for actual handset delivery. */
+  jobid: string | null
 }
 
 export async function sendWelcomeSms({
@@ -26,7 +28,7 @@ export async function sendWelcomeSms({
   const appname = process.env.NETGSM_APPNAME
 
   if (!username || !password || !msgheader) {
-    return { success: false, code: 'MISSING_CREDENTIALS' }
+    return { success: false, code: 'MISSING_CREDENTIALS', jobid: null }
   }
 
   const auth = Buffer.from(`${username}:${password}`).toString('base64')
@@ -53,10 +55,11 @@ export async function sendWelcomeSms({
     // Netgsm returns HTTP 406 with a JSON body containing the business error code.
     const json = (await res.json().catch(() => null)) as { code?: string; jobid?: string } | null
     const code = json?.code ?? `HTTP_${res.status}`
+    const success = res.ok && code === '00'
 
-    return { success: res.ok && code === '00', code }
+    return { success, code, jobid: success ? (json?.jobid ?? null) : null }
   } catch (err) {
     const isTimeout = err instanceof Error && err.name === 'TimeoutError'
-    return { success: false, code: isTimeout ? 'TIMEOUT' : 'NETWORK_ERROR' }
+    return { success: false, code: isTimeout ? 'TIMEOUT' : 'NETWORK_ERROR', jobid: null }
   }
 }

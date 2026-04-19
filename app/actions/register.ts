@@ -19,6 +19,7 @@ export async function registerUser(data: RegistrationInput): Promise<void> {
 
   let smsSuccessful: boolean | null = null
   let smsCode: string | null = null
+  let smsJobid: string | null = null
 
   if (normalized) {
     const message = buildWelcomeSms(data.locale, data.firstName)
@@ -29,6 +30,7 @@ export async function registerUser(data: RegistrationInput): Promise<void> {
     })
     smsSuccessful = result.success
     smsCode = result.code
+    smsJobid = result.jobid
   } else {
     smsSuccessful = false
     smsCode = 'INVALID_PHONE'
@@ -43,6 +45,7 @@ export async function registerUser(data: RegistrationInput): Promise<void> {
     phone_country_code:   normalized?.country ?? null,
     sms_successful:       smsSuccessful,
     sms_api_return_code:  smsCode,
+    sms_jobid:            smsJobid,
   })
   if (error) throw new Error(error.message)
 }
