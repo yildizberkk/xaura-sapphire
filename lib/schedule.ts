@@ -22,6 +22,8 @@ export interface RawSession {
   subtitleIT?: string
   subtitleMN?: string
   type: SessionType
+  smsReminder?: boolean
+  smsMessage?: string
 }
 
 export interface Day {
@@ -42,6 +44,7 @@ export interface ScheduleData {
     dates: string
     location: string
     address: string
+    timezone: string
   }
   days: Day[]
 }
