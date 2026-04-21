@@ -15,20 +15,28 @@ export function useSchedule(days: Day[]) {
   const [clockCfg] = useState(() => parseEventClock())
   const [now, setNow] = useState<Date>(() => currentVirtualTime(clockCfg))
 
+  // Istanbul-anchored YYYY-MM-DD so device TZ can't shift the event day.
+  function istanbulDateStr(d: Date): string {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Istanbul',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+    }).format(d)
+  }
+
   // Derive todayIdx from virtual clock so time-travel and real event both work
   const todayIdx = useMemo(() => {
-    const dateStr = now.toLocaleDateString('sv')
+    const dateStr = istanbulDateStr(now)
     return days.findIndex(d => d.date === dateStr)
   }, [days, now])
 
   const [selectedDay, setSelectedDay] = useState(() => {
     const initNow = currentVirtualTime(clockCfg)
-    const dateStr = initNow.toLocaleDateString('sv')
+    const dateStr = istanbulDateStr(initNow)
     const idx = days.findIndex(d => d.date === dateStr)
     if (idx >= 0) return idx
     // After last event day → show last day; before → show first
     const lastDate = days[days.length - 1]?.date
-    if (lastDate && initNow > new Date(lastDate + 'T23:59:59')) return days.length - 1
+    if (lastDate && initNow > new Date(`${lastDate}T23:59:59.999+03:00`)) return days.length - 1
     return 0
   })
 
