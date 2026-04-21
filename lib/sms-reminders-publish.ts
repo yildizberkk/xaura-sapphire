@@ -134,31 +134,44 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
     }
   }
 
-  const sendQuery = supabaseAdmin
-    .from('message_sends')
-    .select('id, scheduled_message_id, registration_id, phone_snapshot')
-    .eq('status', 'pending')
+  const PAGE_SIZE = 500
+  let claimedAll: Array<{ id: string; scheduled_message_id: string; registration_id: string; phone_snapshot: string }> = []
 
   const scheduledIds = scheduled.map(s => s.id)
-  sendQuery.in('scheduled_message_id', scheduledIds)
 
-  if (scope.kind === 'registration') {
-    sendQuery.eq('registration_id', scope.registrationId)
+  // Loop: grab pending rows in pages of PAGE_SIZE, atomically claim by moving to
+  // 'sending' status, and accumulate until a page returns fewer than PAGE_SIZE.
+  for (;;) {
+    const sendQuery = supabaseAdmin
+      .from('message_sends')
+      .select('id, scheduled_message_id, registration_id, phone_snapshot')
+      .eq('status', 'pending')
+      .in('scheduled_message_id', scheduledIds)
+      .limit(PAGE_SIZE)
+
+    if (scope.kind === 'registration') {
+      sendQuery.eq('registration_id', scope.registrationId)
+    }
+
+    const { data: page, error: pendErr } = await sendQuery
+    if (pendErr) throw new Error(`load pending sends failed: ${pendErr.message}`)
+    if (!page || page.length === 0) break
+
+    const pageIds = page.map(r => r.id)
+    const { data: claimed } = await supabaseAdmin
+      .from('message_sends')
+      .update({ status: 'sending' as MessageSendStatus })
+      .in('id', pageIds)
+      .eq('status', 'pending')
+      .select('id, scheduled_message_id, registration_id, phone_snapshot')
+
+    if (claimed && claimed.length > 0) claimedAll = claimedAll.concat(claimed)
+
+    // If the initial page was smaller than the limit, no more pages exist.
+    if (page.length < PAGE_SIZE) break
   }
 
-  const { data: allPending, error: pendErr } = await sendQuery
-  if (pendErr) throw new Error(`load pending sends failed: ${pendErr.message}`)
-  if (!allPending || allPending.length === 0) return summary
-
-  // Atomically claim rows by moving them to 'sending' so concurrent runners skip them.
-  const pendingIds = allPending.map(r => r.id)
-  const { data: claimed } = await supabaseAdmin
-    .from('message_sends')
-    .update({ status: 'sending' as MessageSendStatus })
-    .in('id', pendingIds)
-    .eq('status', 'pending')
-    .select('id, scheduled_message_id, registration_id, phone_snapshot')
-  const pending = claimed ?? []
+  const pending = claimedAll
   if (pending.length === 0) return summary
 
   const smById = new Map(scheduled.map(s => [s.id, s]))
