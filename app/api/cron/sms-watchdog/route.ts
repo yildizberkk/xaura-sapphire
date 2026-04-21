@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export const maxDuration = 120
 
 export async function GET(request: Request) {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'test') {
     const authHeader = request.headers.get('authorization') ?? ''
     const cronSecret = process.env.CRON_SECRET
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
