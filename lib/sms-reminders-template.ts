@@ -1,5 +1,5 @@
 export const DEFAULT_TEMPLATE =
-  'Sevgili {name}, {session} birazdan başlıyor. Görüşmek üzere.'
+  'Sevgili {name},\n\n{session} birazdan başlıyor.\nGörüşmek üzere.'
 
 /** Maximum GSM-7 + Turkish shift-table segment size. */
 export const MAX_SEGMENT_LENGTH = 160

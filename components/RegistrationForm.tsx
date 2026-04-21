@@ -22,7 +22,7 @@ export default function RegistrationForm({ onComplete }: Props) {
     lastName:  '',
     phone:     '',
     email:     '',
-    consent:   false,
+    consent:   true,
   })
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState('')

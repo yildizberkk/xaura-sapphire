@@ -90,6 +90,7 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
   const regQuery = supabaseAdmin
     .from('registrations')
     .select('id, first_name, phone')
+    .eq('consent', true)
 
   if (scope.kind === 'registration') regQuery.eq('id', scope.registrationId)
   const { data: regs, error: regErr } = await regQuery

@@ -12,7 +12,7 @@ describe('resolveMessage', () => {
       firstName: 'Berk',
       sessionTitle: 'Ruby Okulu',
     })
-    expect(msg).toBe('Sevgili Berk, Ruby Okulu birazdan başlıyor. Görüşmek üzere.')
+    expect(msg).toBe('Sevgili Berk,\n\nRuby Okulu birazdan başlıyor.\nGörüşmek üzere.')
   })
 
   it('uses the session override when provided', () => {
