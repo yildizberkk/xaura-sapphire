@@ -1,6 +1,7 @@
 /** Status state machine for public.message_sends.status. */
 export type MessageSendStatus =
   | 'pending'
+  | 'sending'
   | 'published'
   | 'publish_rejected'
   | 'delivered'

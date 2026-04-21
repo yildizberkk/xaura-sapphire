@@ -145,14 +145,27 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
     sendQuery.eq('registration_id', scope.registrationId)
   }
 
-  const { data: pending, error: pendErr } = await sendQuery
+  const { data: allPending, error: pendErr } = await sendQuery
   if (pendErr) throw new Error(`load pending sends failed: ${pendErr.message}`)
-  if (!pending) return summary
+  if (!allPending || allPending.length === 0) return summary
+
+  // Atomically claim rows by moving them to 'sending' so concurrent runners skip them.
+  const pendingIds = allPending.map(r => r.id)
+  const { data: claimed } = await supabaseAdmin
+    .from('message_sends')
+    .update({ status: 'sending' as MessageSendStatus })
+    .in('id', pendingIds)
+    .eq('status', 'pending')
+    .select('id, scheduled_message_id, registration_id, phone_snapshot')
+  const pending = claimed ?? []
+  if (pending.length === 0) return summary
 
   const smById = new Map(scheduled.map(s => [s.id, s]))
   const regById = new Map(regs.map(r => [r.id, r]))
 
-  await Promise.all(pending.map(async (send) => {
+  const CONCURRENCY = 50
+  for (let i = 0; i < pending.length; i += CONCURRENCY) {
+    await Promise.all(pending.slice(i, i + CONCURRENCY).map(async (send) => {
     const sm = smById.get(send.scheduled_message_id)
     if (!sm) return
     const reg = send.registration_id ? regById.get(send.registration_id) : null
@@ -209,7 +222,11 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
         .eq('id', send.id)
       summary.published++
     } else if (result.code === 'TIMEOUT' || result.code === 'NETWORK_ERROR') {
-      console.warn('[publish] transient error, leaving pending:', result.code, send.id)
+      // Transient — revert to pending so the next watchdog tick retries
+      await supabaseAdmin
+        .from('message_sends')
+        .update({ status: 'pending' as MessageSendStatus })
+        .eq('id', send.id)
     } else {
       await supabaseAdmin
         .from('message_sends')
@@ -221,7 +238,7 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
         .eq('id', send.id)
       summary.publishRejected++
     }
-  }))
+  }))}
 
   return summary
 }
