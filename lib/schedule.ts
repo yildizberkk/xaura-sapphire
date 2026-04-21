@@ -66,12 +66,13 @@ export interface FlightStatus {
 
 // ── Helpers ──────────────────────────────────────────────────────
 
+// Turkey is UTC+3 year-round (no DST), so we anchor wall-clock times with +03:00
+// regardless of the device's timezone. This keeps boarding pass + timeline state
+// correct for attendees whose phones are on other timezones.
 export function parseTime(dateStr: string, timeStr: string | null): Date | null {
   if (!timeStr) return null
-  const [h, m] = timeStr.split(':').map(Number)
-  const d = new Date(dateStr)
-  d.setHours(h, m, 0, 0)
-  return d
+  const d = new Date(`${dateStr}T${timeStr}:00+03:00`)
+  return Number.isNaN(d.getTime()) ? null : d
 }
 
 export function getTodayDayIdx(days: Day[]): number {
@@ -233,7 +234,7 @@ export function getCurrentSegment(
   now: Date,
   durationUnits = { h: 'sa', m: 'dak' },
 ): BoardingSegment {
-  const eventDay0Midnight = new Date('2026-04-24T00:00:00')
+  const eventDay0Midnight = new Date('2026-04-24T00:00:00+03:00')
 
   if (now < eventDay0Midnight) {
     return {
