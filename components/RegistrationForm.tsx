@@ -55,7 +55,7 @@ export default function RegistrationForm({ onComplete }: Props) {
         locale,
       }
       await registerUser(input)
-      localStorage.setItem('sapphire_user_v4', JSON.stringify({
+      localStorage.setItem('sapphire_user_v5', JSON.stringify({
         firstName:  input.firstName,
         lastName:   input.lastName,
         expiresAt:  EXPIRES_AT,
