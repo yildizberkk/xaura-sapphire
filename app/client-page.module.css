@@ -7,8 +7,28 @@
   padding-bottom: max(40px, env(safe-area-inset-bottom, 40px));
 }
 
+/* Prevents any flash of the main app before localStorage is checked */
+.loadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #06091a;
+}
+
 .container {
   max-width: 440px;
   margin: 0 auto;
   padding: max(20px, env(safe-area-inset-top, 20px)) 16px 0;
+  /* ambient amber haze behind all cards — mirrors login page at lower intensity */
+  background: radial-gradient(ellipse 80% 40% at 50% 15%, rgba(205, 173, 112, 0.04) 0%, transparent 70%);
+}
+
+.clock {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 20px;
 }

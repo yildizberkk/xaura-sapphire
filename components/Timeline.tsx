@@ -1,8 +1,10 @@
 // components/Timeline.tsx
 'use client'
-import { useRef, useEffect } from 'react'
+import Image from 'next/image'
+import { useRef, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ClassifiedSession } from '@/lib/schedule'
+import { useTranslation } from '@/hooks/useTranslation'
 import SessionRow from './SessionRow'
 import styles from './Timeline.module.css'
 
@@ -24,6 +26,7 @@ function useDirection(selectedDay: number) {
 }
 
 export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRight }: TimelineProps) {
+  const { t } = useTranslation()
   const direction = useDirection(selectedDay)
 
   // Swipe gesture state
@@ -41,6 +44,12 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
     touchStart.current = null
   }
 
+  const [now, setNow] = useState(() => new Date())
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 10_000)
+    return () => clearInterval(id)
+  }, [])
+
   // Compute "you are here" notch position as % of total session span
   const positionedSessions = sessions.filter(s => s.startDt)
   const hasActiveOrNext = sessions.some(s => s.state === 'active' || s.state === 'next')
@@ -49,7 +58,6 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
     const first = positionedSessions[0].startDt
     const last  = positionedSessions[positionedSessions.length - 1].startDt
     if (!first || !last) return null
-    const now  = new Date()
     const span = last.getTime() - first.getTime()
     if (span === 0) return null
     return Math.min(100, Math.max(0, ((now.getTime() - first.getTime()) / span) * 100))
@@ -68,7 +76,7 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className={styles.header}>Uçuş Programı</div>
+      <div className={styles.header}>{t('timeline.header')}</div>
 
       <div
         className={styles.inner}
@@ -107,7 +115,33 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.footerText}>Xaura Global · Sapphire Momentum II · Nisan 2026</div>
+        <Image
+          src="/x2-emblem.png"
+          alt="X² 2nd Anniversary Edition"
+          width={168}
+          height={161}
+          className={styles.footerMarkWide}
+          sizes="42px"
+          style={{ width: 'auto', height: 40 }}
+        />
+        <Image
+          src="/xaura-logo.png"
+          alt="Xaura Global"
+          width={2500}
+          height={1250}
+          className={styles.footerLogo}
+          sizes="110px"
+          style={{ width: 110, height: 'auto' }}
+        />
+        <Image
+          src="/x-logo.png"
+          alt="X"
+          width={1637}
+          height={1002}
+          className={styles.footerMarkWide}
+          sizes="65px"
+          style={{ width: 'auto', height: 40 }}
+        />
       </div>
     </motion.div>
   )

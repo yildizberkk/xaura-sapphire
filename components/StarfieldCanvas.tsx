@@ -43,9 +43,36 @@ export default function StarfieldCanvas() {
     let frame = 0
 
     function resize() {
-      W = cv.width  = window.innerWidth
-      H = cv.height = window.innerHeight
-      initStars()
+      const newW = window.innerWidth
+      const newH = window.innerHeight
+
+      // Mobile browsers fire 'resize' during scroll because the URL bar
+      // hides/shows, which changes innerHeight but never innerWidth. If we
+      // regenerate stars on those events they visibly teleport mid-scroll.
+      // Ignore height-only changes; only respond to real width changes
+      // (desktop window resize, mobile orientation flip).
+      if (stars.length > 0 && newW === W) {
+        return
+      }
+
+      const oldW = W
+      const oldH = H
+      W = cv.width  = newW
+      H = cv.height = newH
+
+      if (stars.length === 0) {
+        // First mount — generate the starfield.
+        initStars()
+      } else {
+        // Orientation change: rescale positions proportionally so existing
+        // stars slide to their new spots instead of re-randomizing.
+        const sx = newW / oldW
+        const sy = newH / oldH
+        for (const s of stars) {
+          s.x *= sx
+          s.y *= sy
+        }
+      }
     }
 
     function initStars() {

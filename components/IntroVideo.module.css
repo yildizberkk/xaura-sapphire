@@ -1,0 +1,39 @@
+/* components/IntroVideo.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #06091a;
+  overflow: hidden;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.skipBtn {
+  position: absolute;
+  bottom: max(36px, env(safe-area-inset-bottom, 36px));
+  right: 24px;
+  padding: 8px 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(244, 243, 239, 0.22);
+  background: rgba(244, 243, 239, 0.08);
+  color: rgba(244, 243, 239, 0.65);
+  font-family: 'Gilroy', 'Helvetica Neue', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.2s, color 0.2s;
+}
+
+.skipBtn:hover {
+  background: rgba(244, 243, 239, 0.14);
+  color: rgba(244, 243, 239, 0.9);
+}

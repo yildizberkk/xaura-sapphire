@@ -1,0 +1,47 @@
+{
+  "reg": {
+    "welcome": "Benvenuti",
+    "firstName": "Nome",
+    "lastName": "Cognome",
+    "phone": "Telefono",
+    "email": "Email (opzionale)",
+    "consent": "Voglio ricevere notifiche durante l'evento",
+    "submit": "Continua",
+    "loading": "Salvataggio…",
+    "fieldError": "Nome, cognome e telefono sono obbligatori.",
+    "serverError": "Si è verificato un errore, riprova."
+  },
+  "boarding": {
+    "pass": "Carta d'imbarco",
+    "passenger": "Passeggero",
+    "gate": "Gate / Hotel",
+    "departure": "Partenza",
+    "arrival": "Arrivo",
+    "date": "Data",
+    "duration": "Durata del volo",
+    "days3": "3 Giorni · 2026",
+    "daySelect": "Seleziona giorno",
+    "ended": "Il tuo volo è terminato — ci vediamo nei prossimi viaggi sul percorso della leadership.",
+    "h": "h",
+    "m": "min"
+  },
+  "timeline": {
+    "header": "Programma del volo",
+    "active": "✦ Attivo"
+  },
+  "countdown": {
+    "preEvent": "Tempo al decollo",
+    "nextFlight": "Al prossimo decollo",
+    "days": "Giorni",
+    "hours": "Ore",
+    "minutes": "Minuti",
+    "seconds": "Secondi"
+  },
+  "schedule": {
+    "scheduled": "Programmato",
+    "activeFlight": "Volo attivo",
+    "boarding": "Imbarco",
+    "landed": "Completato",
+    "active": "Attivo"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "reg": {
+    "welcome": "Welcome",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone",
+    "email": "Email (optional)",
+    "consent": "I want to receive notifications during the event",
+    "submit": "Continue",
+    "loading": "Saving…",
+    "fieldError": "First name, last name and phone are required.",
+    "serverError": "An error occurred, please try again."
+  },
+  "boarding": {
+    "pass": "Boarding Pass",
+    "passenger": "Passenger",
+    "gate": "Gate / Hotel",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "date": "Date",
+    "duration": "Flight Duration",
+    "days3": "3 Days · 2026",
+    "daySelect": "Select Day",
+    "ended": "Your flight has ended — see you on future journeys on the path of leadership.",
+    "h": "h",
+    "m": "min"
+  },
+  "timeline": {
+    "header": "Flight Schedule",
+    "active": "✦ Active"
+  },
+  "countdown": {
+    "preEvent": "Time Until Flight",
+    "nextFlight": "Until Next Departure",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "schedule": {
+    "scheduled": "Scheduled",
+    "activeFlight": "Active Flight",
+    "boarding": "Boarding",
+    "landed": "Completed",
+    "active": "Active"
+  }
+}

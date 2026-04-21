@@ -1,0 +1,24 @@
+{
+  "event": {
+    "name": "DEV — Sapphire SMS Staging",
+    "subtitle": "dev",
+    "dates": "dev",
+    "location": "dev",
+    "address": "dev",
+    "timezone": "Europe/Istanbul"
+  },
+  "days": [
+    {
+      "day": "Dev", "dayEN": "Dev",
+      "date": "2026-04-19",
+      "sessions": [
+        { "start": "20:15", "end": "20:17", "type": "session",
+          "title": "Dev Session 1", "smsReminder": true },
+        { "start": "20:25", "end": "20:27", "type": "session",
+          "title": "Dev Session 2", "smsReminder": true },
+        { "start": "20:35", "end": "20:37", "type": "session",
+          "title": "Dev Session 3", "smsReminder": true }
+      ]
+    }
+  ]
+}

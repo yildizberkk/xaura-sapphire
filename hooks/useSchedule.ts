@@ -3,45 +3,55 @@
 import { useState, useEffect, useMemo } from 'react'
 import {
   classifySessions,
-  getFlightStatus,
+  getCurrentSegment,
+  getNextSessionDeadline,
   getTodayDayIdx,
 } from '@/lib/schedule'
-import type { Day, ClassifiedSession, FlightStatus } from '@/lib/schedule'
-
-const EVENT_START = new Date('2026-04-24T10:00:00')
+import type { Day, ClassifiedSession, BoardingSegment } from '@/lib/schedule'
+import { useTranslation } from '@/hooks/useTranslation'
+import { parseEventClock, currentVirtualTime } from '@/lib/event-clock'
 
 export function useSchedule(days: Day[]) {
+  const { t, locale } = useTranslation()
   const todayIdx = useMemo(() => getTodayDayIdx(days), [days])
   const [selectedDay, setSelectedDay] = useState(() => todayIdx >= 0 ? todayIdx : 0)
-  const [now, setNow] = useState<Date>(() => new Date())
+  const [clockCfg] = useState(() => parseEventClock())
+  const [now, setNow] = useState<Date>(() => currentVirtualTime(clockCfg))
 
-  // Tick every 30 seconds to re-classify sessions
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 30_000)
+    if (clockCfg.speed === 0) return
+    const interval = clockCfg.speed >= 10 ? 500 : 30_000
+    const id = setInterval(() => setNow(currentVirtualTime(clockCfg)), interval)
     return () => clearInterval(id)
-  }, [])
+  }, [clockCfg])
 
   const sessions: ClassifiedSession[] = useMemo(
     () => classifySessions(days[selectedDay], now),
     [days, selectedDay, now],
   )
 
-  const status: FlightStatus = useMemo(
-    () => getFlightStatus(days[selectedDay], sessions, now),
-    [days, selectedDay, sessions, now],
+  const durationUnits = useMemo(
+    () => ({ h: t('boarding.h'), m: t('boarding.m') }),
+    [locale], // locale is the stable primitive; t is recreated each render
   )
 
-  const msUntilEvent = Math.max(0, EVENT_START.getTime() - now.getTime())
-  const isPreEvent   = msUntilEvent > 0
+  const currentSegment: BoardingSegment = useMemo(
+    () => getCurrentSegment(days, now, durationUnits),
+    [days, now, durationUnits],
+  )
+
+  const nextSessionDeadline: Date | null = useMemo(
+    () => getNextSessionDeadline(days, now),
+    [days, now],
+  )
 
   return {
     selectedDay,
     setSelectedDay,
     todayIdx,
     sessions,
-    status,
     now,
-    isPreEvent,
-    msUntilEvent,
+    currentSegment,
+    nextSessionDeadline,
   }
 }
