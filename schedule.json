@@ -22,6 +22,10 @@
           "title": "Öğle Yemeği", "titleEN": "Lunch", "titleRU": "Обед", "titleBG": "Обяд", "titleIT": "Pranzo", "titleMN": "Өдрийн хоол"
         },
         {
+          "start": "14:30", "end": "16:15", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
           "start": "16:15", "end": "17:30", "type": "session",
           "title": "Ruby Okulu", "titleEN": "Ruby School", "titleRU": "Школа Ruby", "titleBG": "Школа Ruby", "titleIT": "Scuola Ruby", "titleMN": "Ruby Сургууль"
         },
@@ -86,24 +90,27 @@
         },
         {
           "start": "15:30", "end": "16:30", "type": "session",
-          "title": "Sistem Kurmak: Sen Olmadan Çalışan Organizasyon",
-          "titleEN": "Building Systems: Organization That Works Without You",
-          "titleRU": "Построение систем: организация, работающая без вас",
-          "titleBG": "Изграждане на системи: организация, работеща без вас",
-          "titleIT": "Costruire sistemi: organizzazione che funziona senza di te",
-          "titleMN": "Системийг бүтээх: Чамгүйгээр ажилладаг байгууллага"
+          "title": "Eğitim - 5", "titleEN": "Training - 5", "titleRU": "Обучение - 5", "titleBG": "Обучение - 5", "titleIT": "Formazione - 5", "titleMN": "Сургалт - 5"
         },
         {
-          "start": "16:30", "end": "18:00", "type": "break",
+          "start": "16:30", "end": "16:45", "type": "break",
           "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
         },
         {
-          "start": "18:00", "end": null, "type": "session",
-          "title": "Vizyon Liderliği", "titleEN": "Vision Leadership", "titleRU": "Лидерство с видением", "titleBG": "Лидерство с визия", "titleIT": "Leadership Visionaria", "titleMN": "Алсын харааны манлайлал"
+          "start": "16:45", "end": "18:00", "type": "session",
+          "title": "Eğitim - 6", "titleEN": "Training - 6", "titleRU": "Обучение - 6", "titleBG": "Обучение - 6", "titleIT": "Formazione - 6", "titleMN": "Сургалт - 6"
         },
         {
-          "start": null, "end": null, "type": "meal",
+          "start": "18:00", "end": "18:30", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
+          "start": "18:30", "end": "20:30", "type": "meal",
           "title": "Akşam Yemeği", "titleEN": "Dinner", "titleRU": "Ужин", "titleBG": "Вечеря", "titleIT": "Cena", "titleMN": "Оройн хоол"
+        },
+        {
+          "start": "20:30", "end": "21:00", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
         },
         {
           "start": "21:00", "end": null, "type": "ceremony",
@@ -126,6 +133,10 @@
           "title": "Kahvaltı", "titleEN": "Breakfast", "titleRU": "Завтрак", "titleBG": "Закуска", "titleIT": "Colazione", "titleMN": "Өглийн цай"
         },
         {
+          "start": "09:30", "end": "09:45", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
+        },
+        {
           "start": "09:45", "end": "10:30", "type": "session",
           "title": "Eğitim - 1", "titleEN": "Training - 1", "titleRU": "Обучение - 1", "titleBG": "Обучение - 1", "titleIT": "Formazione - 1", "titleMN": "Сургалт - 1"
         },
@@ -140,6 +151,10 @@
         {
           "start": "12:00", "end": "13:00", "type": "break",
           "title": "Oda Boşaltma ve Coffee Break", "titleEN": "Room Checkout & Coffee Break", "titleRU": "Выезд из номера и кофе-пауза", "titleBG": "Освобождаване на стаята и кафе пауза", "titleIT": "Check-out e pausa caffè", "titleMN": "Өрөө чөлөөлөх ба кофены завсарлага"
+        },
+        {
+          "start": "13:00", "end": "13:15", "type": "break",
+          "title": "Ara", "titleEN": "Break", "titleRU": "Перерыв", "titleBG": "Почивка", "titleIT": "Pausa", "titleMN": "Завсарлага"
         },
         {
           "start": "13:15", "end": "15:00", "type": "keynote",
