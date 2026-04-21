@@ -5,8 +5,9 @@
  * Vercel functions run in UTC. This module is the ONLY place server-side
  * code should convert schedule times to absolute UTC moments.
  *
- * NOTE: client-side rendering in lib/schedule.ts continues to use setHours()
- * because attendees' phones are in TRT anyway.
+ * NOTE: client-side rendering in lib/schedule.ts now anchors to +03:00 explicitly
+ * (see parseTime there). This module remains the canonical TZ helper for server
+ * code that must handle arbitrary IANA zones.
  */
 
 /** Parse `YYYY-MM-DD` + `HH:MM` as a wall-clock time in `tz`, return UTC Date. */

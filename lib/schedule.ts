@@ -76,7 +76,10 @@ export function parseTime(dateStr: string, timeStr: string | null): Date | null 
 }
 
 export function getTodayDayIdx(days: Day[]): number {
-  const today = new Date().toLocaleDateString('sv') // "YYYY-MM-DD"
+  const today = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Istanbul',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+  }).format(new Date())
   return days.findIndex(d => d.date === today)
 }
 
@@ -209,9 +212,8 @@ function buildFlatSessions(days: Day[]): FlatSess[] {
       }
 
       if (!effectiveEndDt) {
-        // Last session of the day with no end — runs until midnight
-        effectiveEndDt = new Date(day.date)
-        effectiveEndDt.setHours(23, 59, 59, 999)
+        // Last session of the day with no end — runs until Istanbul midnight
+        effectiveEndDt = new Date(`${day.date}T23:59:59.999+03:00`)
         hasKnownEnd = false
       }
 
@@ -311,8 +313,7 @@ export function getCurrentSegment(
 
   // Cross-day logic
   if (prevSess.dayIdx !== nextSess.dayIdx) {
-    const nextDayMidnight = new Date(nextSess.dateStr)
-    nextDayMidnight.setHours(0, 0, 0, 0)
+    const nextDayMidnight = new Date(`${nextSess.dateStr}T00:00:00+03:00`)
     if (now >= nextDayMidnight) {
       // Past midnight → KP → first session of new day
       return {
@@ -370,8 +371,8 @@ export function getFlightStatus(
   sessions: ClassifiedSession[],
   now: Date,
 ): FlightStatus {
-  const d0 = new Date(day.date); d0.setHours(0, 0, 0, 0)
-  const d1 = new Date(day.date); d1.setHours(23, 59, 59, 999)
+  const d0 = new Date(`${day.date}T00:00:00+03:00`)
+  const d1 = new Date(`${day.date}T23:59:59.999+03:00`)
   if (now < d0) return { text: 'Bekleniyor',  key: 'scheduled' }
   if (now > d1) return { text: 'Tamamlandı',  key: 'landed' }
   if (sessions.some(s => s.state === 'active')) return { text: 'Aktif Uçuş', key: 'active' }
