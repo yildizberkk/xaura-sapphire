@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   const { data: row, error } = await supabaseAdmin
     .from('message_sends')
     .select(`
-      id, phone_snapshot, registration_id,
+      id, status, phone_snapshot, registration_id,
       scheduled_messages ( session_title, message_body ),
       registrations ( first_name )
     `)
@@ -29,6 +29,14 @@ export async function POST(request: Request) {
     .single()
   if (error || !row) {
     return NextResponse.json({ error: error?.message ?? 'not found' }, { status: 404 })
+  }
+
+  const terminalStates = ['delivered', 'retry_published', 'canceled']
+  if (terminalStates.includes(row.status)) {
+    return NextResponse.json(
+      { error: `cannot resend: already in terminal state '${row.status}'` },
+      { status: 409 },
+    )
   }
 
   const sm = (row as unknown as { scheduled_messages: { session_title: string; message_body: string } }).scheduled_messages
