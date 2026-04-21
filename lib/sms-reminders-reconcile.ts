@@ -84,7 +84,7 @@ export async function reconcileDeliveryReports(): Promise<ReconcileSummary> {
     .select(`
       id, phone_snapshot,
       scheduled_messages ( session_start_at, message_body, session_title ),
-      registrations ( first_name )
+      registrations ( first_name, consent )
     `)
     .eq('status', 'failed')
     .eq('retry_count', 0)
@@ -96,8 +96,9 @@ export async function reconcileDeliveryReports(): Promise<ReconcileSummary> {
 
   for (const row of retryRows) {
     const sm = (row as unknown as { scheduled_messages: { session_start_at: string; message_body: string; session_title: string } }).scheduled_messages
-    const reg = (row as unknown as { registrations: { first_name: string } | null }).registrations
+    const reg = (row as unknown as { registrations: { first_name: string; consent: boolean } | null }).registrations
     if (!sm || !reg) continue
+    if (reg.consent === false) continue
 
     if (new Date(sm.session_start_at) < retryCutoff) continue
 
