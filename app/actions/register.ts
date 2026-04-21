@@ -1,4 +1,5 @@
 'use server'
+import { after } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { normalizePhone } from '@/lib/phone'
 import { sendWelcomeSms } from '@/lib/netgsm'
@@ -50,9 +51,12 @@ export async function registerUser(data: RegistrationInput): Promise<void> {
   }).select('id').single()
   if (error) throw new Error(error.message)
 
-  try {
-    await publishPendingReminders({ kind: 'registration', registrationId: inserted.id })
-  } catch (err) {
-    console.error('[register] inline reminder publish failed', err)
-  }
+  // Run after the response is sent — don't make the user wait for 13 Netgsm calls
+  after(async () => {
+    try {
+      await publishPendingReminders({ kind: 'registration', registrationId: inserted.id })
+    } catch (err) {
+      console.error('[register] inline reminder publish failed', err)
+    }
+  })
 }

@@ -152,11 +152,11 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
   const smById = new Map(scheduled.map(s => [s.id, s]))
   const regById = new Map(regs.map(r => [r.id, r]))
 
-  for (const send of pending) {
+  await Promise.all(pending.map(async (send) => {
     const sm = smById.get(send.scheduled_message_id)
-    if (!sm) continue
+    if (!sm) return
     const reg = send.registration_id ? regById.get(send.registration_id) : null
-    if (!reg) continue
+    if (!reg) return
 
     const reminderMs = new Date(sm.reminder_at).getTime()
 
@@ -166,7 +166,7 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
         .update({ status: 'skipped_too_late', last_error: 'reminder within 2-min cutoff at publish time' })
         .eq('id', send.id)
       summary.skippedTooLate++
-      continue
+      return
     }
 
     const normalized = normalizePhone(send.phone_snapshot)
@@ -180,7 +180,7 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
         })
         .eq('id', send.id)
       summary.publishRejected++
-      continue
+      return
     }
 
     const resolved = resolveMessage({
@@ -221,7 +221,7 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
         .eq('id', send.id)
       summary.publishRejected++
     }
-  }
+  }))
 
   return summary
 }
