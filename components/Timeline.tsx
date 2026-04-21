@@ -108,7 +108,7 @@ export default function Timeline({ sessions, selectedDay, onSwipeLeft, onSwipeRi
             transition={{ duration: 0.3, ease: [0.32, 0, 0.67, 0] }}
           >
             {sessions.map((s, i) => (
-              <SessionRow key={`${s.title}-${s.start}`} session={s} index={i} />
+              <SessionRow key={`${i}-${s.title}-${s.start}`} session={s} index={i} />
             ))}
           </motion.div>
         </AnimatePresence>
