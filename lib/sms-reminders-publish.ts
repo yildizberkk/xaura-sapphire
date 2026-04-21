@@ -140,10 +140,6 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
   const scheduledIds = scheduled.map(s => s.id)
 
   const MAX_ITERATIONS = 100
-  // Loop: grab pending rows in pages of PAGE_SIZE, atomically claim by moving to
-  // 'sending' status, and accumulate until a page returns fewer than PAGE_SIZE.
-  // MAX_ITERATIONS is a safety cap (100 pages × 500 = 50k rows) to guard against
-  // pathological loops under concurrent inserts.
   for (let iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
     const sendQuery = supabaseAdmin
       .from('message_sends')
@@ -171,7 +167,6 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
 
     if (claimed && claimed.length > 0) claimedAll = claimedAll.concat(claimed)
 
-    // If the initial page was smaller than the limit, no more pages exist.
     if (page.length < PAGE_SIZE) break
   }
 

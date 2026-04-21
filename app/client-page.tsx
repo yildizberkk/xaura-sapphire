@@ -40,7 +40,6 @@ function Clock({ now }: { now?: Date }) {
       setTime(source.toLocaleTimeString(bcp47, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }))
     }
     tick()
-    // If an external `now` is provided, re-render is driven by the parent — no interval needed.
     if (now) return
     const id = setInterval(tick, 1_000)
     return () => clearInterval(id)

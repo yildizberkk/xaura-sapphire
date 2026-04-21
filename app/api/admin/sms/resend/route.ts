@@ -4,6 +4,7 @@ import { normalizePhone } from '@/lib/phone'
 import { sendImmediateSms } from '@/lib/netgsm'
 import { resolveMessage } from '@/lib/sms-reminders-template'
 import { requireAdminAuth } from '@/lib/admin-auth'
+import type { MessageSendStatus } from '@/lib/sms-reminders-types'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -31,8 +32,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error?.message ?? 'not found' }, { status: 404 })
   }
 
-  const terminalStates = ['delivered', 'retry_published', 'canceled']
-  if (terminalStates.includes(row.status)) {
+  const terminalStates: MessageSendStatus[] = ['delivered', 'retry_published', 'canceled']
+  if (terminalStates.includes(row.status as MessageSendStatus)) {
     return NextResponse.json(
       { error: `cannot resend: already in terminal state '${row.status}'` },
       { status: 409 },

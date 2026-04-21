@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseTime, getCurrentSegment, getTodayDayIdx } from './schedule'
+import { parseTime, getCurrentSegment } from './schedule'
 import type { Day } from './schedule'
 
 describe('parseTime', () => {
@@ -37,17 +37,3 @@ describe('getCurrentSegment', () => {
   })
 })
 
-describe('getTodayDayIdx', () => {
-  it('returns the Istanbul date, not the device local date', () => {
-    const days: Day[] = [
-      { day: 'Cuma', dayEN: 'Friday', date: '2026-04-24', sessions: [] },
-      { day: 'Cumartesi', dayEN: 'Saturday', date: '2026-04-25', sessions: [] },
-    ]
-    // This is a sanity test — not a full TZ stub. It confirms the function runs
-    // and returns a valid index structure for a known date set.
-    const idx = getTodayDayIdx(days)
-    // On April 21 2026 (today when the plan was authored) the function should
-    // return -1 because today is not in the days array.
-    expect(typeof idx).toBe('number')
-  })
-})

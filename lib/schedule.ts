@@ -75,11 +75,17 @@ export function parseTime(dateStr: string, timeStr: string | null): Date | null 
   return Number.isNaN(d.getTime()) ? null : d
 }
 
+const ISTANBUL_DATE_FMT = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Europe/Istanbul',
+  year: 'numeric', month: '2-digit', day: '2-digit',
+})
+
+export function istanbulDateStr(d: Date): string {
+  return ISTANBUL_DATE_FMT.format(d)
+}
+
 export function getTodayDayIdx(days: Day[]): number {
-  const today = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Europe/Istanbul',
-    year: 'numeric', month: '2-digit', day: '2-digit',
-  }).format(new Date())
+  const today = istanbulDateStr(new Date())
   return days.findIndex(d => d.date === today)
 }
 

@@ -5,6 +5,7 @@ import {
   classifySessions,
   getCurrentSegment,
   getNextSessionDeadline,
+  istanbulDateStr,
 } from '@/lib/schedule'
 import type { Day, ClassifiedSession, BoardingSegment } from '@/lib/schedule'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -14,14 +15,6 @@ export function useSchedule(days: Day[]) {
   const { t, locale } = useTranslation()
   const [clockCfg] = useState(() => parseEventClock())
   const [now, setNow] = useState<Date>(() => currentVirtualTime(clockCfg))
-
-  // Istanbul-anchored YYYY-MM-DD so device TZ can't shift the event day.
-  function istanbulDateStr(d: Date): string {
-    return new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Europe/Istanbul',
-      year: 'numeric', month: '2-digit', day: '2-digit',
-    }).format(d)
-  }
 
   // Derive todayIdx from virtual clock so time-travel and real event both work
   const todayIdx = useMemo(() => {
@@ -42,7 +35,7 @@ export function useSchedule(days: Day[]) {
 
   useEffect(() => {
     if (clockCfg.speed === 0) return
-    const interval = clockCfg.speed >= 10 ? 500 : 30_000
+    const interval = clockCfg.speed >= 10 ? 500 : 1_000
     const id = setInterval(() => setNow(currentVirtualTime(clockCfg)), interval)
     return () => clearInterval(id)
   }, [clockCfg])
