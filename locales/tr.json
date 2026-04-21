@@ -9,6 +9,7 @@
     "submit": "Devam Et",
     "loading": "Kaydediliyor…",
     "fieldError": "Ad, soyad ve telefon zorunludur.",
+    "phoneError": "Geçerli bir telefon numarası girin. (örn: 5321234567 veya +90 532 123 4567)",
     "serverError": "Bir hata oluştu, lütfen tekrar deneyin."
   },
   "boarding": {

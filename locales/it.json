@@ -9,6 +9,7 @@
     "submit": "Continua",
     "loading": "Salvataggio…",
     "fieldError": "Nome, cognome e telefono sono obbligatori.",
+    "phoneError": "Inserisci un numero di telefono valido. (es. 5321234567 o +90 532 123 4567)",
     "serverError": "Si è verificato un errore, riprova."
   },
   "boarding": {

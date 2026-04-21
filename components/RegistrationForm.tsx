@@ -5,6 +5,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { registerUser, type RegistrationInput } from '@/app/actions/register'
+import { normalizePhone } from '@/lib/phone'
 import { useTranslation } from '@/hooks/useTranslation'
 import { LOCALES, LOCALE_META } from '@/lib/i18n'
 import styles from './RegistrationForm.module.css'
@@ -36,6 +37,10 @@ export default function RegistrationForm({ onComplete }: Props) {
     e.preventDefault()
     if (!form.firstName.trim() || !form.lastName.trim() || !form.phone.trim()) {
       setError(t('reg.fieldError'))
+      return
+    }
+    if (!normalizePhone(form.phone.trim())) {
+      setError(t('reg.phoneError'))
       return
     }
     setLoading(true)
