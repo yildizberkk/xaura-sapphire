@@ -48,10 +48,11 @@ describe('validateTemplateLength', () => {
   })
 
   it('correctly measures resolved worst-case default template', () => {
+    // Longest eligible session title in the current schedule
     const worst = resolveMessage({
       template: DEFAULT_TEMPLATE,
       firstName: 'Aleksandra-Emmanuelle',
-      sessionTitle: 'Sistem Kurmak: Sen Olmadan Çalışan Organizasyon',
+      sessionTitle: '2. Yıl Dönümü Açılış Konuşması',
     })
     const result = validateTemplateLength(worst)
     expect(result.ok).toBe(true)
