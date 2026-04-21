@@ -29,7 +29,7 @@ export function requireAdminAuth(request: Request): NextResponse | null {
   return null
 }
 
-function timingSafeEqual(a: string, b: string): boolean {
+export function timingSafeEqual(a: string, b: string): boolean {
   const aBuf = Buffer.from(a, 'utf8')
   const bBuf = Buffer.from(b, 'utf8')
   const maxLen = Math.max(aBuf.length, bBuf.length)

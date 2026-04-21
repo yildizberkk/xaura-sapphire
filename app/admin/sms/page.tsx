@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { timingSafeEqual } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,7 +18,8 @@ function fmt(iso: string) {
 
 export default async function AdminSmsPage({ searchParams }: Props) {
   const { token } = await searchParams
-  if (!process.env.ADMIN_SECRET || token !== process.env.ADMIN_SECRET) notFound()
+  const expected = process.env.ADMIN_SECRET
+  if (!expected || !token || !timingSafeEqual(token, expected)) notFound()
 
   const { data: scheduled } = await supabaseAdmin
     .from('scheduled_messages')
