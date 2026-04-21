@@ -10,7 +10,8 @@
     "loading": "Salvataggio…",
     "fieldError": "Nome, cognome e telefono sono obbligatori.",
     "phoneError": "Inserisci un numero di telefono valido. (es. 5321234567 o +90 532 123 4567)",
-    "serverError": "Si è verificato un errore, riprova."
+    "serverError": "Si è verificato un errore, riprova.",
+    "duplicatePhone": "Questo numero di telefono è già registrato."
   },
   "boarding": {
     "pass": "Carta d'imbarco",

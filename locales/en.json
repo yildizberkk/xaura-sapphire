@@ -10,7 +10,8 @@
     "loading": "Saving…",
     "fieldError": "First name, last name and phone are required.",
     "phoneError": "Enter a valid phone number. (e.g. 5321234567 or +90 532 123 4567)",
-    "serverError": "An error occurred, please try again."
+    "serverError": "An error occurred, please try again.",
+    "duplicatePhone": "This phone number is already registered."
   },
   "boarding": {
     "pass": "Boarding Pass",

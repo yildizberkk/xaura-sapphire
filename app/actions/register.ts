@@ -7,6 +7,13 @@ import { buildWelcomeSms } from '@/lib/sms-templates'
 import { publishPendingReminders } from '@/lib/sms-reminders-publish'
 import type { Locale } from '@/lib/i18n'
 
+class DuplicatePhoneError extends Error {
+  constructor() {
+    super('DUPLICATE_PHONE')
+    this.name = 'DuplicatePhoneError'
+  }
+}
+
 export interface RegistrationInput {
   firstName: string
   lastName:  string
@@ -49,7 +56,13 @@ export async function registerUser(data: RegistrationInput): Promise<void> {
     sms_api_return_code:  smsCode,
     sms_jobid:            smsJobid,
   }).select('id').single()
-  if (error) throw new Error(error.message)
+  if (error) {
+    // Postgres unique_violation — phone already registered
+    if ((error as { code?: string }).code === '23505') {
+      throw new DuplicatePhoneError()
+    }
+    throw new Error(error.message)
+  }
 
   // Run after the response is sent — don't make the user wait for 13 Netgsm calls
   after(async () => {

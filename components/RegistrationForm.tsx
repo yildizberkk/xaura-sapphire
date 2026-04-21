@@ -66,7 +66,10 @@ export default function RegistrationForm({ onComplete }: Props) {
       // Keep the user-facing message generic, but log the real cause so it shows
       // up in Vercel runtime logs and browser DevTools if anything breaks at the event.
       console.error('[RegistrationForm] registerUser failed', err)
-      setError(t('reg.serverError'))
+      const isDuplicate =
+        err instanceof Error &&
+        (err.name === 'DuplicatePhoneError' || err.message === 'DUPLICATE_PHONE')
+      setError(t(isDuplicate ? 'reg.duplicatePhone' : 'reg.serverError'))
       setLoading(false)
     }
   }
