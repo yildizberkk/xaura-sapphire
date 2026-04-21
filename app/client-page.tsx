@@ -14,6 +14,7 @@ import IntroVideo        from '@/components/IntroVideo'
 import RegistrationForm  from '@/components/RegistrationForm'
 import BoardingPass      from '@/components/BoardingPass'
 import CountdownDisplay  from '@/components/CountdownDisplay'
+import QuoteDisplay      from '@/components/QuoteDisplay'
 import Timeline          from '@/components/Timeline'
 import styles from './client-page.module.css'
 
@@ -113,6 +114,8 @@ function ClientPageInner({ schedule }: ClientPageProps) {
             segment={currentSegment}
             passenger={user ?? undefined}
           />
+
+          <QuoteDisplay />
 
           {nextSessionDeadline && (
             <CountdownDisplay deadline={nextSessionDeadline} />

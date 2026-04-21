@@ -1,0 +1,20 @@
+/* components/QuoteDisplay.module.css */
+
+.wrap {
+  text-align: center;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--gold-lt);
+  text-shadow:
+    0 0 18px rgba(203, 176, 138, 0.55),
+    0 0 40px rgba(179, 147, 105, 0.25);
+  margin: 0;
+}
