@@ -30,18 +30,21 @@ interface ClientPageProps {
   schedule: ScheduleData
 }
 
-function Clock() {
+function Clock({ now }: { now?: Date }) {
   const { locale } = useTranslation()
   const [time, setTime] = useState('')
   useEffect(() => {
     function tick() {
       const bcp47 = LOCALE_META[locale].bcp47
-      setTime(new Date().toLocaleTimeString(bcp47, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }))
+      const source = now ?? new Date()
+      setTime(source.toLocaleTimeString(bcp47, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }))
     }
     tick()
+    // If an external `now` is provided, re-render is driven by the parent — no interval needed.
+    if (now) return
     const id = setInterval(tick, 1_000)
     return () => clearInterval(id)
-  }, [locale])
+  }, [locale, now])
   return <p className={styles.clock}>{time}</p>
 }
 
@@ -56,6 +59,7 @@ function ClientPageInner({ schedule }: ClientPageProps) {
     sessions,
     currentSegment,
     nextSessionDeadline,
+    now,
   } = useSchedule(schedule.days)
 
   useEffect(() => {
@@ -118,10 +122,10 @@ function ClientPageInner({ schedule }: ClientPageProps) {
           <QuoteDisplay />
 
           {nextSessionDeadline && (
-            <CountdownDisplay deadline={nextSessionDeadline} />
+            <CountdownDisplay deadline={nextSessionDeadline} now={now} />
           )}
 
-          <Clock />
+          <Clock now={now} />
 
           <Timeline
             sessions={sessions}

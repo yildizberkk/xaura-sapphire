@@ -8,6 +8,7 @@ import styles from './CountdownDisplay.module.css'
 
 interface CountdownDisplayProps {
   deadline: Date
+  now?: Date
 }
 
 const SHOW_DAYS_BEFORE = new Date('2026-04-24T00:00:00')
@@ -24,14 +25,17 @@ function getParts(deadline: Date, now: Date) {
 
 function pad(n: number) { return String(n).padStart(2, '0') }
 
-export default function CountdownDisplay({ deadline }: CountdownDisplayProps) {
+export default function CountdownDisplay({ deadline, now: externalNow }: CountdownDisplayProps) {
   const { t, locale } = useTranslation()
-  const [now, setNow] = useState(() => new Date())
+  const [internalNow, setInternalNow] = useState(() => new Date())
 
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1_000)
+    if (externalNow) return
+    const id = setInterval(() => setInternalNow(new Date()), 1_000)
     return () => clearInterval(id)
-  }, [])
+  }, [externalNow])
+
+  const now = externalNow ?? internalNow
 
   const isPreEvent = now < SHOW_DAYS_BEFORE
   const { days, hours, minutes, seconds } = getParts(deadline, now)
