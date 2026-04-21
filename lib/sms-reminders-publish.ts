@@ -139,9 +139,12 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
 
   const scheduledIds = scheduled.map(s => s.id)
 
+  const MAX_ITERATIONS = 100
   // Loop: grab pending rows in pages of PAGE_SIZE, atomically claim by moving to
   // 'sending' status, and accumulate until a page returns fewer than PAGE_SIZE.
-  for (;;) {
+  // MAX_ITERATIONS is a safety cap (100 pages × 500 = 50k rows) to guard against
+  // pathological loops under concurrent inserts.
+  for (let iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
     const sendQuery = supabaseAdmin
       .from('message_sends')
       .select('id, scheduled_message_id, registration_id, phone_snapshot')
@@ -158,12 +161,13 @@ export async function publishPendingReminders(scope: PublishScope): Promise<Publ
     if (!page || page.length === 0) break
 
     const pageIds = page.map(r => r.id)
-    const { data: claimed } = await supabaseAdmin
+    const { data: claimed, error: claimErr } = await supabaseAdmin
       .from('message_sends')
       .update({ status: 'sending' as MessageSendStatus })
       .in('id', pageIds)
       .eq('status', 'pending')
       .select('id, scheduled_message_id, registration_id, phone_snapshot')
+    if (claimErr) throw new Error(`claim pending sends failed: ${claimErr.message}`)
 
     if (claimed && claimed.length > 0) claimedAll = claimedAll.concat(claimed)
 
