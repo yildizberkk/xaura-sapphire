@@ -32,4 +32,37 @@ The app uses a TypeScript `fetch` client at [`lib/netgsm.ts`](lib/netgsm.ts) pos
 
 ## Database (Supabase)
 
-Single table `public.registrations` holds user signups + SMS send status (`sms_successful`, `sms_api_return_code`, `sms_jobid`). No local migration files — schema changes go through the Supabase MCP (`mcp__supabase__apply_migration`). No `supabase/` directory in repo.
+`public.registrations` holds user signups + SMS send status (`sms_successful`, `sms_api_return_code`, `sms_jobid`). `registrations.consent` (bool, default true) gates reminder sends — only rows with `consent=true` receive reminders.
+`public.scheduled_messages` — one row per session per SMS reminder batch; upserted on publish.
+`public.message_sends` — one row per (scheduled_message × registration); status state machine: `pending → sending → published/publish_rejected → delivered/failed/retry_published/skipped_too_late/canceled`.
+No local migration files — schema changes go through `mcp__supabase__apply_migration`. No `supabase/` directory in repo.
+
+## SMS Reminder System
+
+`lib/sms-reminders-*.ts` — core reminder pipeline:
+- `sms-reminders-types.ts` — shared types (`ScheduledMessageRow`, `MessageSendRow`, `MessageSendStatus`)
+- `sms-reminders-template.ts` — resolves per-session message body; `sms-templates.ts` holds the actual Turkish copy
+- `sms-reminders-publish.ts` — `publishPendingReminders()` upserts rows + sends via Netgsm; concurrency capped at 50
+- `sms-reminders-reconcile.ts` — queries Netgsm delivery reports and updates `message_sends` status
+- `schedule-loader.ts` — loads `schedule.json`; set `USE_DEV_SCHEDULE=true` to load `schedule.dev.json` instead (preview env only)
+- `schedule-time.ts` — Istanbul-TZ time helpers; all reminder timestamps stored as UTC ISO strings
+
+**Cron:** `vercel.json` runs `/api/cron/sms-watchdog` every 5 min — do NOT move this to `vercel.ts` (broke deploys).
+
+**Admin panel:** `/admin/sms` — protected by `ADMIN_SECRET` bearer token (or `?token=` query param). Endpoints under `/api/admin/sms/`: `status`, `publish-all`, `cancel`, `killswitch`, `resend`, `preflight`. Use `requireAdminAuth()` from `lib/admin-auth.ts` at the top of every admin route.
+
+**Telegram alerting:** `lib/telegram.ts` — `alertOps(severity, summary, details?)` sends to ops channel; never throws. Env vars: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`.
+
+## Additional Env Vars
+
+- `ADMIN_SECRET` — bearer token for all `/api/admin/*` routes
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — Telegram ops alerts
+- `USE_DEV_SCHEDULE=true` — load `schedule.dev.json` instead of `schedule.json` (preview only)
+
+## Dev/QA Time Travel
+
+`lib/event-clock.ts` — dev-only client-side time injection. Add `?now=2026-04-24T10:00:00&speed=60` to any page URL to fast-forward the event clock. Disabled in production (`NODE_ENV=production`).
+
+## Quotes
+
+`lib/quotes.json` — 100 Turkish motivational quotes displayed randomly between the boarding pass and countdown sections on `client-page.tsx`.

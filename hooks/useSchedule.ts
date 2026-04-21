@@ -5,7 +5,6 @@ import {
   classifySessions,
   getCurrentSegment,
   getNextSessionDeadline,
-  getTodayDayIdx,
 } from '@/lib/schedule'
 import type { Day, ClassifiedSession, BoardingSegment } from '@/lib/schedule'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -13,10 +12,25 @@ import { parseEventClock, currentVirtualTime } from '@/lib/event-clock'
 
 export function useSchedule(days: Day[]) {
   const { t, locale } = useTranslation()
-  const todayIdx = useMemo(() => getTodayDayIdx(days), [days])
-  const [selectedDay, setSelectedDay] = useState(() => todayIdx >= 0 ? todayIdx : 0)
   const [clockCfg] = useState(() => parseEventClock())
   const [now, setNow] = useState<Date>(() => currentVirtualTime(clockCfg))
+
+  // Derive todayIdx from virtual clock so time-travel and real event both work
+  const todayIdx = useMemo(() => {
+    const dateStr = now.toLocaleDateString('sv')
+    return days.findIndex(d => d.date === dateStr)
+  }, [days, now])
+
+  const [selectedDay, setSelectedDay] = useState(() => {
+    const initNow = currentVirtualTime(clockCfg)
+    const dateStr = initNow.toLocaleDateString('sv')
+    const idx = days.findIndex(d => d.date === dateStr)
+    if (idx >= 0) return idx
+    // After last event day → show last day; before → show first
+    const lastDate = days[days.length - 1]?.date
+    if (lastDate && initNow > new Date(lastDate + 'T23:59:59')) return days.length - 1
+    return 0
+  })
 
   useEffect(() => {
     if (clockCfg.speed === 0) return

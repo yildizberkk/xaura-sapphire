@@ -91,11 +91,13 @@ export default function BoardingPass({
             </div>
             <div className={styles.routeMid}>
               <div className={styles.routeTrack}>
-                <div className={styles.routeLine} />
-                <div className={styles.routeDot} />
-                <div className={styles.routeLine} style={{ background: 'linear-gradient(to right, rgba(179,147,105,0.4), rgba(85,116,184,0.2))' }} />
+                <div className={styles.routeLineTraveled} style={{ width: `${segment.progressPct * 100}%` }} />
+                <div className={styles.routeLineRemaining} style={{ width: `${(1 - segment.progressPct) * 100}%` }} />
+                <div
+                  className={styles.plane}
+                  style={{ left: `${segment.progressPct * 100}%` }}
+                >✈</div>
               </div>
-              <div className={styles.plane}>✈</div>
               <div className={styles.duration}>{t('boarding.days3')}</div>
             </div>
             <div className={`${styles.city} ${styles.cityRight}`}>

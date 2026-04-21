@@ -159,6 +159,7 @@ export interface BoardingSegment {
   inis: string | null     // "HH:MM"
   suresi: string | null   // e.g. "2sa 30dak"
   dateStr: string | null  // "YYYY-MM-DD" for Tarih field
+  progressPct: number     // 0–1: plane position on route line
 }
 
 interface FlatSess {
@@ -240,6 +241,7 @@ export function getCurrentSegment(
       dep: 'AYT', depName: 'Antalya',
       arr: 'KP',  arrName: 'KREMLIN PALACE',
       kalkis: null, inis: null, suresi: null, dateStr: null,
+      progressPct: 0,
     }
   }
 
@@ -253,6 +255,8 @@ export function getCurrentSegment(
   if (activeIdx >= 0) {
     const curr = flat[activeIdx]
     const next = activeIdx < flat.length - 1 ? flat[activeIdx + 1] : null
+    const actElapsed  = curr.startDt ? now.getTime() - curr.startDt.getTime() : 0
+    const actDuration = curr.startDt ? curr.effectiveEndDt.getTime() - curr.startDt.getTime() : 1
     return {
       type: 'active',
       dep: curr.code,    depName: curr.title,
@@ -263,6 +267,7 @@ export function getCurrentSegment(
         ? fmtDuration(curr.effectiveEndDt.getTime() - curr.startDt.getTime(), durationUnits)
         : null,
       dateStr: curr.dateStr,
+      progressPct: Math.max(0, Math.min(1, actElapsed / actDuration)),
     }
   }
 
@@ -283,6 +288,7 @@ export function getCurrentSegment(
       type: 'ended',
       dep: '', depName: '', arr: '', arrName: '',
       kalkis: null, inis: null, suresi: null, dateStr: null,
+      progressPct: 1,
     }
   }
 
@@ -296,6 +302,7 @@ export function getCurrentSegment(
       arr: nextSess.code, arrName: nextSess.title,
       kalkis: null, inis: null, suresi: null,
       dateStr: nextSess.dateStr,
+      progressPct: 0,
     }
   }
 
@@ -313,6 +320,7 @@ export function getCurrentSegment(
         arr: nextSess.code, arrName: nextSess.title,
         kalkis: null, inis: null, suresi: null,
         dateStr: nextSess.dateStr,
+        progressPct: 0,
       }
     }
     // Before midnight, after last session → end-of-day
@@ -323,10 +331,15 @@ export function getCurrentSegment(
       kalkis: prevSess.startDt ? fmtHHMM(prevSess.startDt) : null,
       inis: null, suresi: null,
       dateStr: prevSess.dateStr,
+      progressPct: 1,
     }
   }
 
   // Same-day gap between sessions (implicit break)
+  const gapStart    = prevSess.effectiveEndDt.getTime()
+  const gapEnd      = nextSess.startDt ? nextSess.startDt.getTime() : gapStart + 1
+  const gapDuration = gapEnd - gapStart
+  const gapElapsed  = now.getTime() - gapStart
   return {
     type: 'gap',
     dep: prevSess.code, depName: prevSess.title,
@@ -337,6 +350,7 @@ export function getCurrentSegment(
       ? fmtDuration(nextSess.startDt!.getTime() - prevSess.effectiveEndDt.getTime(), durationUnits)
       : null,
     dateStr: prevSess.dateStr,
+    progressPct: gapDuration > 0 ? Math.max(0, Math.min(1, gapElapsed / gapDuration)) : 0.5,
   }
 }
 

@@ -82,25 +82,44 @@
 
 .routeTrack {
   width: 100%;
+  position: relative;
+  height: 24px;
   display: flex;
   align-items: center;
-  gap: 2px;
 }
 
-.routeLine {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(to right, rgba(85,116,184,0.45), rgba(179,147,105,0.45));
-}
-
-.routeDot {
-  width: 4px; height: 4px;
-  border-radius: 50%;
+.routeLineTraveled {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
   background: var(--gold);
-  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(179,147,105,0.8), 0 0 14px rgba(179,147,105,0.35);
+  transition: width 0.8s linear;
+  border-radius: 1px;
 }
 
-.plane { font-size: 15px; color: var(--gold); line-height: 1; }
+.routeLineRemaining {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(to right, rgba(85,116,184,0.3), rgba(85,116,184,0.12));
+  transition: width 0.8s linear;
+}
+
+.plane {
+  position: absolute;
+  font-size: 20px;
+  color: var(--gold);
+  line-height: 1;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 0.8s linear;
+  pointer-events: none;
+}
 
 .duration {
   font-size: 8.5px;
